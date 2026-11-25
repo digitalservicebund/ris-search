@@ -1,6 +1,5 @@
 package de.bund.digitalservice.ris.search.models.ldml;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
@@ -21,6 +20,6 @@ import lombok.Getter;
 @Getter
 public class FrbrExpression {
 
-  @XmlElement(name = "FRBRlanguage", namespace = LiteratureNamespaces.AKN_NS)
+  @XmlElement(name = "FRBRlanguage", namespace = Namespaces.AKN_NS)
   private List<FrbrLanguage> frbrLanguages;
 }

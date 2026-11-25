@@ -2,6 +2,8 @@ package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
+import de.bund.digitalservice.ris.search.models.ldml.Periodikum;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

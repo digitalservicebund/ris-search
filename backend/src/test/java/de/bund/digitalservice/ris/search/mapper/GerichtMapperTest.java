@@ -2,13 +2,13 @@ package de.bund.digitalservice.ris.search.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.Spruchkoerper;
+import de.bund.digitalservice.ris.search.models.ldml.RisGericht;
+import de.bund.digitalservice.ris.search.models.ldml.Spruchkoerper;
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CaseLawGerichtMapperTest {
+class GerichtMapperTest {
 
   @Test
   @DisplayName("Maps a Gericht with all its fields")
@@ -22,7 +22,7 @@ class CaseLawGerichtMapperTest {
             .sitzDerAussenstelle("Kassel")
             .build();
 
-    Gericht gericht = CaseLawGerichtMapper.map(risGericht);
+    Gericht gericht = GerichtMapper.map(risGericht);
 
     assertThat(gericht)
         .isEqualTo(
@@ -38,7 +38,7 @@ class CaseLawGerichtMapperTest {
   @Test
   @DisplayName("Maps a Gericht without Spruchkoerper")
   void mapsGerichtWithoutSpruchkoerper() {
-    Gericht gericht = CaseLawGerichtMapper.map(RisGericht.builder().gerichtstyp("BGH").build());
+    Gericht gericht = GerichtMapper.map(RisGericht.builder().gerichtstyp("BGH").build());
 
     assertThat(gericht).isEqualTo(Gericht.builder().gerichtstyp("BGH").build());
   }
@@ -46,6 +46,6 @@ class CaseLawGerichtMapperTest {
   @Test
   @DisplayName("Returns null when there is no Gericht")
   void returnsNullWithoutGericht() {
-    assertThat(CaseLawGerichtMapper.map(null)).isNull();
+    assertThat(GerichtMapper.map(null)).isNull();
   }
 }

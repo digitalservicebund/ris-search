@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+package de.bund.digitalservice.ris.search.models.ldml;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import lombok.Setter;
 @Setter
 public class Fundstelle {
 
-  @XmlElement(name = "periodikum", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "periodikum", namespace = Namespaces.RIS_NS)
   private Periodikum periodikum;
 
-  @XmlElement(name = "zitatstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "zitatstelle", namespace = Namespaces.RIS_NS)
   private String zitatstelle;
 
-  @XmlElement(name = "fundstellenTyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "fundstellenTyp", namespace = Namespaces.RIS_NS)
   private String fundstellenTyp;
 
   /**

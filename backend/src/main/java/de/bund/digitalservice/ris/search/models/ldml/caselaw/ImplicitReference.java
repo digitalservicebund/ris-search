@@ -1,5 +1,10 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
+import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;

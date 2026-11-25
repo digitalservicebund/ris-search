@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
+import de.bund.digitalservice.ris.search.models.ldml.RisGericht;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Objects;
 import java.util.stream.Collectors;

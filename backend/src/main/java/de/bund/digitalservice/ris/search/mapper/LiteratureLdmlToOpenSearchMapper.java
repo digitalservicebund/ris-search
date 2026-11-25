@@ -339,11 +339,26 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static LiteratureUnindexed extractUnindexed(LiteratureLdml literatureLdml) {
     List<ImplicitReference> references = getAllImplicitReferences(literatureLdml);
-    return LiteratureZitierungenMapper.mapUnindexed(
-        references.stream().map(ImplicitReference::getReferenzSelbststaendigeLiteratur).toList(),
-        references.stream().map(ImplicitReference::getReferenzUnselbststaendigeLiteratur).toList(),
-        references.stream().map(ImplicitReference::getReferenzRechtsprechung).toList(),
-        references.stream().map(ImplicitReference::getReferenzVerwaltungsvorschrift).toList());
+    return LiteratureUnindexed.builder()
+        .zitierungenLiteraturSelbststaendig(
+            ZitierungenMapper.mapLiteraturSelbststaendig(
+                references.stream()
+                    .map(ImplicitReference::getReferenzSelbststaendigeLiteratur)
+                    .toList()))
+        .zitierungenLiteraturUnselbststaendig(
+            ZitierungenMapper.mapLiteraturUnselbststaendig(
+                references.stream()
+                    .map(ImplicitReference::getReferenzUnselbststaendigeLiteratur)
+                    .toList()))
+        .zitierungenRechtsprechung(
+            ZitierungenMapper.mapRechtsprechung(
+                references.stream().map(ImplicitReference::getReferenzRechtsprechung).toList()))
+        .zitierungenVerwaltungsvorschriften(
+            ZitierungenMapper.mapVerwaltungsvorschriften(
+                references.stream()
+                    .map(ImplicitReference::getReferenzVerwaltungsvorschrift)
+                    .toList()))
+        .build();
   }
 
   /**
