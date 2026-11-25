@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.models.ldml.literature.Periodikum;
-import de.bund.digitalservice.ris.search.models.ldml.literature.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.ldml.literature.ReferenzSelbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.ldml.literature.ReferenzUnselbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.ldml.literature.ReferenzVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisGericht;
-import de.bund.digitalservice.ris.search.models.ldml.literature.RisZitierung;
+import de.bund.digitalservice.ris.search.models.ldml.Periodikum;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.ldml.RisGericht;
+import de.bund.digitalservice.ris.search.models.ldml.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
@@ -116,20 +116,11 @@ final class LiteratureZitierungenMapper {
   }
 
   private static Gericht mapGericht(RisGericht gericht) {
-    if (gericht == null) {
-      return null;
-    }
-    return Gericht.builder()
-        .gerichtstyp(gericht.getGerichtstyp())
-        .gerichtsort(gericht.getGerichtsort())
-        .gerichtsbarkeit(gericht.getGerichtsbarkeit())
-        .spruchkoerper(gericht.getSpruchkoerper())
-        .sitzDerAussenstelle(gericht.getSitzDerAussenstelle())
-        .build();
+    return GerichtMapper.map(gericht);
   }
 
   private static Fundstelle mapFundstelle(
-      de.bund.digitalservice.ris.search.models.ldml.literature.Fundstelle fundstelle) {
+      de.bund.digitalservice.ris.search.models.ldml.Fundstelle fundstelle) {
     if (fundstelle == null) {
       return null;
     }

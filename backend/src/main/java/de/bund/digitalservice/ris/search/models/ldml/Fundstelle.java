@@ -1,5 +1,6 @@
-package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+package de.bund.digitalservice.ris.search.models.ldml;
 
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdmlNamespaces;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.Setter;

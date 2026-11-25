@@ -58,7 +58,7 @@ final class CaseLawUnindexedMapper {
         .entscheidungsdatum(DateUtils.nullSafeParseyyyyMMdd(entscheidung.getEntscheidungsdatum()))
         .dokumentnummer(entscheidung.getDokumentnummer())
         .aktenzeichen(entscheidung.getAktenzeichen())
-        .gericht(CaseLawGerichtMapper.map(entscheidung.getGericht()))
+        .gericht(GerichtMapper.map(entscheidung.getGericht()))
         .build();
   }
 
@@ -72,7 +72,7 @@ final class CaseLawUnindexedMapper {
         .mitteilungsdatum(DateUtils.nullSafeParseyyyyMMdd(entscheidung.getMitteilungsdatum()))
         .dokumentnummer(entscheidung.getDokumentnummer())
         .aktenzeichen(entscheidung.getAktenzeichen())
-        .gericht(CaseLawGerichtMapper.map(entscheidung.getGericht()))
+        .gericht(GerichtMapper.map(entscheidung.getGericht()))
         .vermerk(entscheidung.getVermerk())
         .build();
   }

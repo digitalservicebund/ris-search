@@ -5,6 +5,7 @@ import static de.bund.digitalservice.ris.search.utils.MappingUtils.validateNotNu
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
 import de.bund.digitalservice.ris.search.models.DatumsTyp;
+import de.bund.digitalservice.ris.search.models.ldml.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.AknKeyword;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.CaseLawLdml;
@@ -18,7 +19,6 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.JudgmentBody;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherAnalysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.VerknuepfteEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;

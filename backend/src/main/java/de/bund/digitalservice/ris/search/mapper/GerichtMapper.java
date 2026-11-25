@@ -1,12 +1,12 @@
 package de.bund.digitalservice.ris.search.mapper;
 
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisGericht;
+import de.bund.digitalservice.ris.search.models.ldml.RisGericht;
 import de.bund.digitalservice.ris.search.models.opensearch.common.Gericht;
 
 /** Maps a court of a case law LDML document to {@link Gericht}. */
-final class CaseLawGerichtMapper {
+final class GerichtMapper {
 
-  private CaseLawGerichtMapper() {}
+  private GerichtMapper() {}
 
   static Gericht map(RisGericht gericht) {
     if (gericht == null) {

@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+package de.bund.digitalservice.ris.search.models.ldml;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +27,7 @@ public class Spruchkoerper {
   @XmlAttribute private String domainTerm;
 
   /** A reference to a formal definition within the Akoma Ntoso namespace. */
-  @XmlAttribute(name = "refersTo", namespace = CaseLawLdmlNamespaces.AKN_NS)
+  @XmlAttribute(name = "refersTo", namespace = Namespaces.AKN_NS)
   private String refersTo;
 
   /** The actual name or designation of the judicial body (e.g., "1. Senat"). */

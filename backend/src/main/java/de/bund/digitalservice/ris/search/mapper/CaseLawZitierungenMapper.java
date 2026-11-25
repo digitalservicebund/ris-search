@@ -1,15 +1,15 @@
 package de.bund.digitalservice.ris.search.mapper;
 
+import de.bund.digitalservice.ris.search.models.ldml.Periodikum;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
+import de.bund.digitalservice.ris.search.models.ldml.RisZitierung;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.Periodikum;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzRechtsprechung;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzSelbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzUnselbststaendigeLiteratur;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzVerwaltungsvorschrift;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
@@ -100,7 +100,7 @@ final class CaseLawZitierungenMapper {
         .referenzUri(ref.getReferenzUri())
         .dokumentnummer(ref.getDokumentnummer())
         .artDerZitierung(ref.getArtDerZitierung())
-        .gericht(CaseLawGerichtMapper.map(ref.getGericht()))
+        .gericht(GerichtMapper.map(ref.getGericht()))
         .entscheidungsdatum(DateUtils.nullSafeParseyyyyMMdd(ref.getEntscheidungsdatum()))
         .dokumenttyp(ref.getDokumenttyp())
         .aktenzeichen(ref.getAktenzeichen())
@@ -131,7 +131,7 @@ final class CaseLawZitierungenMapper {
   }
 
   private static Fundstelle mapFundstelle(
-      de.bund.digitalservice.ris.search.models.ldml.caselaw.Fundstelle fundstelle) {
+      de.bund.digitalservice.ris.search.models.ldml.Fundstelle fundstelle) {
     if (fundstelle == null) {
       return null;
     }

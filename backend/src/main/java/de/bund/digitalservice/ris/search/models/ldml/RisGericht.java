@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+package de.bund.digitalservice.ris.search.models.ldml;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents a court entity within the Case Law LDML structure. *
+ * Represents a court entity within the LDML structure. *
  *
  * <p>This class maps court-specific data, including organizational hierarchy and geographic
  * location, using both standard Akoma Ntoso and custom RIS namespaces.
@@ -34,22 +34,22 @@ public class RisGericht {
   private String showAs;
 
   /** The type of court (e.g., Amtsgericht, Landgericht). */
-  @XmlElement(name = "gerichtstyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "gerichtstyp", namespace = Namespaces.RIS_NS)
   private String gerichtstyp;
 
   /** The geographic location/seat of the court. */
-  @XmlElement(name = "gerichtsort", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "gerichtsort", namespace = Namespaces.RIS_NS)
   private String gerichtsort;
 
   /** The jurisdiction (Gerichtsbarkeit) the court belongs to. */
-  @XmlElement(name = "gerichtsbarkeit", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "gerichtsbarkeit", namespace = Namespaces.RIS_NS)
   private String gerichtsbarkeit;
 
   /** The specific judicial body or chamber (Spruchkörper) within the court. */
-  @XmlElement(name = "spruchkoerper", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "spruchkoerper", namespace = Namespaces.RIS_NS)
   private Spruchkoerper spruchkoerper;
 
-  @XmlElement(name = "sitzDerAussenstelle", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "sitzDerAussenstelle", namespace = Namespaces.RIS_NS)
   private String sitzDerAussenstelle;
 
   /**

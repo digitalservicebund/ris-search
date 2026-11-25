@@ -1,5 +1,9 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
