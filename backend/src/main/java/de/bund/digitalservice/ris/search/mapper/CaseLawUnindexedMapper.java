@@ -3,12 +3,14 @@ package de.bund.digitalservice.ris.search.mapper;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -20,12 +22,17 @@ final class CaseLawUnindexedMapper {
   static CaseLawUnindexed map(Meta meta) {
     return CaseLawUnindexed.builder()
         .zitierungenLiteraturSelbststaendig(
-            CaseLawZitierungenMapper.mapLiteraturSelbststaendig(meta))
+            ZitierungenMapper.mapLiteraturSelbststaendig(
+                extractReferences(meta, ImplicitReference::getReferenzSelbststaendigeLiteratur)))
         .zitierungenLiteraturUnselbststaendig(
-            CaseLawZitierungenMapper.mapLiteraturUnselbststaendig(meta))
-        .zitierungenRechtsprechung(CaseLawZitierungenMapper.mapRechtsprechung(meta))
+            ZitierungenMapper.mapLiteraturUnselbststaendig(
+                extractReferences(meta, ImplicitReference::getReferenzUnselbststaendigeLiteratur)))
+        .zitierungenRechtsprechung(
+            ZitierungenMapper.mapRechtsprechung(
+                extractReferences(meta, ImplicitReference::getReferenzRechtsprechung)))
         .zitierungenVerwaltungsvorschriften(
-            CaseLawZitierungenMapper.mapVerwaltungsvorschriften(meta))
+            ZitierungenMapper.mapVerwaltungsvorschriften(
+                extractReferences(meta, ImplicitReference::getReferenzVerwaltungsvorschrift)))
         .vorgehendeEntscheidungen(
             mapImplicitReferences(
                 meta,
@@ -47,6 +54,20 @@ final class CaseLawUnindexedMapper {
         .stream()
         .flatMap(Collection::stream)
         .map(mapper)
+        .toList();
+  }
+
+  /** Extracts one reference type from all implicit references, skipping nulls. */
+  private static <T> List<T> extractReferences(
+      Meta meta, Function<ImplicitReference, T> extractor) {
+    return Optional.ofNullable(meta.getAnalysis())
+        .map(Analysis::getOtherReferences)
+        .map(OtherReferences::getImplicitReferences)
+        .orElse(List.of())
+        .stream()
+        .filter(Objects::nonNull)
+        .map(extractor)
+        .filter(Objects::nonNull)
         .toList();
   }
 

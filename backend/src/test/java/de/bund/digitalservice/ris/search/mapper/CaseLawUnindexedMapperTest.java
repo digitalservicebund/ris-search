@@ -6,6 +6,7 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
+import de.bund.digitalservice.ris.search.models.ldml.caselaw.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.NachgehendeEntscheidung;
 import de.bund.digitalservice.ris.search.models.opensearch.VorgehendeEntscheidung;
@@ -22,6 +23,26 @@ class CaseLawUnindexedMapperTest {
 
     assertThat(unindexed.vorgehendeEntscheidungen()).isEmpty();
     assertThat(unindexed.nachgehendeEntscheidungen()).isEmpty();
+    assertThat(unindexed.zitierungenRechtsprechung()).isEmpty();
+    assertThat(unindexed.zitierungenLiteraturSelbststaendig()).isEmpty();
+    assertThat(unindexed.zitierungenLiteraturUnselbststaendig()).isEmpty();
+    assertThat(unindexed.zitierungenVerwaltungsvorschriften()).isEmpty();
+  }
+
+  @Test
+  @DisplayName("Returns empty Zitierungen when the references contain no citations")
+  void returnsEmptyZitierungenForNonCitationReferences() {
+    ImplicitReference normReference = new ImplicitReference();
+    normReference.setReferenzNorm(new ReferenzNorm());
+    OtherReferences otherReferences = new OtherReferences();
+    otherReferences.setImplicitReferences(List.of(normReference));
+    Analysis analysis = new Analysis();
+    analysis.setOtherReferences(otherReferences);
+
+    CaseLawUnindexed unindexed =
+        CaseLawUnindexedMapper.map(Meta.builder().analysis(analysis).build());
+
+    assertThat(unindexed.zitierungenRechtsprechung()).isEmpty();
   }
 
   @Test

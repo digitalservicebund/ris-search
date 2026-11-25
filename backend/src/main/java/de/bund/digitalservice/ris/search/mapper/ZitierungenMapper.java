@@ -6,10 +6,6 @@ import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLite
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
 import de.bund.digitalservice.ris.search.models.ldml.RisZitierung;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.Analysis;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.ImplicitReference;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.Meta;
-import de.bund.digitalservice.ris.search.models.ldml.caselaw.OtherReferences;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
@@ -19,51 +15,43 @@ import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
-/** Maps the aktiv- and passivzitierungen of a case law LDML document. */
-final class CaseLawZitierungenMapper {
+/**
+ * Maps the aktiv- and passivzitierungen of an LDML document (case law or literature) to their
+ * OpenSearch representation. Each document type extracts the references from its own implicit
+ * references and passes them in. Null references and references without a valid Richtung are
+ * skipped.
+ */
+final class ZitierungenMapper {
 
-  private CaseLawZitierungenMapper() {}
+  private ZitierungenMapper() {}
 
-  static List<ZitierungLiteraturSelbststaendig> mapLiteraturSelbststaendig(Meta meta) {
-    return extract(
-        meta,
-        ImplicitReference::getReferenzSelbststaendigeLiteratur,
-        CaseLawZitierungenMapper::mapSelbststaendigeLiteratur);
+  static List<ZitierungLiteraturSelbststaendig> mapLiteraturSelbststaendig(
+      List<ReferenzSelbststaendigeLiteratur> references) {
+    return map(references, ZitierungenMapper::mapSelbststaendigeLiteratur);
   }
 
-  static List<ZitierungLiteraturUnselbststaendig> mapLiteraturUnselbststaendig(Meta meta) {
-    return extract(
-        meta,
-        ImplicitReference::getReferenzUnselbststaendigeLiteratur,
-        CaseLawZitierungenMapper::mapUnselbststaendigeLiteratur);
+  static List<ZitierungLiteraturUnselbststaendig> mapLiteraturUnselbststaendig(
+      List<ReferenzUnselbststaendigeLiteratur> references) {
+    return map(references, ZitierungenMapper::mapUnselbststaendigeLiteratur);
   }
 
-  static List<ZitierungRechtsprechung> mapRechtsprechung(Meta meta) {
-    return extract(
-        meta,
-        ImplicitReference::getReferenzRechtsprechung,
-        CaseLawZitierungenMapper::mapRechtsprechung);
+  static List<ZitierungRechtsprechung> mapRechtsprechung(List<ReferenzRechtsprechung> references) {
+    return map(references, ZitierungenMapper::mapRechtsprechung);
   }
 
-  static List<ZitierungVerwaltungsvorschrift> mapVerwaltungsvorschriften(Meta meta) {
-    return extract(
-        meta,
-        ImplicitReference::getReferenzVerwaltungsvorschrift,
-        CaseLawZitierungenMapper::mapVerwaltungsvorschrift);
+  static List<ZitierungVerwaltungsvorschrift> mapVerwaltungsvorschriften(
+      List<ReferenzVerwaltungsvorschrift> references) {
+    return map(references, ZitierungenMapper::mapVerwaltungsvorschrift);
   }
 
-  private static <R extends RisZitierung, T> List<T> extract(
-      Meta meta, Function<ImplicitReference, R> extractor, Function<R, T> mapper) {
-    return Optional.ofNullable(meta.getAnalysis())
-        .map(Analysis::getOtherReferences)
-        .map(OtherReferences::getImplicitReferences)
-        .orElse(List.of())
-        .stream()
-        .filter(Objects::nonNull)
-        .map(extractor)
+  private static <R extends RisZitierung, T> List<T> map(
+      List<R> references, Function<R, T> mapper) {
+    if (references == null) {
+      return List.of();
+    }
+    return references.stream()
         .filter(Objects::nonNull)
         .filter(ref -> ref.isAktiv() || ref.isPassiv())
         .map(mapper)
@@ -120,14 +108,9 @@ final class CaseLawZitierungenMapper {
         .build();
   }
 
+  /** Only called for references that are either aktiv or passiv (see {@link #map}). */
   private static Richtung mapRichtung(RisZitierung ref) {
-    if (ref.isAktiv()) {
-      return Richtung.AKTIV;
-    }
-    if (ref.isPassiv()) {
-      return Richtung.PASSIV;
-    }
-    return null;
+    return ref.isAktiv() ? Richtung.AKTIV : Richtung.PASSIV;
   }
 
   private static Fundstelle mapFundstelle(
