@@ -1,10 +1,10 @@
 # 29. No API versioning until go-live
 
-Date: 2026-11-24
+Date: 2026-11-25
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
