@@ -29,6 +29,8 @@ public class ApiConfig {
 
     public static final String LITERATURE = BASE + "/literature";
     public static final String LITERATURE_CHANGELOGS = LITERATURE + CHANGELOGS;
+    public static final String LITERATURNACHWEISE = BASE + "/literaturnachweise";
+    public static final String LITERATURNACHWEISE_CHANGELOGS = LITERATURNACHWEISE + CHANGELOGS;
 
     public static final String ADMINISTRATIVE_DIRECTIVE = BASE + "/administrative-directive";
     public static final String ADMINISTRATIVE_DIRECTIVE_CHANGELOGS =
