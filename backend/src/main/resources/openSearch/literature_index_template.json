@@ -29,6 +29,386 @@
           "type": "alias",
           "path": "norm_references"
         },
+        "datum": {
+          "type": "alias",
+          "path": "first_publication_date"
+        },
+        "t": {
+          "type": "alias",
+          "path": "main_title"
+        },
+        "v": {
+          "type": "alias",
+          "path": "authors"
+        },
+        "fu": {
+          "type": "alias",
+          "path": "dependent_references"
+        },
+        "n": {
+          "type": "alias",
+          "path": "norm_references"
+        },
+        "HAUPTTITEL": {
+          "type": "alias",
+          "path": "main_title"
+        },
+        "haupttitel": {
+          "type": "alias",
+          "path": "main_title"
+        },
+        "DOKTITEL": {
+          "type": "alias",
+          "path": "documentary_title"
+        },
+        "doktitel": {
+          "type": "alias",
+          "path": "documentary_title"
+        },
+        "TITELZUS": {
+          "type": "alias",
+          "path": "main_title_additions"
+        },
+        "titelzus": {
+          "type": "alias",
+          "path": "main_title_additions"
+        },
+        "KURZTITEL": {
+          "type": "alias",
+          "path": "short_titles"
+        },
+        "kurztitel": {
+          "type": "alias",
+          "path": "short_titles"
+        },
+        "NEBENTITEL": {
+          "type": "alias",
+          "path": "additional_titles"
+        },
+        "nebentitel": {
+          "type": "alias",
+          "path": "additional_titles"
+        },
+        "GESAMTTITEL": {
+          "type": "alias",
+          "path": "full_title_additions"
+        },
+        "gesamttitel": {
+          "type": "alias",
+          "path": "full_title_additions"
+        },
+        "KTXT": {
+          "type": "alias",
+          "path": "short_report"
+        },
+        "ktxt": {
+          "type": "alias",
+          "path": "short_report"
+        },
+        "GLIEDERUNG": {
+          "type": "alias",
+          "path": "outline"
+        },
+        "gliederung": {
+          "type": "alias",
+          "path": "outline"
+        },
+        "FN": {
+          "type": "alias",
+          "path": "footnotes"
+        },
+        "fn": {
+          "type": "alias",
+          "path": "footnotes"
+        },
+        "VERF": {
+          "type": "alias",
+          "path": "authors"
+        },
+        "verf": {
+          "type": "alias",
+          "path": "authors"
+        },
+        "MITARB": {
+          "type": "alias",
+          "path": "collaborators"
+        },
+        "mitarb": {
+          "type": "alias",
+          "path": "collaborators"
+        },
+        "URH": {
+          "type": "alias",
+          "path": "originator"
+        },
+        "urh": {
+          "type": "alias",
+          "path": "originator"
+        },
+        "HRSGP": {
+          "type": "alias",
+          "path": "publisher_persons"
+        },
+        "hrsgp": {
+          "type": "alias",
+          "path": "publisher_persons"
+        },
+        "HRSGI": {
+          "type": "alias",
+          "path": "publisher_organizations"
+        },
+        "hrsgi": {
+          "type": "alias",
+          "path": "publisher_organizations"
+        },
+        "BEARB": {
+          "type": "alias",
+          "path": "editor"
+        },
+        "bearb": {
+          "type": "alias",
+          "path": "editor"
+        },
+        "BEGR": {
+          "type": "alias",
+          "path": "founder"
+        },
+        "begr": {
+          "type": "alias",
+          "path": "founder"
+        },
+        "FSULIT": {
+          "type": "alias",
+          "path": "dependent_references"
+        },
+        "fsulit": {
+          "type": "alias",
+          "path": "dependent_references"
+        },
+        "FSSLIT": {
+          "type": "alias",
+          "path": "independent_references"
+        },
+        "fsslit": {
+          "type": "alias",
+          "path": "independent_references"
+        },
+        "NORM": {
+          "type": "alias",
+          "path": "norm_references"
+        },
+        "norm": {
+          "type": "alias",
+          "path": "norm_references"
+        },
+        "DNR": {
+          "type": "alias",
+          "path": "document_number"
+        },
+        "dnr": {
+          "type": "alias",
+          "path": "document_number"
+        },
+        "ISBN": {
+          "type": "alias",
+          "path": "international_identifiers"
+        },
+        "isbn": {
+          "type": "alias",
+          "path": "international_identifiers"
+        },
+        "DTYP": {
+          "type": "alias",
+          "path": "document_types"
+        },
+        "dtyp": {
+          "type": "alias",
+          "path": "document_types"
+        },
+        "JAHR": {
+          "type": "alias",
+          "path": "years_of_publication"
+        },
+        "jahr": {
+          "type": "alias",
+          "path": "years_of_publication"
+        },
+        "AUSGABE": {
+          "type": "alias",
+          "path": "edition"
+        },
+        "ausgabe": {
+          "type": "alias",
+          "path": "edition"
+        },
+        "TEILBAND": {
+          "type": "alias",
+          "path": "volumes"
+        },
+        "teilband": {
+          "type": "alias",
+          "path": "volumes"
+        },
+        "VERLAG": {
+          "type": "alias",
+          "path": "publisher_information"
+        },
+        "verlag": {
+          "type": "alias",
+          "path": "publisher_information"
+        },
+        "HSSVMK": {
+          "type": "alias",
+          "path": "university_note"
+        },
+        "hssvmk": {
+          "type": "alias",
+          "path": "university_note"
+        },
+        "KGRVMK": {
+          "type": "alias",
+          "path": "conference_note"
+        },
+        "kgrvmk": {
+          "type": "alias",
+          "path": "conference_note"
+        },
+        "SPRACHE": {
+          "type": "alias",
+          "path": "language"
+        },
+        "sprache": {
+          "type": "alias",
+          "path": "language"
+        },
+        "TITEL": {
+          "type": "alias",
+          "path": "titel_aspekte"
+        },
+        "titel": {
+          "type": "alias",
+          "path": "titel_aspekte"
+        },
+        "ZITFORMAL": {
+          "type": "alias",
+          "path": "bibliothekarische_verweisungen"
+        },
+        "zitformal": {
+          "type": "alias",
+          "path": "bibliothekarische_verweisungen"
+        },
+        "VORAUFL": {
+          "type": "alias",
+          "path": "vorauflagen"
+        },
+        "voraufl": {
+          "type": "alias",
+          "path": "vorauflagen"
+        },
+        "KOLLVMK": {
+          "type": "alias",
+          "path": "kollationsvermerk"
+        },
+        "kollvmk": {
+          "type": "alias",
+          "path": "kollationsvermerk"
+        },
+        "SLW": {
+          "type": "alias",
+          "path": "schlagworte"
+        },
+        "slw": {
+          "type": "alias",
+          "path": "schlagworte"
+        },
+        "SG": {
+          "type": "alias",
+          "path": "sachgebiete"
+        },
+        "sg": {
+          "type": "alias",
+          "path": "sachgebiete"
+        },
+        "REGION": {
+          "type": "alias",
+          "path": "regionen"
+        },
+        "region": {
+          "type": "alias",
+          "path": "regionen"
+        },
+        "BERUFSBILD": {
+          "type": "alias",
+          "path": "zuordnung_berufsbilder"
+        },
+        "berufsbild": {
+          "type": "alias",
+          "path": "zuordnung_berufsbilder"
+        },
+        "DEFINITION": {
+          "type": "alias",
+          "path": "zuordnung_definitionen"
+        },
+        "definition": {
+          "type": "alias",
+          "path": "zuordnung_definitionen"
+        },
+        "KGRUND": {
+          "type": "alias",
+          "path": "zuordnung_kuendigungsgruende"
+        },
+        "kgrund": {
+          "type": "alias",
+          "path": "zuordnung_kuendigungsgruende"
+        },
+        "TV": {
+          "type": "alias",
+          "path": "zuordnung_tarifvertraege"
+        },
+        "tv": {
+          "type": "alias",
+          "path": "zuordnung_tarifvertraege"
+        },
+        "UEBER": {
+          "type": "alias",
+          "path": "ueber_personen_institutionen"
+        },
+        "ueber": {
+          "type": "alias",
+          "path": "ueber_personen_institutionen"
+        },
+        "KONGR": {
+          "type": "alias",
+          "path": "ueber_kongresse"
+        },
+        "kongr": {
+          "type": "alias",
+          "path": "ueber_kongresse"
+        },
+        "FUERPERSINST": {
+          "type": "alias",
+          "path": "fuer_personen_institutionen"
+        },
+        "fuerpersinst": {
+          "type": "alias",
+          "path": "fuer_personen_institutionen"
+        },
+        "ABWNR": {
+          "type": "alias",
+          "path": "abweichende_dokumentnummern"
+        },
+        "abwnr": {
+          "type": "alias",
+          "path": "abweichende_dokumentnummern"
+        },
+        "DART": {
+          "type": "alias",
+          "path": "dokumentart"
+        },
+        "dart": {
+          "type": "alias",
+          "path": "dokumentart"
+        },
         "id": {
           "type": "keyword"
         },
@@ -169,6 +549,58 @@
           "analyzer": "custom_german_analyzer"
         },
         "dokumentart": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "edition": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "university_note": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "editor": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "founder": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "publisher_organizations": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "publisher_persons": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "short_titles": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "additional_titles": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "full_title_additions": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "footnotes": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "publisher_information": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "international_identifiers": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "volumes": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
