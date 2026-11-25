@@ -33,7 +33,7 @@ jobs:
         working-directory: ./backend
         run: ./gradlew xsdDocumentation
 
-      - uses: chainguard-dev/actions/setup-gitsign@794a2c44abbbd7b3a186db97b359270e4105448f
+      - uses: chainguard-dev/actions/setup-gitsign@d496b2ab65497cac13d77ccd5038b8aae7e8c43b
 
       - name: Commit and push changes
         if: ${{ github.ref == 'refs/heads/main' }}
