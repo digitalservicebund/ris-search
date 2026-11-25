@@ -120,6 +120,58 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
+        "bibliothekarische_verweisungen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "vorauflagen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "kollationsvermerk": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "regionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "zuordnung_berufsbilder": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "zuordnung_definitionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "zuordnung_kuendigungsgruende": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "zuordnung_tarifvertraege": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "ueber_kongresse": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "ueber_personen_institutionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "fuer_personen_institutionen": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "abweichende_dokumentnummern": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "dokumentart": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
         "unindexed": {
           "type": "object",
           "enabled": false
