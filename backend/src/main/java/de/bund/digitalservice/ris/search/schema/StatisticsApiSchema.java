@@ -13,13 +13,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * <p>The fields in this record are annotated with {@code @JsonProperty} to ensure proper mapping to
  * and from JSON when interacting with the API.
  *
- * <p>- legislation: Statistical count for legislation items. - case-law: Statistical count for case
- * law items. - literature: Statistical count for literature items.
+ * <p>- legislation: Statistical count for legislation items. - rechtsprechung: Statistical count
+ * for case law items. - literature: Statistical count for literature items.
  */
 public record StatisticsApiSchema(
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("legislation")
         StatisticsCountSchema legislation,
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("case-law")
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("rechtsprechung")
         StatisticsCountSchema caseLaw,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) @JsonProperty("literature")
         StatisticsCountSchema literature,

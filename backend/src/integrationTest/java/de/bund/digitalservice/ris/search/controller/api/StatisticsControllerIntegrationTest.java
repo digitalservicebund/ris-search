@@ -39,7 +39,7 @@ class StatisticsControllerIntegrationTest extends ContainersIntegrationBase {
         .perform(get(ApiConfig.Paths.STATISTICS).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.legislation.count").value(normsCount))
-        .andExpect(jsonPath("$.case-law.count").value(caseLawCount))
+        .andExpect(jsonPath("$.rechtsprechung.count").value(caseLawCount))
         .andExpect(jsonPath("$.literature.count").value(literatureCount))
         .andExpect(
             jsonPath("$.administrative-directive.count").value(administrativeDirectiveCount));

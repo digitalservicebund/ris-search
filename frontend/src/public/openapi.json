@@ -2381,7 +2381,7 @@
           "legislation" : {
             "$ref" : "#/components/schemas/StatisticsCountSchema"
           },
-          "case-law" : {
+          "rechtsprechung" : {
             "$ref" : "#/components/schemas/StatisticsCountSchema"
           },
           "literature" : {
@@ -2391,7 +2391,7 @@
             "$ref" : "#/components/schemas/StatisticsCountSchema"
           }
         },
-        "required" : [ "administrative-directive", "case-law", "legislation", "literature" ]
+        "required" : [ "administrative-directive", "legislation", "literature", "rechtsprechung" ]
       },
       "StatisticsCountSchema" : {
         "type" : "object",

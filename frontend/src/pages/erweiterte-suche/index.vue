@@ -55,7 +55,7 @@ const { data: stats } = await useRisBackend<Statistics>("/v1/statistics");
 const count = computed(() =>
   stats.value
     ? {
-        [DocumentKind.CaseLaw]: stats.value["case-law"]?.count,
+        [DocumentKind.CaseLaw]: stats.value.rechtsprechung?.count,
         [DocumentKind.Literature]: stats.value.literature?.count,
         [DocumentKind.Norm]: stats.value.legislation?.count,
         [DocumentKind.AdministrativeDirective]:
