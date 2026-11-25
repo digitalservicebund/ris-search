@@ -30,9 +30,3 @@ curl https://testphase.rechtsinformationen.bund.de/v1/legislation/eli/bund/bgbl-
 ```
 
 Replace `{eId}` with the value from step 2.
-
-## Pitfalls
-
-- Single articles are only available as HTML. For XML, get the complete `regelungstext-1.xml` and select the element with that `eId`.
-- Match on `name` (`§ 3`), not on the position in the list. Don't rely on the order of `hasPart` to follow the numbering of the articles.
-- Look up the `eId` again for each version of the law instead of reusing it from another version.

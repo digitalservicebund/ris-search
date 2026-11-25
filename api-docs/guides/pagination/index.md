@@ -17,6 +17,10 @@ All paginated endpoints share the following parameters:
 | `size`          | `int` | The number of entities per page   | 100     |
 | `pageIndex`     | `int` | The number of the page to request | 0       |
 
+::: tip **Info**
+You can page through at most 10,000 results. To get all documents, see [Download documents in bulk](/use-cases/bulk-download/).
+:::
+
 ## Responses
 
 ::: code-group

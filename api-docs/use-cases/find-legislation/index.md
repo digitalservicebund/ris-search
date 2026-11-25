@@ -57,9 +57,3 @@ curl -sG https://testphase.rechtsinformationen.bund.de/v1/legislation \
 | `temporalCoverage` | Validity period, e.g. `1998-02-06/..` (open end) |
 | `legislationLegalForce` | Whether this version is currently in force |
 | `encoding[].contentUrl` | Links to HTML and XML of this version |
-
-## Pitfalls
-
-- `dateFrom` and `dateTo` filter by “Ausfertigungsdatum”, not by validity. To filter by validity, use `temporalCoverageFrom` and `temporalCoverageTo` or `mostRelevantOn`.
-- Results are sorted by relevance. Use `sort=-date` for newest first, or `sort=temporalCoverageFrom`.
-- You can page through at most 10,000 results. To get everything, see [Download documents in bulk](/use-cases/bulk-download/).

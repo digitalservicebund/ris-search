@@ -50,9 +50,3 @@ curl $BASE/1998-01-29/regelungstext-1.html    # HTML
 curl $BASE/1998-01-29/regelungstext-1.xml     # XML (LegalDocML.de)
 curl -O $BASE/1998-01-29.zip                  # ZIP: all files of this version
 ```
-
-## Pitfalls
-
-- Search endpoints only return JSON. To get HTML or XML, follow the links in `encoding` or add the extension to the single document URL.
-- For case law, the JSON of a single document already contains the full text fields (e.g. `tenor`, `gruende`). For legislation, the JSON contains metadata and structure, but not the text.
-- More on the data standards: [Standards](/standards/).
