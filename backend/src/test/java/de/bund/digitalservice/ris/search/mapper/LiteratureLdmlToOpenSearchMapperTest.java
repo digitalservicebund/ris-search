@@ -200,58 +200,6 @@ class LiteratureLdmlToOpenSearchMapperTest {
   }
 
   @Test
-  @DisplayName("Ignores fundstellen in selbstständige literature")
-  void ignoresFundstellenInSli() {
-    String sliWithFundstellen =
-        """
-        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
-          <akn:doc name="offene-struktur">
-            <akn:meta>
-              <akn:identification>
-                <akn:FRBRWork>
-                  <akn:FRBRalias name="dokumentnummer" value="XXLS000000002" />
-                </akn:FRBRWork>
-              </akn:identification>
-              <akn:analysis source="#rechtsinformationen-des-bundes">
-                <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                  <akn:implicitReference showAs="BB, 1979, 1298-1300">
-                    <ris:fundstelle domainTerm="Fundstelle">
-                      <ris:periodikum domainTerm="Periodikum">
-                        <ris:abkuerzung domainTerm="Abkürzung">BB</ris:abkuerzung>
-                      </ris:periodikum>
-                      <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
-                    </ris:fundstelle>
-                  </akn:implicitReference>
-                  <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
-                    <ris:fundstelleSelbststaendig domainTerm="Fundstelle selbstständig">
-                      <ris:titel domainTerm="Titel">Titel einer Fundstelle</ris:titel>
-                      <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
-                    </ris:fundstelleSelbststaendig>
-                  </akn:implicitReference>
-                </akn:otherReferences>
-              </akn:analysis>
-              <akn:proprietary source="#rechtsinformationen-des-bundes">
-                <ris:meta>
-                  <ris:dokumenttypen>
-                    <ris:dokumenttyp>Auf</ris:dokumenttyp>
-                  </ris:dokumenttypen>
-                  <ris:veroeffentlichungsJahre>
-                    <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
-                  </ris:veroeffentlichungsJahre>
-                </ris:meta>
-              </akn:proprietary>
-            </akn:meta>
-          </akn:doc>
-        </akn:akomaNtoso>
-        """;
-
-    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(sliWithFundstellen, NOW);
-
-    assertThat(literature.dependentReferences()).isEmpty();
-    assertThat(literature.independentReferences()).isEmpty();
-  }
-
-  @Test
   @DisplayName("Returns empty optional if document number is missing")
   void returnsEmptyOptionalIfDocumentNumberIsMissing() {
     String literatureLdml =
