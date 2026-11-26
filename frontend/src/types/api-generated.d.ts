@@ -834,7 +834,7 @@ export interface components {
     schemas: {
         StatisticsApiSchema: {
             legislation: components["schemas"]["StatisticsCountSchema"];
-            "case-law": components["schemas"]["StatisticsCountSchema"];
+            rechtsprechung: components["schemas"]["StatisticsCountSchema"];
             literature: components["schemas"]["StatisticsCountSchema"];
             "administrative-directive": components["schemas"]["StatisticsCountSchema"];
         };

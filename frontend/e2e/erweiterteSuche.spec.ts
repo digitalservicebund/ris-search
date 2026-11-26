@@ -22,15 +22,11 @@ function getResultCounter(page: Page) {
 
 const nonZeroResultCount = /[1-9][\d.]* Suchergebnis(se)?/;
 
-function getTotalDocumentCounter(page: Page) {
+function getSearchLabel(page: Page) {
   return page.getByText(
-    /In [\d.]+ (Gesetze & Verordnungen|Gerichtsentscheidungen|Literaturnachweise|Verwaltungsvorschriften) suchen/,
-    { exact: true },
+    /^In (Gesetzen & Verordnungen|Gerichtsentscheidungen|Literaturnachweisen|Verwaltungsvorschriften) suchen$/,
   );
 }
-
-const nonZeroTotalDocumentCount = (documentKind: string) =>
-  new RegExp(`[1-9][\\d.]* ${documentKind}`);
 
 async function searchFor(
   page: Page,
@@ -350,13 +346,11 @@ test.describe("searching legislation", () => {
     await expect(searchResults).toHaveText(Array(5).fill(/^Norm/));
   });
 
-  test("shows total document count", async ({ page }) => {
+  test("shows the document kind to search in", async ({ page }) => {
     await navigate(page, "/erweiterte-suche?documentKind=N");
 
-    const count = getTotalDocumentCounter(page);
-
-    await expect(count).toHaveText(
-      nonZeroTotalDocumentCount("Gesetze & Verordnungen"),
+    await expect(getSearchLabel(page)).toHaveText(
+      "In Gesetzen & Verordnungen suchen",
     );
   });
 
@@ -573,13 +567,11 @@ test.describe("searching caselaw", () => {
     );
   });
 
-  test("shows total document count", async ({ page }) => {
+  test("shows the document kind to search in", async ({ page }) => {
     await navigate(page, "/erweiterte-suche?documentKind=R");
 
-    const count = getTotalDocumentCounter(page);
-
-    await expect(count).toHaveText(
-      nonZeroTotalDocumentCount("Gerichtsentscheidungen"),
+    await expect(getSearchLabel(page)).toHaveText(
+      "In Gerichtsentscheidungen suchen",
     );
   });
 
@@ -749,13 +741,11 @@ test.describe("searching literature", () => {
     await expect(searchResults).toHaveText([/^Auf/]);
   });
 
-  test("shows total document count", async ({ page }) => {
+  test("shows the document kind to search in", async ({ page }) => {
     await navigate(page, "/erweiterte-suche?documentKind=L");
 
-    const count = getTotalDocumentCounter(page);
-
-    await expect(count).toHaveText(
-      nonZeroTotalDocumentCount("Literaturnachweise"),
+    await expect(getSearchLabel(page)).toHaveText(
+      "In Literaturnachweisen suchen",
     );
   });
 
@@ -863,13 +853,11 @@ test.describe("searching administrative directive", () => {
     await expect(searchResults).toHaveText([/^(VB|VR|VV)/]);
   });
 
-  test("shows total document count", async ({ page }) => {
+  test("shows the document kind to search in", async ({ page }) => {
     await navigate(page, "/erweiterte-suche?documentKind=V");
 
-    const count = getTotalDocumentCounter(page);
-
-    await expect(count).toHaveText(
-      nonZeroTotalDocumentCount("Verwaltungsvorschriften"),
+    await expect(getSearchLabel(page)).toHaveText(
+      "In Verwaltungsvorschriften suchen",
     );
   });
 

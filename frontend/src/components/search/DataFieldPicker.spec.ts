@@ -5,35 +5,21 @@ import { DocumentKind } from "~/types/api";
 import DataFieldPicker from "./DataFieldPicker.vue";
 
 describe("DataFieldPicker", () => {
-  it("displays the document kind name without count", async () => {
+  it.each([
+    [DocumentKind.Norm, "In Gesetzen & Verordnungen suchen"],
+    [DocumentKind.CaseLaw, "In Gerichtsentscheidungen suchen"],
+    [DocumentKind.AdministrativeDirective, "In Verwaltungsvorschriften suchen"],
+    [DocumentKind.Literature, "In Literaturnachweisen suchen"],
+  ])('displays the search label for "%s"', async (documentKind, label) => {
     await renderSuspended(DataFieldPicker, {
       props: {
         dataFields: undefined,
-        documentKind: DocumentKind.CaseLaw,
+        documentKind,
       },
     });
 
-    expect(
-      screen.getByText("In Gerichtsentscheidungen suchen"),
-    ).toBeInTheDocument();
+    expect(screen.getByText(label)).toBeInTheDocument();
   });
-
-  it.each([DocumentKind.Norm, DocumentKind.Literature, DocumentKind.CaseLaw])(
-    'displays the document kind name and count for "%s"',
-    async (documentKind) => {
-      await renderSuspended(DataFieldPicker, {
-        props: {
-          dataFields: undefined,
-          count: { [documentKind]: 1000 },
-          documentKind,
-        },
-      });
-
-      expect(
-        screen.getByText(`In 1.000 ${formatDocumentKind(documentKind)} suchen`),
-      ).toBeInTheDocument();
-    },
-  );
 
   it("displays the data fields for the document kind", async () => {
     const { rerender } = await renderSuspended(DataFieldPicker, {
