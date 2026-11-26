@@ -63,6 +63,9 @@
                     <ris:begruenderListe domainTerm="Begründerliste">
                         <ris:begruender domainTerm="Begründer" refersTo="#foo-begruender-1">Begruender, Foo</ris:begruender>
                     </ris:begruenderListe>
+                    <ris:bibliothekarischeVerweisungen domainTerm="Bibliothekarische Verweisungen">
+                        <ris:bibliothekarischeVerweisung domainTerm="Bibliothekarische Verweisung">Bibliothekarische Verweisung</ris:bibliothekarischeVerweisung>
+                    </ris:bibliothekarischeVerweisungen>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
@@ -90,6 +93,7 @@
                     <ris:hochschulschriftenvermerke domainTerm="Hochschulschriftenvermerke">
                         <ris:hochschulschriftenvermerk domainTerm="Hochschulschriftenvermerk" refersTo="#universitaet-1">Universität Foo</ris:hochschulschriftenvermerk>
                     </ris:hochschulschriftenvermerke>
+                    <ris:kollation domainTerm="Kollation">Kollation, 608 S</ris:kollation>
                     <ris:kongresse domainTerm="Kongresse">
                         <ris:kongress domainTerm="Kongress"
                                       eId="foo-kongress-1"
@@ -175,6 +179,9 @@
                     <ris:veroeffentlichungsJahre domainTerm="Veröffentlichungsjahre">
                         <ris:veroeffentlichungsJahr domainTerm="Veröffentlichungsjahr">2025</ris:veroeffentlichungsJahr>
                     </ris:veroeffentlichungsJahre>
+                    <ris:vorauflagen domainTerm="Vorauflagen">
+                        <ris:vorauflage domainTerm="Vorauflage">Vorauflage111111, 1976</ris:vorauflage>
+                    </ris:vorauflagen>
                 </ris:meta>
             </akn:proprietary>
         </akn:meta>

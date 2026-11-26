@@ -130,6 +130,9 @@ public class LiteratureLdmlToOpenSearchMapper {
         .titelAspekte(extractTitelAspekte(literatureLdml))
         .schlagworte(extractSchlagworte(literatureLdml))
         .sachgebiete(extractSachgebiete(literatureLdml))
+        .bibliothekarischeVerweisungen(extractBibliothekarischeVerweisungen(literatureLdml))
+        .kollationsvermerk(extractKollationsvermerk(literatureLdml))
+        .vorauflagen(extractVorauflagen(literatureLdml))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();
@@ -490,6 +493,28 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractTitelAspekte(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getTitelAspekte).orElse(List.of());
+  }
+
+  private static List<String> extractBibliothekarischeVerweisungen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml)
+        .map(RisMeta::getBibliothekarischeVerweisungen)
+        .orElse(List.of())
+        .stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  private static String extractKollationsvermerk(LiteratureLdml ldml) {
+    return extractRisMeta(ldml)
+        .map(RisMeta::getKollation)
+        .filter(StringUtils::isNotBlank)
+        .orElse(null);
+  }
+
+  private static List<String> extractVorauflagen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getVorauflagen).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 
   private static List<String> extractSachgebiete(LiteratureLdml ldml) {

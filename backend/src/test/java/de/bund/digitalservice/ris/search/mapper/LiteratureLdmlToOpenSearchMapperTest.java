@@ -67,6 +67,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .footnotes(List.of())
             .internationalIdentifiers(List.of())
             .volumes(List.of())
+            .bibliothekarischeVerweisungen(List.of())
+            .vorauflagen(List.of())
             .indexedAt(NOW.toString())
             .languages(List.of("deu"))
             .shortReport(
@@ -181,6 +183,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
                     "paritätische Beteiligung",
                     "paritätische Mitbestimmung"))
             .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .bibliothekarischeVerweisungen(List.of("Bibliothekarische Verweisung"))
+            .kollationsvermerk("Kollation, 608 S")
+            .vorauflagen(List.of("Vorauflage111111, 1976"))
             .unindexed(
                 LiteratureUnindexed.builder()
                     .zitierungenLiteraturSelbststaendig(List.of())

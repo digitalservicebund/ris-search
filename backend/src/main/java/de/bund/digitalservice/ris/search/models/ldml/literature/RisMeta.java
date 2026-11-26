@@ -111,4 +111,17 @@ public class RisMeta {
   @XmlElementWrapper(name = "titelAspekte", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "titelAspekt", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> titelAspekte;
+
+  @XmlElementWrapper(
+      name = "bibliothekarischeVerweisungen",
+      namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "bibliothekarischeVerweisung", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> bibliothekarischeVerweisungen;
+
+  @XmlElement(namespace = LiteratureNamespaces.RIS_NS)
+  private String kollation;
+
+  @XmlElementWrapper(name = "vorauflagen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "vorauflage", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> vorauflagen;
 }
