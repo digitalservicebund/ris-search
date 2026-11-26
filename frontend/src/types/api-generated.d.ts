@@ -180,6 +180,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/literaturnachweise": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List and search Literaturnachweise
+         * @description The endpoint returns a list of Literaturnachweise from our database. The list is paginated and can be filtered and sorted.
+         */
+        get: operations["searchLiteraturnachweise"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/literaturnachweise/{documentNumber}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Metadaten eines Literaturnachweises
+         * @description The endpoint returns the metadata of a single Literaturnachweis.
+         */
+        get: operations["getLiteraturnachweis"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/literaturnachweise/{documentNumber}.zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Literaturnachweis ZIP (XML and attachments)
+         * @description Returns all files of a Literaturnachweis as a ZIP archive.
+         */
+        get: operations["getLiteraturnachweisAsZip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/literaturnachweise/{documentNumber}.xml": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Literaturnachweis XML
+         * @description Returns a Literaturnachweis as XML. This content is used as a source for the HTML endpoint.
+         */
+        get: operations["getLiteraturnachweisAsXml"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/literaturnachweise/{documentNumber}.html": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Literaturnachweis HTML
+         * @description Renders and returns a Literaturnachweis as HTML.
+         */
+        get: operations["getLiteraturnachweisAsHtml"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/literaturnachweise/changelog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Literaturnachweise changelog
+         * @description Returns references of document changes that occurred in between two points in time.
+         */
+        get: operations["getChangelogs_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/literature": {
         parameters: {
             query?: never;
@@ -291,7 +411,7 @@ export interface paths {
          * Literature changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_1"];
+        get: operations["getChangelogs_2"];
         put?: never;
         post?: never;
         delete?: never;
@@ -484,7 +604,7 @@ export interface paths {
          * Legislation changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_2"];
+        get: operations["getChangelogs_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -819,7 +939,7 @@ export interface paths {
          * Administrative Directive changelog
          * @description Returns references of document changes that occurred in between two points in time.
          */
-        get: operations["getChangelogs_3"];
+        get: operations["getChangelogs_4"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1617,6 +1737,95 @@ export interface components {
             "@type"?: string;
             item: components["schemas"]["LiteratureSearchSchema"];
             textMatches: components["schemas"]["TextMatchSchema"][];
+        };
+        LiteraturnachweisSchema: {
+            /** @example Literaturnachweis */
+            "@type"?: string;
+            "@context": string;
+            /** @example KALU000000000 */
+            "@id": string;
+            /** @example de */
+            inLanguage: string;
+            /**
+             * @description Dokumentnummer
+             * @example KALU000000000
+             */
+            dokumentnummer?: string;
+            /**
+             * @description Jahre der Veröffentlichung
+             * @example [2014, 2024-09]
+             */
+            veroeffentlichungsJahre?: string[];
+            /**
+             * @description Dokumenttypen
+             * @example ['Auf']
+             */
+            dokumenttypen?: string[];
+            /**
+             * @description Fundstelle
+             * @example ['BUV, 1982, 123-123']
+             */
+            fundstellenUnselbstaendig?: string[];
+            /**
+             * @description Fundstelle in selbstständiger Literatur
+             * @example ['50 Jahre Betriebs-Berater, 1987, 123-456']
+             */
+            fundstellenSelbstaendig?: string[];
+            /**
+             * @description Liste von Verweisen auf Normen.
+             * @example ['GG, Art 6 Abs 2 S 1, 1949-05-23']
+             */
+            referenzenNorm?: string[];
+            /** @description Haupttitel */
+            haupttitel?: string;
+            /** @description Zusätze zum Haupttitel */
+            haupttitelzusatz?: string;
+            /** @description Dokumentarischer Titel */
+            dokumentarischerTitel?: string;
+            /** @description Ausgabe */
+            ausgabe?: string;
+            /** @description Bestellnummer */
+            bestellnummern: string[];
+            /**
+             * @description Liste der Verfasser
+             * @example ['Musterfrau, Sabine']
+             */
+            verfasser?: string[];
+            /**
+             * @description Liste der Mitarbeiter
+             * @example ['Mustermann, Max']
+             */
+            mitarbeiter?: string[];
+            /** @description Liste der Bearbeiter */
+            bearbeiter?: string[];
+            /** @description Liste der Begründer */
+            begruender?: string[];
+            /** @description Herausgebende Personen */
+            herausgeberPersonen?: string[];
+            /** @description Herausgebende Institutionen */
+            herausgeberInstitutionen?: string[];
+            /** @description Liste der Verlagsangaben */
+            verlagsangaben?: string[];
+            /**
+             * @description Liste der Urheber
+             * @example ['DGB']
+             */
+            urheber?: string[];
+            /**
+             * @description Liste der Kongressvermerke
+             * @example ['Nationaler Beispiel Kongress, 2024, Berlin, GER']
+             */
+            kongressvermerke?: string[];
+            /** @description Liste der Hochschulschriftenvermerke */
+            hochschulschriftenvermerke?: string[];
+            /** @description Teilbände */
+            teilbaende?: string[];
+            /**
+             * @description Literaturtyp
+             * @example ['sli', 'uli']
+             */
+            literaturtyp: string;
+            encoding: components["schemas"]["DocumentEncodingSchema"][];
         };
         LiteratureSchema: {
             /** @example Literature */
@@ -2450,6 +2659,200 @@ export interface operations {
             };
         };
     };
+    searchLiteraturnachweise: {
+        parameters: {
+            query?: {
+                documentNumber?: string;
+                yearOfPublication?: string[];
+                documentType?: string[];
+                author?: string[];
+                collaborator?: string[];
+                /** @description Searches for the given tokens in searchTerm. If searchTerm contains more than one token, all tokens must be in the document for the document to match. */
+                searchTerm?: string;
+                /** @description The from (greater than or equal) parameter returns all entities where date is later than, or equal to, the given date. */
+                dateFrom?: string;
+                /** @description The to (less than or equal) parameter returns all entities where date is earlier than, or equal to, the given date. */
+                dateTo?: string;
+                /**
+                 * @description The number of entities per page
+                 * @example 100
+                 */
+                size?: number;
+                /**
+                 * @description The number of the page to request. The page starts with the value 0
+                 * @example 0
+                 */
+                pageIndex?: number;
+                /** @description The field to sort the results by. Default is the relevance score calculated by OpenSearch. Valid usage of the sort field are : date and documentNumber and not setting the sort field (sort by relevance descending).Add a leading - to set the order to descending (-date) */
+                sort?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionSchemaSearchMemberSchemaLiteratureSearchSchema"];
+                };
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteraturnachweis: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example KALU000000002 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LiteraturnachweisSchema"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteraturnachweisAsZip: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example XXLS201770751 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/zip": components["schemas"]["StreamingResponseBody"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteraturnachweisAsXml: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example BJLU075748788 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/xml": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getLiteraturnachweisAsHtml: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example BJLU075748788 */
+                documentNumber: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": string;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getChangelogs_1: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ChangelogResponse"];
+                };
+            };
+        };
+    };
     searchLiterature: {
         parameters: {
             query?: {
@@ -2621,7 +3024,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_1: {
+    getChangelogs_2: {
         parameters: {
             query: {
                 from: string;
@@ -3054,7 +3457,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_2: {
+    getChangelogs_3: {
         parameters: {
             query: {
                 from: string;
@@ -3629,7 +4032,7 @@ export interface operations {
             };
         };
     };
-    getChangelogs_3: {
+    getChangelogs_4: {
         parameters: {
             query: {
                 from: string;

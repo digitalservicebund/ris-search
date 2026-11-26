@@ -14,7 +14,9 @@ import org.jetbrains.annotations.Nullable;
 @Builder
 public record LiteraturnachweisSchema(
     @JsonProperty("@context") @Schema(requiredMode = Schema.RequiredMode.REQUIRED) String context,
-    @Schema(example = "KALU000000000", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            example = "/v1/literaturnachweise/KALU000000000",
+            requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,
     @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
@@ -90,7 +92,7 @@ public record LiteraturnachweisSchema(
         List<String> teilbaende,
     @Schema(
             description = "Literaturtyp",
-            example = "['sli', 'uli']",
+            example = "uli",
             requiredMode = Schema.RequiredMode.REQUIRED)
         String literaturtyp,
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED) List<DocumentEncodingSchema> encoding)

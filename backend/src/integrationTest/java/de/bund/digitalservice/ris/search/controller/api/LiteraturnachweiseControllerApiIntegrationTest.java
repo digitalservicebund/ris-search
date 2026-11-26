@@ -438,10 +438,10 @@ class LiteraturnachweiseControllerApiIntegrationTest extends ContainersIntegrati
                 .params(MultiValueMap.fromSingleValue(Map.of("from", from, "to", to))))
         .andExpect(status().isOk())
         .andExpect(isJsonLdCompliant())
-        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literature/file1/zip"))
+        .andExpect(jsonPath("$.changed[0].['@id']").value("/v1/literaturnachweise/file1/zip"))
         .andExpect(jsonPath("$.changed[0].['@type']").value("MediaObject"))
-        .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literature/file2"))
-        .andExpect(jsonPath("$.deleted[0].['@type']").value("Literature"));
+        .andExpect(jsonPath("$.deleted[0].['@id']").value("/v1/literaturnachweise/file2"))
+        .andExpect(jsonPath("$.deleted[0].['@type']").value("Literaturnachweis"));
   }
 
   @Test
