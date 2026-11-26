@@ -109,6 +109,26 @@
                             </ris:fundstelle>
                         </ris:referenzUnselbststaendigeLiteratur>
                     </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Unselbstständige Literatur">
+                        <ris:referenzUnselbststaendigeLiteratur domainTerm="Referenz Unselbstständige Literatur">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">uli</ris:referenzArt>
+                            <ris:fundstelle domainTerm="Fundstelle">
+                                <ris:periodikum domainTerm="Periodikum">
+                                    <ris:abkuerzung domainTerm="Abkürzung">AktivUnselbstständigeliterature</ris:abkuerzung>
+                                </ris:periodikum>
+                                <ris:zitatstelle domainTerm="Zitatstelle">2024</ris:zitatstelle>
+                            </ris:fundstelle>
+                        </ris:referenzUnselbststaendigeLiteratur>
+                    </akn:implicitReference>
+                    <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
+                        <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
+                            <ris:richtung domainTerm="Richtung der Referenzierung">aktiv</ris:richtung>
+                            <ris:referenzArt domainTerm="Art der Referenz">adm</ris:referenzArt>
+                            <ris:artDerZitierung domainTerm="Art der Zitierung">Anwendung</ris:artDerZitierung>
+                            <ris:jurisAbkuerzung domainTerm="juris-Abkürzung">AktivVwV</ris:jurisAbkuerzung>
+                        </ris:referenzVerwaltungsvorschrift>
+                    </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
             <akn:proprietary source="#rechtsinformationen-des-bundes">

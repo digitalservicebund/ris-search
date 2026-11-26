@@ -24,7 +24,6 @@ import de.bund.digitalservice.ris.search.models.ldml.caselaw.VerknuepfteEntschei
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawDocumentationUnit;
 import de.bund.digitalservice.ris.search.models.opensearch.CaseLawUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
-import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung;
 import de.bund.digitalservice.ris.search.utils.DateUtils;
 import de.bund.digitalservice.ris.search.utils.MappingUtils;
 import jakarta.xml.bind.DataBindingException;
@@ -40,7 +39,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.springframework.stereotype.Service;
 
@@ -151,21 +149,27 @@ public class CaseLawLdmlToOpenSearchMapper {
                 meta,
                 refs -> refs.getReferencesByType(ImplicitReference::getNachgehendeEntscheidung)))
         .aktivzitierungLiteraturUnselbstaendig(
-            searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.AKTIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.AKTIV))
         .passivzitierungLiteraturUnselbstaendig(
-            searchTexts(unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.PASSIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.PASSIV))
         .aktivzitierungLiteraturSelbstaendig(
-            searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.AKTIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturSelbststaendig(), Richtung.AKTIV))
         .passivzitierungLiteraturSelbstaendig(
-            searchTexts(unindexed.zitierungenLiteraturSelbststaendig(), Richtung.PASSIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturSelbststaendig(), Richtung.PASSIV))
         .aktivzitierungRechtsprechung(
-            searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.AKTIV))
+            ZitierungenMapper.searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.AKTIV))
         .passivzitierungRechtsprechung(
-            searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.PASSIV))
+            ZitierungenMapper.searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.PASSIV))
         .aktivzitierungVerwaltungsvorschriften(
-            searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.AKTIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenVerwaltungsvorschriften(), Richtung.AKTIV))
         .passivzitierungVerwaltungsvorschriften(
-            searchTexts(unindexed.zitierungenVerwaltungsvorschriften(), Richtung.PASSIV))
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenVerwaltungsvorschriften(), Richtung.PASSIV))
         .amtlicheFundstellen(extractAmtlicheFundstellen(meta))
         .nichtamtlicheFundstellen(extractNichtamtlicheFundstellen(meta))
         .gesetzeskraft(extractGesetzeskraft(meta))
@@ -310,15 +314,6 @@ public class CaseLawLdmlToOpenSearchMapper {
         .flatMap(Collection::stream)
         .filter(Objects::nonNull)
         .map(VerknuepfteEntscheidung::getFormatted)
-        .toList();
-  }
-
-  private static List<String> searchTexts(
-      List<? extends Zitierung> zitierungen, Richtung richtung) {
-    return zitierungen.stream()
-        .filter(zitierung -> zitierung.richtung() == richtung)
-        .map(Zitierung::toSearchText)
-        .filter(StringUtils::isNotBlank)
         .toList();
   }
 

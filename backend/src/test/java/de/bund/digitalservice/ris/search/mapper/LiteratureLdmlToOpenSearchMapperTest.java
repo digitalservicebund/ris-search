@@ -92,6 +92,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
                     "paritätische Beteiligung",
                     "paritätische Mitbestimmung"))
             .sachgebiete(List.of("ID-01 Sachgebiet1", "ID-02 Sachgebiet2"))
+            .aktivzitierungenRechtsprechung(List.of("Vergleiche FooBar 1. Kammer 03.04.2008"))
+            .aktivzitierungenLiteraturSelbstaendig(List.of("Selbstständigeliterature 2025"))
+            .aktivzitierungenLiteraturUnselbstaendig(
+                List.of("AktivUnselbstständigeliterature 2024"))
+            .aktivzitierungenVerwaltungsvorschriften(List.of("Anwendung AktivVwV"))
             .unindexed(
                 LiteratureUnindexed.builder()
                     .zitierungenLiteraturSelbststaendig(
@@ -118,6 +123,14 @@ class LiteratureLdmlToOpenSearchMapperTest {
                                         .periodikum("Unselbstständigeliterature")
                                         .zitatstelle("1989")
                                         .build())
+                                .build(),
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.AKTIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("AktivUnselbstständigeliterature")
+                                        .zitatstelle("2024")
+                                        .build())
                                 .build()))
                     .zitierungenRechtsprechung(
                         List.of(
@@ -137,6 +150,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
                                 .richtung(Richtung.PASSIV)
                                 .artDerZitierung("Vergleiche")
                                 .jurisAbkuerzung("NaNu")
+                                .build(),
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.AKTIV)
+                                .artDerZitierung("Anwendung")
+                                .jurisAbkuerzung("AktivVwV")
                                 .build()))
                     .build())
             .build();
@@ -206,17 +224,53 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .ueberKongresse(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
             .dokumentart("selbststaendig")
             .abweichendeDokumentnummern(List.of("XXLS100000001"))
+            .aktivzitierungenRechtsprechung(List.of("Vergleiche FooBar 1. Kammer 03.04.2008"))
+            .aktivzitierungenLiteraturSelbstaendig(List.of("Selbstständigeliterature 2025"))
+            .aktivzitierungenLiteraturUnselbstaendig(
+                List.of("AktivUnselbstständigeliterature 2024"))
+            .aktivzitierungenVerwaltungsvorschriften(List.of("Anwendung AktivVwV"))
             .unindexed(
                 LiteratureUnindexed.builder()
-                    .zitierungenLiteraturSelbststaendig(List.of())
-                    .zitierungenLiteraturUnselbststaendig(List.of())
-                    .zitierungenRechtsprechung(List.of())
+                    .zitierungenLiteraturSelbststaendig(
+                        List.of(
+                            ZitierungLiteraturSelbststaendig.builder()
+                                .richtung(Richtung.AKTIV)
+                                .titel("Selbstständigeliterature")
+                                .veroeffentlichungsjahr("2025")
+                                .build()))
+                    .zitierungenLiteraturUnselbststaendig(
+                        List.of(
+                            ZitierungLiteraturUnselbststaendig.builder()
+                                .richtung(Richtung.AKTIV)
+                                .fundstelle(
+                                    Fundstelle.builder()
+                                        .periodikum("AktivUnselbstständigeliterature")
+                                        .zitatstelle("2024")
+                                        .build())
+                                .build()))
+                    .zitierungenRechtsprechung(
+                        List.of(
+                            ZitierungRechtsprechung.builder()
+                                .richtung(Richtung.AKTIV)
+                                .artDerZitierung("Vergleiche")
+                                .gericht(
+                                    Gericht.builder()
+                                        .gerichtstyp("FooBar")
+                                        .spruchkoerper("1. Kammer")
+                                        .build())
+                                .entscheidungsdatum(LocalDate.of(2008, Month.APRIL, 3))
+                                .build()))
                     .zitierungenVerwaltungsvorschriften(
                         List.of(
                             ZitierungVerwaltungsvorschrift.builder()
                                 .richtung(Richtung.PASSIV)
                                 .artDerZitierung("Vergleiche")
                                 .jurisAbkuerzung("NaNu")
+                                .build(),
+                            ZitierungVerwaltungsvorschrift.builder()
+                                .richtung(Richtung.AKTIV)
+                                .artDerZitierung("Anwendung")
+                                .jurisAbkuerzung("AktivVwV")
                                 .build()))
                     .build())
             .build();

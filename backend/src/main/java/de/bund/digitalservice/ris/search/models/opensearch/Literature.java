@@ -65,6 +65,14 @@ public record Literature(
     @Field(name = Fields.FUER_PERSONEN_INSTITUTIONEN) List<String> fuerPersonenInstitutionen,
     @Field(name = Fields.ABWEICHENDE_DOKUMENTNUMMERN) List<String> abweichendeDokumentnummern,
     @Nullable @Field(name = Fields.DOKUMENTART) String dokumentart,
+    @Field(name = Fields.AKTIVZITIERUNGEN_RECHTSPRECHUNG)
+        List<String> aktivzitierungenRechtsprechung,
+    @Field(name = Fields.AKTIVZITIERUNGEN_LITERATUR_SELBSTAENDIG)
+        List<String> aktivzitierungenLiteraturSelbstaendig,
+    @Field(name = Fields.AKTIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG)
+        List<String> aktivzitierungenLiteraturUnselbstaendig,
+    @Field(name = Fields.AKTIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN)
+        List<String> aktivzitierungenVerwaltungsvorschriften,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
         LiteratureUnindexed unindexed)
@@ -203,5 +211,16 @@ public record Literature(
     public static final String ABWEICHENDE_DOKUMENTNUMMERN = "abweichende_dokumentnummern";
 
     public static final String DOKUMENTART = "dokumentart";
+
+    public static final String AKTIVZITIERUNGEN_RECHTSPRECHUNG = "aktivzitierungen_rechtsprechung";
+
+    public static final String AKTIVZITIERUNGEN_LITERATUR_SELBSTAENDIG =
+        "aktivzitierungen_literatur_selbstaendig";
+
+    public static final String AKTIVZITIERUNGEN_LITERATUR_UNSELBSTAENDIG =
+        "aktivzitierungen_literatur_unselbstaendig";
+
+    public static final String AKTIVZITIERUNGEN_VERWALTUNGSVORSCHRIFTEN =
+        "aktivzitierungen_verwaltungsvorschriften";
   }
 }

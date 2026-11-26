@@ -111,4 +111,23 @@ class ZitierungenMapperTest {
                 .fundstelle(Fundstelle.builder().zitatstelle("1999, 641").build())
                 .build());
   }
+
+  @Test
+  @DisplayName("Returns the search texts of the citations with the given Richtung, skipping blanks")
+  void returnsSearchTextsOfGivenRichtung() {
+    List<ZitierungRechtsprechung> zitierungen =
+        List.of(
+            ZitierungRechtsprechung.builder()
+                .richtung(Richtung.AKTIV)
+                .dokumentnummer("JURE100074208")
+                .build(),
+            ZitierungRechtsprechung.builder()
+                .richtung(Richtung.PASSIV)
+                .dokumentnummer("JURE100074209")
+                .build(),
+            ZitierungRechtsprechung.builder().richtung(Richtung.AKTIV).build());
+
+    assertThat(ZitierungenMapper.searchTexts(zitierungen, Richtung.AKTIV))
+        .containsExactly("JURE100074208");
+  }
 }
