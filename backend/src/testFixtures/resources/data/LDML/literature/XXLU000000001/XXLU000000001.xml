@@ -166,6 +166,32 @@
                             <ris:titel domainTerm="Titel">Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:personenInstitutionen domainTerm="Personen/Institutionen">
+                        <ris:personInstitution domainTerm="Person/Institution"
+                                               eId="person-institution-nachname-vorname-eins"
+                                               showAs="Nachname, Vorname-Eins">
+                            <ris:name domainTerm="Name">Nachname, Vorname-Eins</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">Prof Dr</ris:zusatz>
+                        </ris:personInstitution>
+                        <ris:personInstitution domainTerm="Person/Institution"
+                                               eId="person-institution-eine-institution"
+                                               showAs="Eine Institution">
+                            <ris:name domainTerm="Name">Eine Institution</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">2016, Berlin</ris:zusatz>
+                        </ris:personInstitution>
+                    </ris:personenInstitutionen>
+                    <ris:ueberPersonenInstitutionen domainTerm="Über Personen/Institutionen">
+                        <ris:ueberPersonInstitution domainTerm="Über Person/Institution"
+                                                    refersTo="#person-institution-nachname-vorname-eins">Nachname, Vorname-Eins</ris:ueberPersonInstitution>
+                    </ris:ueberPersonenInstitutionen>
+                    <ris:fuerPersonenInstitutionen domainTerm="Für Personen/Institutionen">
+                        <ris:fuerPersonInstitution domainTerm="Für Person/Institution"
+                                                   refersTo="#person-institution-eine-institution">Eine Institution</ris:fuerPersonInstitution>
+                    </ris:fuerPersonenInstitutionen>
+                    <ris:ueberkongresse domainTerm="Über Kongresse">
+                        <ris:ueberkongress domainTerm="Über Kongress"
+                                           refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:ueberkongress>
+                    </ris:ueberkongresse>
                     <ris:regionen domainTerm="Regionen">
                         <ris:region domainTerm="Region">DE</ris:region>
                     </ris:regionen>

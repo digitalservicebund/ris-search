@@ -74,6 +74,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .definitionen(List.of("Definition"))
             .kuendigungsgruende(List.of("Straftat"))
             .tarifvertraege(List.of("Mantel"))
+            .ueberPersonenInstitutionen(List.of("Nachname, Vorname-Eins"))
+            .fuerPersonenInstitutionen(List.of("Eine Institution"))
+            .ueberKongresse(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
             .indexedAt(NOW.toString())
             .languages(List.of("deu"))
             .shortReport(
@@ -196,6 +199,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .definitionen(List.of("Definition"))
             .kuendigungsgruende(List.of("Straftat"))
             .tarifvertraege(List.of("Mantel"))
+            .ueberPersonenInstitutionen(List.of("Nachname, Vorname-Eins"))
+            .fuerPersonenInstitutionen(List.of("Eine Institution"))
+            .ueberKongresse(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
             .unindexed(
                 LiteratureUnindexed.builder()
                     .zitierungenLiteraturSelbststaendig(List.of())

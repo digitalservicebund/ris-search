@@ -144,4 +144,20 @@ public class RisMeta {
   @XmlElementWrapper(name = "tarifvertraege", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "tarifvertrag", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> tarifvertraege;
+
+  @XmlElementWrapper(name = "personenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "personInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisPersonInstitution> personenInstitutionen;
+
+  @XmlElementWrapper(name = "ueberPersonenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "ueberPersonInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> ueberPersonenInstitutionen;
+
+  @XmlElementWrapper(name = "fuerPersonenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "fuerPersonInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> fuerPersonenInstitutionen;
+
+  @XmlElementWrapper(name = "ueberkongresse", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "ueberkongress", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> ueberKongresse;
 }

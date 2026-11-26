@@ -24,6 +24,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisPersonInstitution;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
@@ -108,7 +109,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .authors(extractAuthors(literatureLdml))
         .collaborators(extractCollaborators(literatureLdml))
         .originators(extractOriginators(literatureLdml))
-        .conferenceNotes(extractConferenceNotes(literatureLdml))
+        .conferenceNotes(extractKongresse(literatureLdml, RisMeta::getKongressvermerke))
         .universityNotes(extractUniversityNotes(literatureLdml))
         .editors(extractEditor(literatureLdml))
         .founder(extractFounder(literatureLdml))
@@ -139,6 +140,11 @@ public class LiteratureLdmlToOpenSearchMapper {
         .definitionen(extractDefinitionen(literatureLdml))
         .kuendigungsgruende(extractStrings(literatureLdml, RisMeta::getKuendigungsgruende))
         .tarifvertraege(extractStrings(literatureLdml, RisMeta::getTarifvertraege))
+        .ueberPersonenInstitutionen(
+            extractPersonenInstitutionen(literatureLdml, RisMeta::getUeberPersonenInstitutionen))
+        .fuerPersonenInstitutionen(
+            extractPersonenInstitutionen(literatureLdml, RisMeta::getFuerPersonenInstitutionen))
+        .ueberKongresse(extractKongresse(literatureLdml, RisMeta::getUeberKongresse))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();
@@ -278,12 +284,27 @@ public class LiteratureLdmlToOpenSearchMapper {
     return extractPersonName(literatureLdml, RisMeta::getBearbeiterListe);
   }
 
-  private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
-    var eIds = getRoleReferences(literatureLdml, RisMeta::getKongressvermerke);
+  private static List<String> extractKongresse(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var eIds = getRoleReferences(literatureLdml, roleList);
 
     return extractRisMeta(literatureLdml).map(RisMeta::getKongresse).orElse(List.of()).stream()
         .filter(kongress -> eIds.contains(kongress.getEId()))
         .map(RisKongress::getShowAs)
+        .filter(Objects::nonNull)
+        .toList();
+  }
+
+  private static List<String> extractPersonenInstitutionen(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var eIds = getRoleReferences(literatureLdml, roleList);
+
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getPersonenInstitutionen)
+        .orElse(List.of())
+        .stream()
+        .filter(personInstitution -> eIds.contains(personInstitution.getEId()))
+        .map(RisPersonInstitution::getShowAs)
         .filter(Objects::nonNull)
         .toList();
   }
