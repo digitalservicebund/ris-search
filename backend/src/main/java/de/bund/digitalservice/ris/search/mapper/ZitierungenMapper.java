@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschri
 import de.bund.digitalservice.ris.search.models.ldml.RisZitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Fundstelle;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Zitierung;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturSelbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungLiteraturUnselbststaendig;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.ZitierungRechtsprechung;
@@ -16,6 +17,7 @@ import de.bund.digitalservice.ris.search.utils.DateUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Maps the aktiv- and passivzitierungen of an LDML document (case law or literature) to their
@@ -44,6 +46,14 @@ final class ZitierungenMapper {
   static List<ZitierungVerwaltungsvorschrift> mapVerwaltungsvorschriften(
       List<ReferenzVerwaltungsvorschrift> references) {
     return map(references, ZitierungenMapper::mapVerwaltungsvorschrift);
+  }
+
+  static List<String> searchTexts(List<? extends Zitierung> zitierungen, Richtung richtung) {
+    return zitierungen.stream()
+        .filter(zitierung -> zitierung.richtung() == richtung)
+        .map(Zitierung::toSearchText)
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 
   private static <R extends RisZitierung, T> List<T> map(

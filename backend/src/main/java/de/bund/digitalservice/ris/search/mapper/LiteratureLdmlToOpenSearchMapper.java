@@ -28,6 +28,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.RisPersonInstitu
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
+import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
 import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
@@ -98,6 +99,7 @@ public class LiteratureLdmlToOpenSearchMapper {
     var yearsOfPublication = extractYearsOfPublication(literatureLdml);
     var firstYearOfPublication =
         LiteratureLdmlMappingUtils.extractFirstYearOfPublication(yearsOfPublication);
+    var unindexed = extractUnindexed(literatureLdml);
     return Literature.builder()
         .id(documentNumber)
         .documentNumber(documentNumber)
@@ -150,6 +152,18 @@ public class LiteratureLdmlToOpenSearchMapper {
         .abweichendeDokumentnummern(
             extractStrings(literatureLdml, RisMeta::getAbweichendeDokumentnummern))
         .unindexed(extractUnindexed(literatureLdml))
+        .aktivzitierungenRechtsprechung(
+            ZitierungenMapper.searchTexts(unindexed.zitierungenRechtsprechung(), Richtung.AKTIV))
+        .aktivzitierungenLiteraturSelbstaendig(
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturSelbststaendig(), Richtung.AKTIV))
+        .aktivzitierungenLiteraturUnselbstaendig(
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenLiteraturUnselbststaendig(), Richtung.AKTIV))
+        .aktivzitierungenVerwaltungsvorschriften(
+            ZitierungenMapper.searchTexts(
+                unindexed.zitierungenVerwaltungsvorschriften(), Richtung.AKTIV))
+        .unindexed(unindexed)
         .indexedAt(time.toString())
         .build();
   }

@@ -409,6 +409,38 @@
           "type": "alias",
           "path": "dokumentart"
         },
+        "ZITRSPR": {
+          "type": "alias",
+          "path": "aktivzitierungen_rechtsprechung"
+        },
+        "zitrspr": {
+          "type": "alias",
+          "path": "aktivzitierungen_rechtsprechung"
+        },
+        "ZITSLIT": {
+          "type": "alias",
+          "path": "aktivzitierungen_literatur_selbstaendig"
+        },
+        "zitslit": {
+          "type": "alias",
+          "path": "aktivzitierungen_literatur_selbstaendig"
+        },
+        "ZITULIT": {
+          "type": "alias",
+          "path": "aktivzitierungen_literatur_unselbstaendig"
+        },
+        "zitulit": {
+          "type": "alias",
+          "path": "aktivzitierungen_literatur_unselbstaendig"
+        },
+        "ZITVWV": {
+          "type": "alias",
+          "path": "aktivzitierungen_verwaltungsvorschriften"
+        },
+        "zitvwv": {
+          "type": "alias",
+          "path": "aktivzitierungen_verwaltungsvorschriften"
+        },
         "id": {
           "type": "keyword"
         },
@@ -549,6 +581,22 @@
           "analyzer": "custom_german_analyzer"
         },
         "dokumentart": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierungen_rechtsprechung": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierungen_literatur_selbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierungen_literatur_unselbstaendig": {
+          "type": "text",
+          "analyzer": "custom_german_analyzer"
+        },
+        "aktivzitierungen_verwaltungsvorschriften": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
