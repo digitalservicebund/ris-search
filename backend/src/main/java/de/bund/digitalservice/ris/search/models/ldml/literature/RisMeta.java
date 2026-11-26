@@ -111,4 +111,57 @@ public class RisMeta {
   @XmlElementWrapper(name = "titelAspekte", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "titelAspekt", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> titelAspekte;
+
+  @XmlElementWrapper(
+      name = "bibliothekarischeVerweisungen",
+      namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "bibliothekarischeVerweisung", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> bibliothekarischeVerweisungen;
+
+  @XmlElement(namespace = LiteratureNamespaces.RIS_NS)
+  private String kollation;
+
+  @XmlElementWrapper(name = "vorauflagen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "vorauflage", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> vorauflagen;
+
+  @XmlElementWrapper(name = "regionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "region", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> regionen;
+
+  @XmlElementWrapper(name = "berufsbilder", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "berufsbild", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> berufsbilder;
+
+  @XmlElementWrapper(name = "definitionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "definition", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisDefinition> definitionen;
+
+  @XmlElementWrapper(name = "kuendigungsgruende", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "kuendigungsgrund", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> kuendigungsgruende;
+
+  @XmlElementWrapper(name = "tarifvertraege", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "tarifvertrag", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> tarifvertraege;
+
+  @XmlElementWrapper(name = "personenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "personInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisPersonInstitution> personenInstitutionen;
+
+  @XmlElementWrapper(name = "ueberPersonenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "ueberPersonInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> ueberPersonenInstitutionen;
+
+  @XmlElementWrapper(name = "fuerPersonenInstitutionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "fuerPersonInstitution", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> fuerPersonenInstitutionen;
+
+  @XmlElementWrapper(name = "ueberkongresse", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "ueberkongress", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisRoleItem> ueberKongresse;
+
+  @XmlElementWrapper(name = "abweichendeDokumentnummern", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "abweichendeDokumentnummer", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> abweichendeDokumentnummern;
 }

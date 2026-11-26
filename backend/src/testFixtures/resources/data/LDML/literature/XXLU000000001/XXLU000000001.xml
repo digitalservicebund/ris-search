@@ -113,10 +113,25 @@
             </akn:analysis>
             <akn:proprietary source="#rechtsinformationen-des-bundes">
                 <ris:meta>
+                    <ris:abweichendeDokumentnummern domainTerm="Abweichende Dokumentnummern">
+                        <ris:abweichendeDokumentnummer domainTerm="Abweichende Dokumentnummer">XXLU100000001</ris:abweichendeDokumentnummer>
+                    </ris:abweichendeDokumentnummern>
+                    <ris:berufsbilder domainTerm="Berufsbilder">
+                        <ris:berufsbild domainTerm="Berufsbild">Beruf</ris:berufsbild>
+                    </ris:berufsbilder>
+                    <ris:definitionen domainTerm="Definitionen">
+                        <ris:definition domainTerm="Definition">
+                            <ris:definierterBegriff domainTerm="Definierter Begriff">Definition</ris:definierterBegriff>
+                        </ris:definition>
+                    </ris:definitionen>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
                     </ris:dokumenttypen>
+                    <ris:fuerPersonenInstitutionen domainTerm="Für Personen/Institutionen">
+                        <ris:fuerPersonInstitution domainTerm="Für Person/Institution"
+                                                   refersTo="#person-institution-eine-institution">Eine Institution</ris:fuerPersonInstitution>
+                    </ris:fuerPersonenInstitutionen>
                     <ris:gliederung domainTerm="Gliederung">
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">I. Äpfel.</ris:gliederungseintrag>
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Birnen.</ris:gliederungseintrag>
@@ -133,6 +148,9 @@
                     <ris:kongressvermerke domainTerm="Kongressvermerke">
                         <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
                     </ris:kongressvermerke>
+                    <ris:kuendigungsgruende domainTerm="Kündigungsgründe">
+                        <ris:kuendigungsgrund domainTerm="Kündigungsgrund">Straftat</ris:kuendigungsgrund>
+                    </ris:kuendigungsgruende>
                     <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
                         <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
                     </ris:mitarbeiterListe>
@@ -155,13 +173,41 @@
                             <ris:titel domainTerm="Titel">Dr</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:personenInstitutionen domainTerm="Personen/Institutionen">
+                        <ris:personInstitution domainTerm="Person/Institution"
+                                               eId="person-institution-nachname-vorname-eins"
+                                               showAs="Nachname, Vorname-Eins">
+                            <ris:name domainTerm="Name">Nachname, Vorname-Eins</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">Prof Dr</ris:zusatz>
+                        </ris:personInstitution>
+                        <ris:personInstitution domainTerm="Person/Institution"
+                                               eId="person-institution-eine-institution"
+                                               showAs="Eine Institution">
+                            <ris:name domainTerm="Name">Eine Institution</ris:name>
+                            <ris:zusatz domainTerm="Zusatz">2016, Berlin</ris:zusatz>
+                        </ris:personInstitution>
+                    </ris:personenInstitutionen>
+                    <ris:regionen domainTerm="Regionen">
+                        <ris:region domainTerm="Region">DE</ris:region>
+                    </ris:regionen>
                     <ris:sachgebiete domainTerm="Sachgebiete">
                         <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-01">Sachgebiet1</ris:sachgebiet>
                         <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-02">Sachgebiet2</ris:sachgebiet>
                     </ris:sachgebiete>
+                    <ris:tarifvertraege domainTerm="Tarifverträge">
+                        <ris:tarifvertrag domainTerm="Tarifvertrag">Mantel</ris:tarifvertrag>
+                    </ris:tarifvertraege>
                     <ris:titelAspekte domainTerm="Titelaspekte">
                         <ris:titelAspekt domainTerm="Titelaspekt">Testdokument</ris:titelAspekt>
                     </ris:titelAspekte>
+                    <ris:ueberkongresse domainTerm="Über Kongresse">
+                        <ris:ueberkongress domainTerm="Über Kongress"
+                                           refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:ueberkongress>
+                    </ris:ueberkongresse>
+                    <ris:ueberPersonenInstitutionen domainTerm="Über Personen/Institutionen">
+                        <ris:ueberPersonInstitution domainTerm="Über Person/Institution"
+                                                    refersTo="#person-institution-nachname-vorname-eins">Nachname, Vorname-Eins</ris:ueberPersonInstitution>
+                    </ris:ueberPersonenInstitutionen>
                     <ris:urheberListe domainTerm="Urheberliste">
                         <ris:urheber domainTerm="Urheber" refersTo="#foo-urheber-1">FOO</ris:urheber>
                     </ris:urheberListe>

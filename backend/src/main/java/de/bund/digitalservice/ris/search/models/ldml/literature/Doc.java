@@ -1,6 +1,7 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 
@@ -23,6 +24,13 @@ import lombok.Getter;
  */
 @Getter
 public class Doc {
+  /**
+   * The document type, e.g. {@code
+   * /akn/ontology/de/concept/documenttype/bund/literatur/selbststaendig}.
+   */
+  @XmlAttribute(name = "name")
+  private String name;
+
   @XmlElement(name = "meta", namespace = LiteratureNamespaces.AKN_NS)
   private Meta meta;
 

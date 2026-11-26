@@ -19,10 +19,12 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisDefinition;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisPerson;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisPersonInstitution;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
@@ -33,6 +35,7 @@ import java.io.StringReader;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -107,7 +110,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .authors(extractAuthors(literatureLdml))
         .collaborators(extractCollaborators(literatureLdml))
         .originators(extractOriginators(literatureLdml))
-        .conferenceNotes(extractConferenceNotes(literatureLdml))
+        .conferenceNotes(extractKongresse(literatureLdml, RisMeta::getKongressvermerke))
         .universityNotes(extractUniversityNotes(literatureLdml))
         .editors(extractEditor(literatureLdml))
         .founder(extractFounder(literatureLdml))
@@ -130,6 +133,22 @@ public class LiteratureLdmlToOpenSearchMapper {
         .titelAspekte(extractTitelAspekte(literatureLdml))
         .schlagworte(extractSchlagworte(literatureLdml))
         .sachgebiete(extractSachgebiete(literatureLdml))
+        .bibliothekarischeVerweisungen(extractBibliothekarischeVerweisungen(literatureLdml))
+        .kollationsvermerk(extractKollationsvermerk(literatureLdml))
+        .vorauflagen(extractVorauflagen(literatureLdml))
+        .regionen(extractStrings(literatureLdml, RisMeta::getRegionen))
+        .berufsbilder(extractStrings(literatureLdml, RisMeta::getBerufsbilder))
+        .definitionen(extractDefinitionen(literatureLdml))
+        .kuendigungsgruende(extractStrings(literatureLdml, RisMeta::getKuendigungsgruende))
+        .tarifvertraege(extractStrings(literatureLdml, RisMeta::getTarifvertraege))
+        .ueberPersonenInstitutionen(
+            extractPersonenInstitutionen(literatureLdml, RisMeta::getUeberPersonenInstitutionen))
+        .fuerPersonenInstitutionen(
+            extractPersonenInstitutionen(literatureLdml, RisMeta::getFuerPersonenInstitutionen))
+        .ueberKongresse(extractKongresse(literatureLdml, RisMeta::getUeberKongresse))
+        .dokumentart(extractDokumentart(literatureLdml))
+        .abweichendeDokumentnummern(
+            extractStrings(literatureLdml, RisMeta::getAbweichendeDokumentnummern))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();
@@ -155,6 +174,22 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(Doc::getMeta)
         .map(Meta::getProprietary)
         .map(Proprietary::getMeta);
+  }
+
+  private static final Map<String, String> DOKUMENTARTEN =
+      Map.of(
+          "/akn/ontology/de/concept/documenttype/bund/literatur/selbststaendig",
+          "selbststaendig",
+          "/akn/ontology/de/concept/documenttype/bund/literatur/unselbststaendig",
+          "unselbststaendig");
+
+  /** Maps the akn:doc name to the Dokumentart. Unknown names are mapped to null. */
+  private static String extractDokumentart(LiteratureLdml literatureLdml) {
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getName)
+        .map(DOKUMENTARTEN::get)
+        .orElse(null);
   }
 
   private static List<String> extractShortTitles(LiteratureLdml literatureLdml) {
@@ -269,12 +304,27 @@ public class LiteratureLdmlToOpenSearchMapper {
     return extractPersonName(literatureLdml, RisMeta::getBearbeiterListe);
   }
 
-  private static List<String> extractConferenceNotes(LiteratureLdml literatureLdml) {
-    var eIds = getRoleReferences(literatureLdml, RisMeta::getKongressvermerke);
+  private static List<String> extractKongresse(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var eIds = getRoleReferences(literatureLdml, roleList);
 
     return extractRisMeta(literatureLdml).map(RisMeta::getKongresse).orElse(List.of()).stream()
         .filter(kongress -> eIds.contains(kongress.getEId()))
         .map(RisKongress::getShowAs)
+        .filter(Objects::nonNull)
+        .toList();
+  }
+
+  private static List<String> extractPersonenInstitutionen(
+      LiteratureLdml literatureLdml, Function<RisMeta, List<RisRoleItem>> roleList) {
+    var eIds = getRoleReferences(literatureLdml, roleList);
+
+    return extractRisMeta(literatureLdml)
+        .map(RisMeta::getPersonenInstitutionen)
+        .orElse(List.of())
+        .stream()
+        .filter(personInstitution -> eIds.contains(personInstitution.getEId()))
+        .map(RisPersonInstitution::getShowAs)
         .filter(Objects::nonNull)
         .toList();
   }
@@ -490,6 +540,44 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractTitelAspekte(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getTitelAspekte).orElse(List.of());
+  }
+
+  private static List<String> extractBibliothekarischeVerweisungen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml)
+        .map(RisMeta::getBibliothekarischeVerweisungen)
+        .orElse(List.of())
+        .stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  private static String extractKollationsvermerk(LiteratureLdml ldml) {
+    return extractRisMeta(ldml)
+        .map(RisMeta::getKollation)
+        .filter(StringUtils::isNotBlank)
+        .orElse(null);
+  }
+
+  private static List<String> extractVorauflagen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getVorauflagen).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  /** Returns the non-blank values of a simple string list in ris:meta. */
+  private static List<String> extractStrings(
+      LiteratureLdml ldml, Function<RisMeta, List<String>> getter) {
+    return extractRisMeta(ldml).map(getter).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  private static List<String> extractDefinitionen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getDefinitionen).orElse(List.of()).stream()
+        .filter(Objects::nonNull)
+        .map(RisDefinition::getDefinierterBegriff)
+        .filter(StringUtils::isNotBlank)
+        .toList();
   }
 
   private static List<String> extractSachgebiete(LiteratureLdml ldml) {
