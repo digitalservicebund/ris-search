@@ -1162,7 +1162,7 @@ export interface components {
              * @description Dokumentnummer
              * @example KARE000000000
              */
-            dokumentNummer?: string;
+            dokumentNummer: string;
             /**
              * @description European Case Law Identifier
              * @example ECLI:DE:FGRLP:1969:0905.IV85.68.0A
@@ -1206,7 +1206,7 @@ export interface components {
              * Format: date
              * @description Datum der Entscheidung, hier kann es zu Dopplungen mit anderen Entscheidungen kommen, auch in Kombination mit Aktenzeichen und Gericht.
              */
-            datum?: string;
+            datum: string;
             /**
              * @description Art des Datums
              * @example Entscheidungsdatum
@@ -1227,7 +1227,7 @@ export interface components {
              *     Dokument verwendet werden.
              * @example BGH 123/23
              */
-            aktenzeichenListe?: string[];
+            aktenzeichenListe: string[];
             /**
              * @description Abweichende Aktenzeichen
              * @example 1
@@ -1409,7 +1409,7 @@ export interface components {
              *     Weitere Dokumentnummern die für dieses Dokument verwendet werden
              * @example DEV-123
              */
-            abweichendeDokumentnummern?: string[];
+            abweichendeDokumentnummern: string[];
             /** @example /v1/rechtsprechung/ECLI:DE:FGRLP:1969:0905.IV85.68.0A */
             "@id": string;
             /** @example de */
@@ -1750,7 +1750,7 @@ export interface components {
              * @description Dokumentnummer
              * @example KALU000000000
              */
-            dokumentnummer?: string;
+            dokumentnummer: string;
             /**
              * @description Jahre der Veröffentlichung
              * @example [
@@ -1758,35 +1758,35 @@ export interface components {
              *       "2024-09"
              *     ]
              */
-            veroeffentlichungsJahre?: string[];
+            veroeffentlichungsJahre: string[];
             /**
              * @description Dokumenttypen
              * @example [
              *       "Auf"
              *     ]
              */
-            dokumenttypen?: string[];
+            dokumenttypen: string[];
             /**
              * @description Fundstelle
              * @example [
              *       "BUV, 1982, 123-123"
              *     ]
              */
-            fundstellenUnselbstaendig?: string[];
+            fundstellenUnselbstaendig: string[];
             /**
              * @description Fundstelle in selbstständiger Literatur
              * @example [
              *       "50 Jahre Betriebs-Berater, 1987, 123-456"
              *     ]
              */
-            fundstellenSelbstaendig?: string[];
+            fundstellenSelbstaendig: string[];
             /**
              * @description Liste von Verweisen auf Normen.
              * @example [
              *       "GG, Art 6 Abs 2 S 1, 1949-05-23"
              *     ]
              */
-            referenzenNorm?: string[];
+            referenzenNorm: string[];
             /** @description Haupttitel */
             haupttitel?: string;
             /** @description Zusätze zum Haupttitel */
@@ -1803,42 +1803,42 @@ export interface components {
              *       "Musterfrau, Sabine"
              *     ]
              */
-            verfasser?: string[];
+            verfasser: string[];
             /**
              * @description Liste der Mitarbeiter
              * @example [
              *       "Mustermann, Max"
              *     ]
              */
-            mitarbeiter?: string[];
+            mitarbeiter: string[];
             /** @description Liste der Bearbeiter */
-            bearbeiter?: string[];
+            bearbeiter: string[];
             /** @description Liste der Begründer */
-            begruender?: string[];
+            begruender: string[];
             /** @description Herausgebende Personen */
-            herausgeberPersonen?: string[];
+            herausgeberPersonen: string[];
             /** @description Herausgebende Institutionen */
-            herausgeberInstitutionen?: string[];
+            herausgeberInstitutionen: string[];
             /** @description Liste der Verlagsangaben */
-            verlagsangaben?: string[];
+            verlagsangaben: string[];
             /**
              * @description Liste der Urheber
              * @example [
              *       "DGB"
              *     ]
              */
-            urheber?: string[];
+            urheber: string[];
             /**
              * @description Liste der Kongressvermerke
              * @example [
              *       "Nationaler Beispiel Kongress, 2024, Berlin, GER"
              *     ]
              */
-            kongressvermerke?: string[];
+            kongressvermerke: string[];
             /** @description Liste der Hochschulschriftenvermerke */
-            hochschulschriftenvermerke?: string[];
+            hochschulschriftenvermerke: string[];
             /** @description Teilbände */
-            teilbaende?: string[];
+            teilbaende: string[];
             /**
              * @description Literaturtyp
              * @example uli

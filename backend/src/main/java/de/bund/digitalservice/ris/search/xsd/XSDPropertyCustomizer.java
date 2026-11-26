@@ -2,6 +2,7 @@ package de.bund.digitalservice.ris.search.xsd;
 
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.util.AnnotationsUtils;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import io.swagger.v3.oas.models.media.Schema;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -12,6 +13,10 @@ import org.springdoc.core.customizers.PropertyCustomizer;
  * Springdoc {@link PropertyCustomizer} that resolves the OpenAPI {@code description} of any {@link
  * RISSchema}-annotated property from the parsed XSD documentation, falling back to the annotation's
  * own {@code description} when no match is found.
+ *
+ * <p>It also adds properties with {@link RISSchema#requiredMode()} {@code REQUIRED} to the {@code
+ * required} list of their parent schema. Swagger only reads the required mode from {@code @Schema}
+ * annotations, so it would otherwise be ignored.
  */
 public class XSDPropertyCustomizer implements PropertyCustomizer {
   private final XSDDescriptionParser parser;
@@ -66,6 +71,10 @@ public class XSDPropertyCustomizer implements PropertyCustomizer {
 
     AnnotationsUtils.getSchemaFromAnnotation(schemaProxy, null)
         .ifPresent(parsedSchema -> mergeNonNullProperties(parsedSchema, property));
+
+    if (myAnno.requiredMode() == RequiredMode.REQUIRED) {
+      type.getParent().addRequiredItem(type.getPropertyName());
+    }
 
     return property;
   }

@@ -3447,7 +3447,7 @@
             "description" : "Whether or not the document is a Vorabdokument"
           }
         },
-        "required" : [ "@context", "@id", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
+        "required" : [ "@context", "@id", "abweichendeDokumentnummern", "aktenzeichenListe", "datum", "dokumentNummer", "ecli", "encoding", "entscheidungsnamen", "inLanguage", "schlagwoerter", "vorabdokument" ]
       },
       "VorgehendeEntscheidungSchema" : {
         "type" : "object",
@@ -4079,7 +4079,7 @@
             }
           }
         },
-        "required" : [ "@context", "@id", "bestellnummern", "encoding", "inLanguage", "literaturtyp" ]
+        "required" : [ "@context", "@id", "bearbeiter", "begruender", "bestellnummern", "dokumentnummer", "dokumenttypen", "encoding", "fundstellenSelbstaendig", "fundstellenUnselbstaendig", "herausgeberInstitutionen", "herausgeberPersonen", "hochschulschriftenvermerke", "inLanguage", "kongressvermerke", "literaturtyp", "mitarbeiter", "referenzenNorm", "teilbaende", "urheber", "verfasser", "verlagsangaben", "veroeffentlichungsJahre" ]
       },
       "LiteratureSchema" : {
         "type" : "object",
