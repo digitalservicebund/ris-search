@@ -63,9 +63,17 @@
                     <ris:begruenderListe domainTerm="Begründerliste">
                         <ris:begruender domainTerm="Begründer" refersTo="#foo-begruender-1">Begruender, Foo</ris:begruender>
                     </ris:begruenderListe>
+                    <ris:berufsbilder domainTerm="Berufsbilder">
+                        <ris:berufsbild domainTerm="Berufsbild">Beruf</ris:berufsbild>
+                    </ris:berufsbilder>
                     <ris:bibliothekarischeVerweisungen domainTerm="Bibliothekarische Verweisungen">
                         <ris:bibliothekarischeVerweisung domainTerm="Bibliothekarische Verweisung">Bibliothekarische Verweisung</ris:bibliothekarischeVerweisung>
                     </ris:bibliothekarischeVerweisungen>
+                    <ris:definitionen domainTerm="Definitionen">
+                        <ris:definition domainTerm="Definition">
+                            <ris:definierterBegriff domainTerm="Definierter Begriff">Definition</ris:definierterBegriff>
+                        </ris:definition>
+                    </ris:definitionen>
                     <ris:dokumenttypen domainTerm="Dokumenttypen">
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Auf</ris:dokumenttyp>
                         <ris:dokumenttyp domainTerm="Dokumenttyp">Foo</ris:dokumenttyp>
@@ -107,6 +115,9 @@
                     <ris:kongressvermerke domainTerm="Kongressvermerke">
                         <ris:kongressvermerk domainTerm="Kongressvermerk" refersTo="#foo-kongress-1">Internationaler Kongreß für das Recht</ris:kongressvermerk>
                     </ris:kongressvermerke>
+                    <ris:kuendigungsgruende domainTerm="Kündigungsgründe">
+                        <ris:kuendigungsgrund domainTerm="Kündigungsgrund">Straftat</ris:kuendigungsgrund>
+                    </ris:kuendigungsgruende>
                     <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
                         <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
                     </ris:mitarbeiterListe>
@@ -150,6 +161,9 @@
                             <ris:titel domainTerm="Titel">Titel</ris:titel>
                         </ris:person>
                     </ris:personen>
+                    <ris:regionen domainTerm="Regionen">
+                        <ris:region domainTerm="Region">DE</ris:region>
+                    </ris:regionen>
                     <ris:sachgebiete domainTerm="Sachgebiete">
                         <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-01">Sachgebiet1</ris:sachgebiet>
                         <ris:sachgebiet domainTerm="Sachgebiet" sachgebiet-id="ID-02">Sachgebiet2</ris:sachgebiet>
@@ -157,6 +171,9 @@
                     <ris:sonstigerSachtitelListe domainTerm="Liste der sonstigen Sachtitel">
                         <ris:sonstigerSachtitel domainTerm="Sonstiger Sachtitel">sonstiger titel</ris:sonstigerSachtitel>
                     </ris:sonstigerSachtitelListe>
+                    <ris:tarifvertraege domainTerm="Tarifverträge">
+                        <ris:tarifvertrag domainTerm="Tarifvertrag">Mantel</ris:tarifvertrag>
+                    </ris:tarifvertraege>
                     <ris:teilbaende domainTerm="Teilbände">
                         <ris:teilband domainTerm="Teilband">Teilband</ris:teilband>
                     </ris:teilbaende>

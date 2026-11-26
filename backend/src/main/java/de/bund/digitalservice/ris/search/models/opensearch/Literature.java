@@ -120,7 +120,7 @@ public record Literature(
     public static final String ID = "id";
 
     /** selbständige Fundstellen */
-    public static final String INDEPENDENT_REFERENCES = "independent_references";
+    public static final String FUNDSTELLEN_SELBSTSTAENDIG = "independent_references";
 
     /** Used internally to store at what time the document was indexed */
     public static final String INDEXED_AT = "indexed_at";

@@ -124,4 +124,24 @@ public class RisMeta {
   @XmlElementWrapper(name = "vorauflagen", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "vorauflage", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> vorauflagen;
+
+  @XmlElementWrapper(name = "regionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "region", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> regionen;
+
+  @XmlElementWrapper(name = "berufsbilder", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "berufsbild", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> berufsbilder;
+
+  @XmlElementWrapper(name = "definitionen", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "definition", namespace = LiteratureNamespaces.RIS_NS)
+  private List<RisDefinition> definitionen;
+
+  @XmlElementWrapper(name = "kuendigungsgruende", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "kuendigungsgrund", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> kuendigungsgruende;
+
+  @XmlElementWrapper(name = "tarifvertraege", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "tarifvertrag", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> tarifvertraege;
 }

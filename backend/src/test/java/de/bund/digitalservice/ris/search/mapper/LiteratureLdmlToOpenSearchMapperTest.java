@@ -69,6 +69,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .volumes(List.of())
             .bibliothekarischeVerweisungen(List.of())
             .vorauflagen(List.of())
+            .regionen(List.of("DE"))
+            .berufsbilder(List.of("Beruf"))
+            .definitionen(List.of("Definition"))
+            .kuendigungsgruende(List.of("Straftat"))
+            .tarifvertraege(List.of("Mantel"))
             .indexedAt(NOW.toString())
             .languages(List.of("deu"))
             .shortReport(
@@ -186,6 +191,11 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .bibliothekarischeVerweisungen(List.of("Bibliothekarische Verweisung"))
             .kollationsvermerk("Kollation, 608 S")
             .vorauflagen(List.of("Vorauflage111111, 1976"))
+            .regionen(List.of("DE"))
+            .berufsbilder(List.of("Beruf"))
+            .definitionen(List.of("Definition"))
+            .kuendigungsgruende(List.of("Straftat"))
+            .tarifvertraege(List.of("Mantel"))
             .unindexed(
                 LiteratureUnindexed.builder()
                     .zitierungenLiteraturSelbststaendig(List.of())

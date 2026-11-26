@@ -19,6 +19,7 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
+import de.bund.digitalservice.ris.search.models.ldml.literature.RisDefinition;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisKongress;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisMeta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.RisOrganisation;
@@ -133,6 +134,11 @@ public class LiteratureLdmlToOpenSearchMapper {
         .bibliothekarischeVerweisungen(extractBibliothekarischeVerweisungen(literatureLdml))
         .kollationsvermerk(extractKollationsvermerk(literatureLdml))
         .vorauflagen(extractVorauflagen(literatureLdml))
+        .regionen(extractStrings(literatureLdml, RisMeta::getRegionen))
+        .berufsbilder(extractStrings(literatureLdml, RisMeta::getBerufsbilder))
+        .definitionen(extractDefinitionen(literatureLdml))
+        .kuendigungsgruende(extractStrings(literatureLdml, RisMeta::getKuendigungsgruende))
+        .tarifvertraege(extractStrings(literatureLdml, RisMeta::getTarifvertraege))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();
@@ -513,6 +519,22 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractVorauflagen(LiteratureLdml ldml) {
     return extractRisMeta(ldml).map(RisMeta::getVorauflagen).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  /** Returns the non-blank values of a simple string list in ris:meta. */
+  private static List<String> extractStrings(
+      LiteratureLdml ldml, Function<RisMeta, List<String>> getter) {
+    return extractRisMeta(ldml).map(getter).orElse(List.of()).stream()
+        .filter(StringUtils::isNotBlank)
+        .toList();
+  }
+
+  private static List<String> extractDefinitionen(LiteratureLdml ldml) {
+    return extractRisMeta(ldml).map(RisMeta::getDefinitionen).orElse(List.of()).stream()
+        .filter(Objects::nonNull)
+        .map(RisDefinition::getDefinierterBegriff)
         .filter(StringUtils::isNotBlank)
         .toList();
   }
