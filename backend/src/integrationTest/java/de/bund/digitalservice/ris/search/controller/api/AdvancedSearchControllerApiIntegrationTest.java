@@ -18,6 +18,7 @@ import de.bund.digitalservice.ris.search.controller.api.testData.LiteratureTestD
 import de.bund.digitalservice.ris.search.controller.api.testData.NormsTestData;
 import de.bund.digitalservice.ris.search.controller.api.values.SortingTestArguments;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -53,16 +54,24 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
     return "?query=%s:%s".formatted(key, value);
   }
 
+  private static List<Arguments> forAliases(String value, int expectedCount, String... aliases) {
+    return Arrays.stream(aliases).map(alias -> Arguments.of(alias, value, expectedCount)).toList();
+  }
+
   private static Stream<Arguments> caseLawAdvancedSearchParams() {
-    var arguments = new ArrayList<Arguments>();
-    for (var alias : new String[] {"document_type", "DOKUMENTTYP", "TYP", "DT", "DTYP"}) {
-      arguments.add(Arguments.of(alias, "Urteil", CaseLawTestData.URTEIL_COUNT));
-    }
+    var arguments =
+        new ArrayList<>(
+            forAliases(
+                "Urteil",
+                CaseLawTestData.URTEIL_COUNT,
+                "document_type",
+                "DOKUMENTTYP",
+                "TYP",
+                "DT",
+                "DTYP"));
     arguments.add(Arguments.of("location", "Berlin", 2));
 
-    for (var alias : new String[] {"dissenting_opinion", "ABWMEIN"}) {
-      arguments.add(Arguments.of(alias, "abweichende", 1));
-    }
+    arguments.addAll(forAliases("abweichende", 1, "dissenting_opinion", "ABWMEIN"));
 
     arguments.add(
         Arguments.of(
@@ -70,38 +79,45 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
             "[2024-01-01 TO 2024-12-31]",
             3)); // DATUM and DAT aliases are tested separately
 
-    for (var alias : new String[] {"ECLI"}) {
-      arguments.add(Arguments.of(alias, "\"ECLI:DE:FGHH:1972:0630.III10.72.0\"", 1));
-    }
+    arguments.addAll(forAliases("\"ECLI:DE:FGHH:1972:0630.III10.72.0\"", 1, "ECLI"));
 
-    for (var alias : new String[] {"grounds", "GRUENDE", "GR"}) {
-      arguments.add(Arguments.of(alias, "folgende", 1));
-    }
+    arguments.addAll(forAliases("folgende", 1, "grounds", "GRUENDE", "GR"));
 
-    for (var alias :
-        new String[] {"decision_grounds", "ENTSCHEIDUNGSGRUENDE", "EGR", "TXTGRUENDE"}) {
-      arguments.add(Arguments.of(alias, "Entscheidungsgründe", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "Entscheidungsgründe",
+            1,
+            "decision_grounds",
+            "ENTSCHEIDUNGSGRUENDE",
+            "EGR",
+            "TXTGRUENDE"));
 
-    for (var alias : new String[] {"guiding_principle", "LEITSATZ", "LS", "TXTLS"}) {
-      arguments.add(Arguments.of(alias, "Leitsatz", CaseLawTestData.WITH_LEITSATZ_COUNT));
-    }
+    arguments.addAll(
+        forAliases(
+            "Leitsatz",
+            CaseLawTestData.WITH_LEITSATZ_COUNT,
+            "guiding_principle",
+            "LEITSATZ",
+            "LS",
+            "TXTLS"));
 
-    for (var alias : new String[] {"headnote", "ORIENTIERUNGSSATZ", "OSATZ", "OS", "TXTOS"}) {
-      arguments.add(Arguments.of(alias, "Orientierungssatz", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "Orientierungssatz", 1, "headnote", "ORIENTIERUNGSSATZ", "OSATZ", "OS", "TXTOS"));
 
-    for (var alias : new String[] {"other_long_text", "SLANGTEXT", "STEXT", "TXTSONSTLT"}) {
-      arguments.add(Arguments.of(alias, "Sonstiger", 1));
-    }
+    arguments.addAll(
+        forAliases("Sonstiger", 1, "other_long_text", "SLANGTEXT", "STEXT", "TXTSONSTLT"));
 
-    for (var alias : new String[] {"other_headnote", "SORIENTIERUNGSSATZ", "SOSATZ", "TXTSOSATZ"}) {
-      arguments.add(Arguments.of(alias, "Sonstiger Orientierungssatz", 2));
-    }
+    arguments.addAll(
+        forAliases(
+            "Sonstiger Orientierungssatz",
+            2,
+            "other_headnote",
+            "SORIENTIERUNGSSATZ",
+            "SOSATZ",
+            "TXTSOSATZ"));
 
-    for (var alias : new String[] {"case_facts", "TATBESTAND", "TB", "TXTTB"}) {
-      arguments.add(Arguments.of(alias, "Tatbestand", 2));
-    }
+    arguments.addAll(forAliases("Tatbestand", 2, "case_facts", "TATBESTAND", "TB", "TXTTB"));
 
     int documentsWithTenorCount =
         (int)
@@ -109,229 +125,165 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
                 .filter(d -> Objects.equals(d.tenor(), "Tenor"))
                 .count();
     assertThat(documentsWithTenorCount).isPositive();
-    for (var alias : new String[] {"TENOR", "TN", "TXTTN"}) {
-      arguments.add(Arguments.of(alias, "Tenor", documentsWithTenorCount));
-    }
+    arguments.addAll(forAliases("Tenor", documentsWithTenorCount, "TENOR", "TN", "TXTTN"));
 
-    for (var alias : new String[] {"headline", "SHORTTITLE"}) {
-      arguments.add(Arguments.of(alias, "Titelzeile", 1));
-    }
+    arguments.addAll(forAliases("Titelzeile", 1, "headline", "SHORTTITLE"));
 
-    for (var alias : new String[] {"TITELZEILE", "TITEL", "TTZE", "TXTTTZE"}) {
-      arguments.add(Arguments.of(alias, "Titelzeile", 1));
-    }
+    arguments.addAll(forAliases("Titelzeile", 1, "TITELZEILE", "TITEL", "TTZE", "TXTTTZE"));
 
-    for (var alias : new String[] {"outline", "GLIEDERUNG", "GD"}) {
-      arguments.add(Arguments.of(alias, "outlineTest", 1));
-    }
+    arguments.addAll(forAliases("outlineTest", 1, "outline", "GLIEDERUNG", "GD"));
 
-    for (var alias : new String[] {"judicial_body", "SPRUCHKOERPER", "SK", "GERSK"}) {
-      arguments.add(Arguments.of(alias, "judicialbodyTest", 1));
-    }
+    arguments.addAll(
+        forAliases("judicialbodyTest", 1, "judicial_body", "SPRUCHKOERPER", "SK", "GERSK"));
 
-    for (var alias : new String[] {"court_keyword", "GER", "GERICHT", "G"}) {
-      arguments.add(Arguments.of(alias, "LG Saarbrücken", 1));
-    }
+    arguments.addAll(forAliases("LG Saarbrücken", 1, "court_keyword", "GER", "GERICHT", "G"));
 
-    for (var alias : new String[] {"keywords", "SLW", "SCHLAGWOERTER"}) {
-      arguments.add(Arguments.of(alias, "keywordsTest", 1));
-    }
+    arguments.addAll(forAliases("keywordsTest", 1, "keywords", "SLW", "SCHLAGWOERTER"));
 
-    for (var alias : new String[] {"court_type", "GERICHTSTYP", "GERTYP"}) {
-      arguments.add(Arguments.of(alias, "LG", 1));
-    }
+    arguments.addAll(forAliases("LG", 1, "court_type", "GERICHTSTYP", "GERTYP"));
 
-    for (var alias : new String[] {"location", "GERICHTSORT", "GERORT"}) {
-      arguments.add(Arguments.of(alias, "Hamburg", 1));
-    }
+    arguments.addAll(forAliases("Hamburg", 1, "location", "GERICHTSORT", "GERORT"));
 
-    for (var alias : new String[] {"file_numbers", "AKTENZEICHEN", "AZ"}) {
-      arguments.add(Arguments.of(alias, "\"IX ZR 100/10\"", 1));
-    }
+    arguments.addAll(forAliases("\"IX ZR 100/10\"", 1, "file_numbers", "AKTENZEICHEN", "AZ"));
 
-    for (var alias : new String[] {"decision_name", "ENTSCHEIDUNGSNAME", "ENAME"}) {
-      arguments.add(Arguments.of(alias, "decisionNames", 1));
-    }
+    arguments.addAll(forAliases("decisionNames", 1, "decision_name", "ENTSCHEIDUNGSNAME", "ENAME"));
 
-    for (var alias : new String[] {"dissenting_opinion", "ABWMEIN"}) {
-      arguments.add(Arguments.of(alias, "eine abweichende Meinung", 1));
-    }
+    arguments.addAll(forAliases("eine abweichende Meinung", 1, "dissenting_opinion", "ABWMEIN"));
 
-    for (var alias : new String[] {"deviating_document_number", "ABWNR"}) {
-      arguments.add(Arguments.of(alias, "deviatingDocumentNumbers", 1));
-    }
+    arguments.addAll(
+        forAliases("deviatingDocumentNumbers", 1, "deviating_document_number", "ABWNR"));
 
-    for (var alias : new String[] {"legal_effect", "RECHTSKRAFT", "RK"}) {
-      arguments.add(Arguments.of(alias, "JA", 2));
-    }
+    arguments.addAll(forAliases("JA", 2, "legal_effect", "RECHTSKRAFT", "RK"));
 
-    for (var alias : new String[] {"celex", "CELEXNR"}) {
-      arguments.add(Arguments.of(alias, "celexTest", 1));
-    }
+    arguments.addAll(forAliases("celexTest", 1, "celex", "CELEXNR"));
 
-    for (var alias : new String[] {"gerichtsbarkeit", "GERB"}) {
-      arguments.add(Arguments.of(alias, "gerichtsbarkeitTest", 1));
-    }
+    arguments.addAll(forAliases("gerichtsbarkeitTest", 1, "gerichtsbarkeit", "GERB"));
 
-    for (var alias : new String[] {"berufsbilder", "BERB"}) {
-      arguments.add(Arguments.of(alias, "berufsbilderTest", 1));
-    }
+    arguments.addAll(forAliases("berufsbilderTest", 1, "berufsbilder", "BERB"));
 
-    for (var alias : new String[] {"kuendigungsarten", "KUENDIGUNGSART"}) {
-      arguments.add(Arguments.of(alias, "kuendigungsartenTest", 1));
-    }
+    arguments.addAll(forAliases("kuendigungsartenTest", 1, "kuendigungsarten", "KUENDIGUNGSART"));
 
-    for (var alias : new String[] {"herkunftslaender", "HERKL"}) {
-      arguments.add(Arguments.of(alias, "herkunftslaenderTest", 1));
-    }
+    arguments.addAll(forAliases("herkunftslaenderTest", 1, "herkunftslaender", "HERKL"));
 
-    for (var alias : new String[] {"regionen", "REGION"}) {
-      arguments.add(Arguments.of(alias, "regionenTest", 1));
-    }
+    arguments.addAll(forAliases("regionenTest", 1, "regionen", "REGION"));
 
-    for (var alias : new String[] {"tarifvertraege", "TV"}) {
-      arguments.add(Arguments.of(alias, "tarifvertraegeTest", 1));
-    }
+    arguments.addAll(forAliases("tarifvertraegeTest", 1, "tarifvertraege", "TV"));
 
-    for (var alias : new String[] {"kuendigungsgruende", "KUENDIGUNGSGRUND"}) {
-      arguments.add(Arguments.of(alias, "kuendigungsgruendeTest", 1));
-    }
+    arguments.addAll(
+        forAliases("kuendigungsgruendeTest", 1, "kuendigungsgruende", "KUENDIGUNGSGRUND"));
 
-    for (var alias : new String[] {"mitwirkende_richter", "MWRICHTER"}) {
-      arguments.add(Arguments.of(alias, "mitwirkendeRichterTest", 1));
-    }
+    arguments.addAll(forAliases("mitwirkendeRichterTest", 1, "mitwirkende_richter", "MWRICHTER"));
 
-    for (var alias : new String[] {"sachgebiete", "SG"}) {
-      arguments.add(Arguments.of(alias, "sachgebieteTest", 1));
-    }
+    arguments.addAll(forAliases("sachgebieteTest", 1, "sachgebiete", "SG"));
 
-    for (var alias : new String[] {"streitjahre", "STREITJAHR"}) {
-      arguments.add(Arguments.of(alias, "streitjahreTest", 1));
-    }
+    arguments.addAll(forAliases("streitjahreTest", 1, "streitjahre", "STREITJAHR"));
 
-    for (var alias : new String[] {"fehlerhafte_gerichte", "ABWGER"}) {
-      arguments.add(Arguments.of(alias, "fehlerhafteGerichteTest", 1));
-    }
+    arguments.addAll(forAliases("fehlerhafteGerichteTest", 1, "fehlerhafte_gerichte", "ABWGER"));
 
-    for (var alias : new String[] {"definitionen", "DEF"}) {
-      arguments.add(Arguments.of(alias, "definitionenTest", 1));
-    }
+    arguments.addAll(forAliases("definitionenTest", 1, "definitionen", "DEF"));
 
-    for (var alias : new String[] {"erledigung", "ANHERLEDIGT"}) {
-      arguments.add(Arguments.of(alias, "erledigungTest", 1));
-    }
+    arguments.addAll(forAliases("erledigungTest", 1, "erledigung", "ANHERLEDIGT"));
 
-    for (var alias : new String[] {"erledigungsvermerk", "ANHERLVERM"}) {
-      arguments.add(Arguments.of(alias, "erledigungsvermerkTest", 1));
-    }
+    arguments.addAll(forAliases("erledigungsvermerkTest", 1, "erledigungsvermerk", "ANHERLVERM"));
 
-    for (var alias : new String[] {"rechtsfrage", "ANHRECHTSFRAGE"}) {
-      arguments.add(Arguments.of(alias, "rechtsfrageTest", 1));
-    }
+    arguments.addAll(forAliases("rechtsfrageTest", 1, "rechtsfrage", "ANHRECHTSFRAGE"));
 
-    for (var alias : new String[] {"rechtsfrage_gesamt", "TXTRECHTSFRAGE"}) {
-      arguments.add(Arguments.of(alias, "rechtsfrageGesamtTest", 1));
-    }
+    arguments.addAll(
+        forAliases("rechtsfrageGesamtTest", 1, "rechtsfrage_gesamt", "TXTRECHTSFRAGE"));
 
-    for (var alias : new String[] {"previous_decisions", "VORGEHEND"}) {
-      arguments.add(Arguments.of(alias, "previousDecisionsTest", 1));
-    }
+    arguments.addAll(forAliases("previousDecisionsTest", 1, "previous_decisions", "VORGEHEND"));
 
-    for (var alias : new String[] {"ensuing_decisions", "NACHGEHEND"}) {
-      arguments.add(Arguments.of(alias, "ensuingDecisionsTest", 1));
-    }
+    arguments.addAll(forAliases("ensuingDecisionsTest", 1, "ensuing_decisions", "NACHGEHEND"));
 
-    for (var alias : new String[] {"aktivzitierung_rechtsprechung", "ZITRSPR"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungRechtsprechungTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "aktivzitierungRechtsprechungTest", 1, "aktivzitierung_rechtsprechung", "ZITRSPR"));
 
-    for (var alias : new String[] {"passivzitierung_rechtsprechung", "PZITRSPR"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungRechtsprechungTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "passivzitierungRechtsprechungTest", 1, "passivzitierung_rechtsprechung", "PZITRSPR"));
 
-    for (var alias : new String[] {"aktivzitierung_verwaltungsvorschriften", "ZITVWV"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungVerwaltungsvorschriftenTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "aktivzitierungVerwaltungsvorschriftenTest",
+            1,
+            "aktivzitierung_verwaltungsvorschriften",
+            "ZITVWV"));
 
-    for (var alias : new String[] {"passivzitierung_verwaltungsvorschriften", "PZITVWV"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungVerwaltungsvorschriftenTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "passivzitierungVerwaltungsvorschriftenTest",
+            1,
+            "passivzitierung_verwaltungsvorschriften",
+            "PZITVWV"));
 
-    for (var alias : new String[] {"aktivzitierung_literatur_selbstaendig", "ZITLITSELBST"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturSelbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "aktivzitierungLiteraturSelbstaendigTest",
+            1,
+            "aktivzitierung_literatur_selbstaendig",
+            "ZITLITSELBST"));
 
-    for (var alias : new String[] {"aktivzitierung_literatur_unselbstaendig", "ZITLITUNSELBST"}) {
-      arguments.add(Arguments.of(alias, "aktivzitierungLiteraturUnselbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "aktivzitierungLiteraturUnselbstaendigTest",
+            1,
+            "aktivzitierung_literatur_unselbstaendig",
+            "ZITLITUNSELBST"));
 
-    for (var alias : new String[] {"passivzitierung_literatur_selbstaendig", "PZITLITSELBST"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungLiteraturSelbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "passivzitierungLiteraturSelbstaendigTest",
+            1,
+            "passivzitierung_literatur_selbstaendig",
+            "PZITLITSELBST"));
 
-    for (var alias : new String[] {"passivzitierung_literatur_unselbstaendig", "PZITLITUNSELBST"}) {
-      arguments.add(Arguments.of(alias, "passivzitierungLiteraturUnselbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "passivzitierungLiteraturUnselbstaendigTest",
+            1,
+            "passivzitierung_literatur_unselbstaendig",
+            "PZITLITUNSELBST"));
 
-    for (var alias : new String[] {"amtliche_fundstellen", "FS"}) {
-      arguments.add(Arguments.of(alias, "amtlicheFundstellenTest", 1));
-    }
+    arguments.addAll(forAliases("amtlicheFundstellenTest", 1, "amtliche_fundstellen", "FS"));
 
-    for (var alias : new String[] {"nichtamtliche_fundstellen", "FSNAMTL"}) {
-      arguments.add(Arguments.of(alias, "nichtamtlicheFundstellenTest", 1));
-    }
+    arguments.addAll(
+        forAliases("nichtamtlicheFundstellenTest", 1, "nichtamtliche_fundstellen", "FSNAMTL"));
 
-    for (var alias : new String[] {"normenkette", "NORM"}) {
-      arguments.add(Arguments.of(alias, "normenketteTest", 1));
-    }
+    arguments.addAll(forAliases("normenketteTest", 1, "normenkette", "NORM"));
 
-    for (var alias : new String[] {"has_legislative_mandate", "GESETZGEBUNGSAUFTRAG"}) {
-      arguments.add(Arguments.of(alias, "hasLegislativeMandateTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "hasLegislativeMandateTest", 1, "has_legislative_mandate", "GESETZGEBUNGSAUFTRAG"));
 
-    for (var alias : new String[] {"rechtsmittelfuehrer", "ANHRMFUEHRER"}) {
-      arguments.add(Arguments.of(alias, "rechtsmittelfuehrerTest", 1));
-    }
+    arguments.addAll(
+        forAliases("rechtsmittelfuehrerTest", 1, "rechtsmittelfuehrer", "ANHRMFUEHRER"));
 
-    for (var alias : new String[] {"rechtsmittelzulassung", "ANHRMZULASSUNG"}) {
-      arguments.add(Arguments.of(alias, "rechtsmittelzulassungTest", 1));
-    }
+    arguments.addAll(
+        forAliases("rechtsmittelzulassungTest", 1, "rechtsmittelzulassung", "ANHRMZULASSUNG"));
 
-    for (var alias : new String[] {"abweichende_eclis", "ABWECLI"}) {
-      arguments.add(Arguments.of(alias, "abweichendeEclisTest", 1));
-    }
+    arguments.addAll(forAliases("abweichendeEclisTest", 1, "abweichende_eclis", "ABWECLI"));
 
-    for (var alias : new String[] {"abweichende_aktenzeichen", "ABWAZ"}) {
-      arguments.add(Arguments.of(alias, "abweichendeAktenzeichenTest", 1));
-    }
+    arguments.addAll(
+        forAliases("abweichendeAktenzeichenTest", 1, "abweichende_aktenzeichen", "ABWAZ"));
 
-    for (var alias : new String[] {"vorabdokument", "DVORAB"}) {
-      arguments.add(Arguments.of(alias, "true", 1));
-    }
+    arguments.addAll(forAliases("true", 1, "vorabdokument", "DVORAB"));
 
-    for (var alias : new String[] {"abweichende_daten", "ABWDAT"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-05 TO 2024-05-05]", 1));
-    }
+    arguments.addAll(forAliases("[2024-05-05 TO 2024-05-05]", 1, "abweichende_daten", "ABWDAT"));
 
-    for (var alias : new String[] {"daten_der_muendlichen_verhandlung", "MDLVERHDAT"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-06 TO 2024-05-06]", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "[2024-05-06 TO 2024-05-06]", 1, "daten_der_muendlichen_verhandlung", "MDLVERHDAT"));
 
-    for (var alias : new String[] {"langtextdatum", "LANGTEXTDAT"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-07 TO 2024-05-07]", 1));
-    }
+    arguments.addAll(forAliases("[2024-05-07 TO 2024-05-07]", 1, "langtextdatum", "LANGTEXTDAT"));
 
-    for (var alias : new String[] {"letzte_veroeffentlichung", "LASTPUBLDATE"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-08 TO 2024-05-08]", 1));
-    }
+    arguments.addAll(
+        forAliases("[2024-05-08 TO 2024-05-08]", 1, "letzte_veroeffentlichung", "LASTPUBLDATE"));
 
-    for (var alias : new String[] {"erstveroeffentlichung", "FIRSTPUBLDATE"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-09 TO 2024-05-09]", 1));
-    }
+    arguments.addAll(
+        forAliases("[2024-05-09 TO 2024-05-09]", 1, "erstveroeffentlichung", "FIRSTPUBLDATE"));
 
-    for (var alias : new String[] {"mitteilungsdatum", "ANHMITT"}) {
-      arguments.add(Arguments.of(alias, "[2024-05-10 TO 2024-05-10]", 1));
-    }
+    arguments.addAll(forAliases("[2024-05-10 TO 2024-05-10]", 1, "mitteilungsdatum", "ANHMITT"));
 
     return arguments.stream();
   }
@@ -353,208 +305,141 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
 
   private static Stream<Arguments> literatureAdvancedSearchParams() {
     var arguments = new ArrayList<Arguments>();
-    for (var alias : new String[] {"first_publication_date", "DATUM", "datum"}) {
-      arguments.add(Arguments.of(alias, "[2020-01-01 TO 2020-12-31]", 1));
-    }
+    arguments.addAll(
+        forAliases("[2020-01-01 TO 2020-12-31]", 1, "first_publication_date", "DATUM", "datum"));
 
-    for (var alias : new String[] {"main_title", "T", "t", "HAUPTTITEL", "haupttitel"}) {
-      arguments.add(Arguments.of(alias, "kompakt", 1));
-    }
+    arguments.addAll(forAliases("kompakt", 1, "main_title", "T", "t", "HAUPTTITEL", "haupttitel"));
 
-    for (var alias : new String[] {"authors", "V", "v", "VERF", "verf"}) {
-      arguments.add(Arguments.of(alias, "Hoffmann", 1));
-    }
+    arguments.addAll(forAliases("Hoffmann", 1, "authors", "V", "v", "VERF", "verf"));
 
-    for (var alias : new String[] {"dependent_references", "FU", "fu", "FSULIT", "fsulit"}) {
-      arguments.add(Arguments.of(alias, "NJW", 1));
-    }
+    arguments.addAll(forAliases("NJW", 1, "dependent_references", "FU", "fu", "FSULIT", "fsulit"));
 
-    for (var alias : new String[] {"norm_references", "N", "n", "NORM", "norm"}) {
-      arguments.add(Arguments.of(alias, "GG", 1));
-    }
+    arguments.addAll(forAliases("GG", 1, "norm_references", "N", "n", "NORM", "norm"));
 
-    for (var alias : new String[] {"documentary_title", "DOKTITEL", "doktitel"}) {
-      arguments.add(Arguments.of(alias, "ZPO", 1));
-    }
+    arguments.addAll(forAliases("ZPO", 1, "documentary_title", "DOKTITEL", "doktitel"));
 
-    for (var alias : new String[] {"main_title_additions", "TITELZUS", "titelzus"}) {
-      arguments.add(Arguments.of(alias, "Zusatz", 1));
-    }
+    arguments.addAll(forAliases("Zusatz", 1, "main_title_additions", "TITELZUS", "titelzus"));
 
-    for (var alias : new String[] {"short_titles", "KURZTITEL", "kurztitel"}) {
-      arguments.add(Arguments.of(alias, "kurztitelTest", 1));
-    }
+    arguments.addAll(forAliases("kurztitelTest", 1, "short_titles", "KURZTITEL", "kurztitel"));
 
-    for (var alias : new String[] {"additional_titles", "NEBENTITEL", "nebentitel"}) {
-      arguments.add(Arguments.of(alias, "nebentitelTest", 1));
-    }
+    arguments.addAll(
+        forAliases("nebentitelTest", 1, "additional_titles", "NEBENTITEL", "nebentitel"));
 
-    for (var alias : new String[] {"full_title_additions", "GESAMTTITEL", "gesamttitel"}) {
-      arguments.add(Arguments.of(alias, "gesamttitelTest", 1));
-    }
+    arguments.addAll(
+        forAliases("gesamttitelTest", 1, "full_title_additions", "GESAMTTITEL", "gesamttitel"));
 
-    for (var alias : new String[] {"short_report", "KTXT", "ktxt"}) {
-      arguments.add(Arguments.of(alias, "Lehrbuch", 1));
-    }
+    arguments.addAll(forAliases("Lehrbuch", 1, "short_report", "KTXT", "ktxt"));
 
-    for (var alias : new String[] {"outline", "GLIEDERUNG", "gliederung"}) {
-      arguments.add(Arguments.of(alias, "Staatsorganisationsrecht", 1));
-    }
+    arguments.addAll(
+        forAliases("Staatsorganisationsrecht", 1, "outline", "GLIEDERUNG", "gliederung"));
 
-    for (var alias : new String[] {"footnotes", "FN", "fn"}) {
-      arguments.add(Arguments.of(alias, "fussnoteTest", 1));
-    }
+    arguments.addAll(forAliases("fussnoteTest", 1, "footnotes", "FN", "fn"));
 
-    for (var alias : new String[] {"collaborators", "MITARB", "mitarb"}) {
-      arguments.add(Arguments.of(alias, "Meier", 1));
-    }
+    arguments.addAll(forAliases("Meier", 1, "collaborators", "MITARB", "mitarb"));
 
-    for (var alias : new String[] {"originator", "URH", "urh"}) {
-      arguments.add(Arguments.of(alias, "FOO", 1));
-    }
+    arguments.addAll(forAliases("FOO", 1, "originator", "URH", "urh"));
 
-    for (var alias : new String[] {"publisher_persons", "HRSGP", "hrsgp"}) {
-      arguments.add(Arguments.of(alias, "herausgeberPersonTest", 1));
-    }
+    arguments.addAll(forAliases("herausgeberPersonTest", 1, "publisher_persons", "HRSGP", "hrsgp"));
 
-    for (var alias : new String[] {"publisher_organizations", "HRSGI", "hrsgi"}) {
-      arguments.add(Arguments.of(alias, "herausgeberInstitutionTest", 1));
-    }
+    arguments.addAll(
+        forAliases("herausgeberInstitutionTest", 1, "publisher_organizations", "HRSGI", "hrsgi"));
 
-    for (var alias : new String[] {"editor", "BEARB", "bearb"}) {
-      arguments.add(Arguments.of(alias, "bearbeiterTest", 1));
-    }
+    arguments.addAll(forAliases("bearbeiterTest", 1, "editor", "BEARB", "bearb"));
 
-    for (var alias : new String[] {"founder", "BEGR", "begr"}) {
-      arguments.add(Arguments.of(alias, "begruenderTest", 1));
-    }
+    arguments.addAll(forAliases("begruenderTest", 1, "founder", "BEGR", "begr"));
 
-    for (var alias : new String[] {"independent_references", "FSSLIT", "fsslit"}) {
-      arguments.add(Arguments.of(alias, "Festschrift", 1));
-    }
+    arguments.addAll(forAliases("Festschrift", 1, "independent_references", "FSSLIT", "fsslit"));
 
-    for (var alias : new String[] {"document_number", "DNR", "dnr"}) {
-      arguments.add(Arguments.of(alias, "KALU000000003", 1));
-    }
+    arguments.addAll(forAliases("KALU000000003", 1, "document_number", "DNR", "dnr"));
 
-    for (var alias : new String[] {"international_identifiers", "ISBN", "isbn"}) {
-      arguments.add(Arguments.of(alias, "isbnTest", 1));
-    }
+    arguments.addAll(forAliases("isbnTest", 1, "international_identifiers", "ISBN", "isbn"));
 
-    for (var alias : new String[] {"document_types", "DTYP", "dtyp"}) {
-      arguments.add(Arguments.of(alias, "Buch", 1));
-    }
+    arguments.addAll(forAliases("Buch", 1, "document_types", "DTYP", "dtyp"));
 
-    for (var alias : new String[] {"years_of_publication", "JAHR", "jahr"}) {
-      arguments.add(Arguments.of(alias, "2020", 1));
-    }
+    arguments.addAll(forAliases("2020", 1, "years_of_publication", "JAHR", "jahr"));
 
-    for (var alias : new String[] {"edition", "AUSGABE", "ausgabe"}) {
-      arguments.add(Arguments.of(alias, "ausgabeTest", 1));
-    }
+    arguments.addAll(forAliases("ausgabeTest", 1, "edition", "AUSGABE", "ausgabe"));
 
-    for (var alias : new String[] {"volumes", "TEILBAND", "teilband"}) {
-      arguments.add(Arguments.of(alias, "teilbandTest", 1));
-    }
+    arguments.addAll(forAliases("teilbandTest", 1, "volumes", "TEILBAND", "teilband"));
 
-    for (var alias : new String[] {"publisher_information", "VERLAG", "verlag"}) {
-      arguments.add(Arguments.of(alias, "verlagTest", 1));
-    }
+    arguments.addAll(forAliases("verlagTest", 1, "publisher_information", "VERLAG", "verlag"));
 
-    for (var alias : new String[] {"university_note", "HSSVMK", "hssvmk"}) {
-      arguments.add(Arguments.of(alias, "hochschulvermerkTest", 1));
-    }
+    arguments.addAll(forAliases("hochschulvermerkTest", 1, "university_note", "HSSVMK", "hssvmk"));
 
-    for (var alias : new String[] {"conference_note", "KGRVMK", "kgrvmk"}) {
-      arguments.add(Arguments.of(alias, "Kongress", 1));
-    }
+    arguments.addAll(forAliases("Kongress", 1, "conference_note", "KGRVMK", "kgrvmk"));
 
-    for (var alias : new String[] {"language", "SPRACHE", "sprache"}) {
-      arguments.add(Arguments.of(alias, "eng", 1));
-    }
+    arguments.addAll(forAliases("eng", 1, "language", "SPRACHE", "sprache"));
 
-    for (var alias : new String[] {"titel_aspekte", "TITEL", "titel"}) {
-      arguments.add(Arguments.of(alias, "titelAspektTest", 1));
-    }
+    arguments.addAll(forAliases("titelAspektTest", 1, "titel_aspekte", "TITEL", "titel"));
 
-    for (var alias : new String[] {"bibliothekarische_verweisungen", "ZITFORMAL", "zitformal"}) {
-      arguments.add(Arguments.of(alias, "zitformalTest", 1));
-    }
+    arguments.addAll(
+        forAliases("zitformalTest", 1, "bibliothekarische_verweisungen", "ZITFORMAL", "zitformal"));
 
-    for (var alias : new String[] {"vorauflagen", "VORAUFL", "voraufl"}) {
-      arguments.add(Arguments.of(alias, "vorauflageTest", 1));
-    }
+    arguments.addAll(forAliases("vorauflageTest", 1, "vorauflagen", "VORAUFL", "voraufl"));
 
-    for (var alias : new String[] {"kollationsvermerk", "KOLLVMK", "kollvmk"}) {
-      arguments.add(Arguments.of(alias, "kollationsvermerkTest", 1));
-    }
+    arguments.addAll(
+        forAliases("kollationsvermerkTest", 1, "kollationsvermerk", "KOLLVMK", "kollvmk"));
 
-    for (var alias : new String[] {"schlagworte", "SLW", "slw"}) {
-      arguments.add(Arguments.of(alias, "schlagwortTest", 1));
-    }
+    arguments.addAll(forAliases("schlagwortTest", 1, "schlagworte", "SLW", "slw"));
 
-    for (var alias : new String[] {"sachgebiete", "SG", "sg"}) {
-      arguments.add(Arguments.of(alias, "sachgebietTest", 1));
-    }
+    arguments.addAll(forAliases("sachgebietTest", 1, "sachgebiete", "SG", "sg"));
 
-    for (var alias : new String[] {"regionen", "REGION", "region"}) {
-      arguments.add(Arguments.of(alias, "regionTest", 1));
-    }
+    arguments.addAll(forAliases("regionTest", 1, "regionen", "REGION", "region"));
 
-    for (var alias : new String[] {"berufsbilder", "BERUFSBILD", "berufsbild"}) {
-      arguments.add(Arguments.of(alias, "berufsbildTest", 1));
-    }
+    arguments.addAll(forAliases("berufsbildTest", 1, "berufsbilder", "BERUFSBILD", "berufsbild"));
 
-    for (var alias : new String[] {"definitionen", "DEFINITION", "definition"}) {
-      arguments.add(Arguments.of(alias, "definitionTest", 1));
-    }
+    arguments.addAll(forAliases("definitionTest", 1, "definitionen", "DEFINITION", "definition"));
 
-    for (var alias : new String[] {"kuendigungsgruende", "KGRUND", "kgrund"}) {
-      arguments.add(Arguments.of(alias, "kuendigungsgrundTest", 1));
-    }
+    arguments.addAll(
+        forAliases("kuendigungsgrundTest", 1, "kuendigungsgruende", "KGRUND", "kgrund"));
 
-    for (var alias : new String[] {"tarifvertraege", "TV", "tv"}) {
-      arguments.add(Arguments.of(alias, "tarifvertragTest", 1));
-    }
+    arguments.addAll(forAliases("tarifvertragTest", 1, "tarifvertraege", "TV", "tv"));
 
-    for (var alias : new String[] {"ueber_personen_institutionen", "UEBER", "ueber"}) {
-      arguments.add(Arguments.of(alias, "ueberPersonTest", 1));
-    }
+    arguments.addAll(
+        forAliases("ueberPersonTest", 1, "ueber_personen_institutionen", "UEBER", "ueber"));
 
-    for (var alias : new String[] {"ueber_kongresse", "KONGR", "kongr"}) {
-      arguments.add(Arguments.of(alias, "ueberKongressTest", 1));
-    }
+    arguments.addAll(forAliases("ueberKongressTest", 1, "ueber_kongresse", "KONGR", "kongr"));
 
-    for (var alias : new String[] {"fuer_personen_institutionen", "FUERPERSINST", "fuerpersinst"}) {
-      arguments.add(Arguments.of(alias, "fuerPersonTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "fuerPersonTest", 1, "fuer_personen_institutionen", "FUERPERSINST", "fuerpersinst"));
 
-    for (var alias : new String[] {"abweichende_dokumentnummern", "ABWNR", "abwnr"}) {
-      arguments.add(Arguments.of(alias, "abweichendeNummerTest", 1));
-    }
+    arguments.addAll(
+        forAliases("abweichendeNummerTest", 1, "abweichende_dokumentnummern", "ABWNR", "abwnr"));
 
-    for (var alias : new String[] {"dokumentart", "DART", "dart"}) {
-      arguments.add(Arguments.of(alias, "dokumentartTest", 1));
-    }
+    arguments.addAll(forAliases("dokumentartTest", 1, "dokumentart", "DART", "dart"));
 
-    for (var alias : new String[] {"aktivzitierungen_rechtsprechung", "ZITRSPR", "zitrspr"}) {
-      arguments.add(Arguments.of(alias, "zitierungRechtsprechungTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "zitierungRechtsprechungTest",
+            1,
+            "aktivzitierungen_rechtsprechung",
+            "ZITRSPR",
+            "zitrspr"));
 
-    for (var alias :
-        new String[] {"aktivzitierungen_literatur_selbstaendig", "ZITSLIT", "zitslit"}) {
-      arguments.add(Arguments.of(alias, "zitierungSelbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "zitierungSelbstaendigTest",
+            1,
+            "aktivzitierungen_literatur_selbstaendig",
+            "ZITSLIT",
+            "zitslit"));
 
-    for (var alias :
-        new String[] {"aktivzitierungen_literatur_unselbstaendig", "ZITULIT", "zitulit"}) {
-      arguments.add(Arguments.of(alias, "zitierungUnselbstaendigTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "zitierungUnselbstaendigTest",
+            1,
+            "aktivzitierungen_literatur_unselbstaendig",
+            "ZITULIT",
+            "zitulit"));
 
-    for (var alias :
-        new String[] {"aktivzitierungen_verwaltungsvorschriften", "ZITVWV", "zitvwv"}) {
-      arguments.add(Arguments.of(alias, "zitierungVerwaltungTest", 1));
-    }
+    arguments.addAll(
+        forAliases(
+            "zitierungVerwaltungTest",
+            1,
+            "aktivzitierungen_verwaltungsvorschriften",
+            "ZITVWV",
+            "zitvwv"));
 
     return arguments.stream();
   }
