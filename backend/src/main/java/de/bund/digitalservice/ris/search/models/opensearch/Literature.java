@@ -52,6 +52,19 @@ public record Literature(
     @Field(name = Fields.SACHGEBIETE) List<String> sachgebiete,
     @Nullable @Field(name = Fields.SHORT_REPORT) String shortReport,
     @Nullable @Field(name = Fields.OUTLINE) String outline,
+    @Field(name = Fields.BIBLIOTHEKARISCHE_VERWEISUNGEN) List<String> bibliothekarischeVerweisungen,
+    @Field(name = Fields.VORAUFLAGEN) List<String> vorauflagen,
+    @Nullable @Field(name = Fields.KOLLATIONSVERMERK) String kollationsvermerk,
+    @Field(name = Fields.REGIONEN) List<String> regionen,
+    @Field(name = Fields.BERUFSBILDER) List<String> berufsbilder,
+    @Field(name = Fields.DEFINITIONEN) List<String> definitionen,
+    @Field(name = Fields.KUENDIGUNGSGRUENDE) List<String> kuendigungsgruende,
+    @Field(name = Fields.TARIFVERTRAEGE) List<String> tarifvertraege,
+    @Field(name = Fields.UEBER_KONGRESSE) List<String> ueberKongresse,
+    @Field(name = Fields.UEBER_PERSONEN_INSTITUTIONEN) List<String> ueberPersonenInstitutionen,
+    @Field(name = Fields.FUER_PERSONEN_INSTITUTIONEN) List<String> fuerPersonenInstitutionen,
+    @Field(name = Fields.ABWEICHENDE_DOKUMENTNUMMERN) List<String> abweichendeDokumentnummern,
+    @Nullable @Field(name = Fields.DOKUMENTART) String dokumentart,
     @JsonIgnore @Field(name = Fields.INDEXED_AT) String indexedAt,
     @Field(name = Fields.UNINDEXED, type = FieldType.Object, enabled = false)
         LiteratureUnindexed unindexed)
@@ -164,5 +177,31 @@ public record Literature(
     public static final String SCHLAGWORTE = "schlagworte";
 
     public static final String SACHGEBIETE = "sachgebiete";
+
+    public static final String BIBLIOTHEKARISCHE_VERWEISUNGEN = "bibliothekarische_verweisungen";
+
+    public static final String VORAUFLAGEN = "vorauflagen";
+
+    public static final String KOLLATIONSVERMERK = "kollationsvermerk";
+
+    public static final String REGIONEN = "regionen";
+
+    public static final String BERUFSBILDER = "berufsbilder";
+
+    public static final String DEFINITIONEN = "definitionen";
+
+    public static final String KUENDIGUNGSGRUENDE = "kuendigungsgruende";
+
+    public static final String TARIFVERTRAEGE = "tarifvertraege";
+
+    public static final String UEBER_KONGRESSE = "ueber_kongresse";
+
+    public static final String UEBER_PERSONEN_INSTITUTIONEN = "ueber_personen_institutionen";
+
+    public static final String FUER_PERSONEN_INSTITUTIONEN = "fuer_personen_institutionen";
+
+    public static final String ABWEICHENDE_DOKUMENTNUMMERN = "abweichende_dokumentnummern";
+
+    public static final String DOKUMENTART = "dokumentart";
   }
 }
