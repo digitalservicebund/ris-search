@@ -768,7 +768,7 @@ test.describe("searching caselaw", () => {
 
 test.describe("searching literature", () => {
   test("narrows search", { tag: ["@RISDEV-12193"] }, async ({ page }) => {
-    await navigate(page, "/suche?query=ein");
+    await navigate(page, "/suche?query=XXLU000000001");
 
     const searchResults = getSearchResults(page);
     const resultCounter = getResultCounter(page);
