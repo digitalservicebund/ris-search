@@ -170,8 +170,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .internationalIdentifiers(List.of("ISBN 3-XXXXX-XX-X", "ISSN XXXX-XXXX"))
             .volumes(List.of("Teilband"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
-            .dependentReferences(List.of("BB, 1979, 1298-1300"))
-            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            // fundstellen only exist in uli documents
+            .dependentReferences(List.of())
+            .independentReferences(List.of())
             .titelAspekte(List.of("Testdokument"))
             .schlagworte(
                 List.of(
@@ -196,6 +197,58 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .build();
 
     assertThat(literature).isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("Ignores fundstellen in selbstständige literature")
+  void ignoresFundstellenInSli() {
+    String sliWithFundstellen =
+        """
+        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
+          <akn:doc name="offene-struktur">
+            <akn:meta>
+              <akn:identification>
+                <akn:FRBRWork>
+                  <akn:FRBRalias name="dokumentnummer" value="XXLS000000002" />
+                </akn:FRBRWork>
+              </akn:identification>
+              <akn:analysis source="#rechtsinformationen-des-bundes">
+                <akn:otherReferences source="#rechtsinformationen-des-bundes">
+                  <akn:implicitReference showAs="BB, 1979, 1298-1300">
+                    <ris:fundstelle domainTerm="Fundstelle">
+                      <ris:periodikum domainTerm="Periodikum">
+                        <ris:abkuerzung domainTerm="Abkürzung">BB</ris:abkuerzung>
+                      </ris:periodikum>
+                      <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
+                    </ris:fundstelle>
+                  </akn:implicitReference>
+                  <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
+                    <ris:fundstelleSelbststaendig domainTerm="Fundstelle selbstständig">
+                      <ris:titel domainTerm="Titel">Titel einer Fundstelle</ris:titel>
+                      <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
+                    </ris:fundstelleSelbststaendig>
+                  </akn:implicitReference>
+                </akn:otherReferences>
+              </akn:analysis>
+              <akn:proprietary source="#rechtsinformationen-des-bundes">
+                <ris:meta>
+                  <ris:dokumenttypen>
+                    <ris:dokumenttyp>Auf</ris:dokumenttyp>
+                  </ris:dokumenttypen>
+                  <ris:veroeffentlichungsJahre>
+                    <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
+                  </ris:veroeffentlichungsJahre>
+                </ris:meta>
+              </akn:proprietary>
+            </akn:meta>
+          </akn:doc>
+        </akn:akomaNtoso>
+        """;
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(sliWithFundstellen, NOW);
+
+    assertThat(literature.dependentReferences()).isEmpty();
+    assertThat(literature.independentReferences()).isEmpty();
   }
 
   @Test

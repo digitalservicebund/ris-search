@@ -41,10 +41,18 @@
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
                     <akn:implicitReference showAs="BB, 1979, 1298-1300">
-                        <ris:fundstelleUnselbstaendig periodikum="BB" zitatstelle="1979, 1298-1300"/>
+                        <ris:fundstelle domainTerm="Fundstelle">
+                            <ris:periodikum domainTerm="Periodikum">
+                                <ris:abkuerzung domainTerm="Abkürzung">BB</ris:abkuerzung>
+                            </ris:periodikum>
+                            <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
+                        </ris:fundstelle>
                     </akn:implicitReference>
                     <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
-                        <ris:fundstelleSelbstaendig titel="Titel einer Fundstelle" zitatstelle="1979, 1298-1300"/>
+                        <ris:fundstelleSelbststaendig domainTerm="Fundstelle selbstständig">
+                            <ris:titel domainTerm="Titel">Titel einer Fundstelle</ris:titel>
+                            <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
+                        </ris:fundstelleSelbststaendig>
                     </akn:implicitReference>
                     <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
                         <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>

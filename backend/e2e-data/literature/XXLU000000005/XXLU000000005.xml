@@ -37,10 +37,20 @@
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
                     <akn:implicitReference showAs="FooBar, 1982, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
+                        <ris:fundstelle domainTerm="Fundstelle">
+                            <ris:periodikum domainTerm="Periodikum">
+                                <ris:abkuerzung domainTerm="Abkürzung">FooBar</ris:abkuerzung>
+                            </ris:periodikum>
+                            <ris:zitatstelle domainTerm="Zitatstelle">1982, 123-123</ris:zitatstelle>
+                        </ris:fundstelle>
                     </akn:implicitReference>
                     <akn:implicitReference showAs="Baz, 1999, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1999, 123-123"/>
+                        <ris:fundstelle domainTerm="Fundstelle">
+                            <ris:periodikum domainTerm="Periodikum">
+                                <ris:abkuerzung domainTerm="Abkürzung">Baz</ris:abkuerzung>
+                            </ris:periodikum>
+                            <ris:zitatstelle domainTerm="Zitatstelle">1999, 123-123</ris:zitatstelle>
+                        </ris:fundstelle>
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>

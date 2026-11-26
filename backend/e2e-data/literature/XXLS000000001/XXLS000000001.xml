@@ -40,15 +40,6 @@
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference showAs="Baz, 1900, 124-125">
-                        <ris:fundstelleUnselbstaendig periodikum="Baz" zitatstelle="1900, 124-125"/>
-                    </akn:implicitReference>
-                    <akn:implicitReference showAs="FooBar, 1982, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
-                    </akn:implicitReference>
-                    <akn:implicitReference showAs="SelbstFund, 1982, 123-123">
-                        <ris:fundstelleSelbstaendig titel="SelbstFund" zitatstelle="2024, 456-456"/>
-                    </akn:implicitReference>
                     <akn:implicitReference showAs="BMV-Ä">
                         <ris:normReference abbreviation="BMV-Ä"/>
                     </akn:implicitReference>
