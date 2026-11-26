@@ -3887,7 +3887,7 @@
           },
           "@id" : {
             "type" : "string",
-            "example" : "KALU000000000"
+            "example" : "/v1/literaturnachweise/KALU000000000"
           },
           "inLanguage" : {
             "type" : "string",
@@ -3901,51 +3901,51 @@
           "veroeffentlichungsJahre" : {
             "type" : "array",
             "description" : "Jahre der Veröffentlichung",
-            "example" : "[2014, 2024-09]",
+            "example" : [ "2014", "2024-09" ],
             "items" : {
               "type" : "string",
               "description" : "Jahre der Veröffentlichung",
-              "example" : "[2014, 2024-09]"
+              "example" : [ "2014", "2024-09" ]
             }
           },
           "dokumenttypen" : {
             "type" : "array",
             "description" : "Dokumenttypen",
-            "example" : "['Auf']",
+            "example" : [ "Auf" ],
             "items" : {
               "type" : "string",
               "description" : "Dokumenttypen",
-              "example" : "['Auf']"
+              "example" : [ "Auf" ]
             }
           },
           "fundstellenUnselbstaendig" : {
             "type" : "array",
             "description" : "Fundstelle",
-            "example" : "['BUV, 1982, 123-123']",
+            "example" : [ "BUV, 1982, 123-123" ],
             "items" : {
               "type" : "string",
               "description" : "Fundstelle",
-              "example" : "['BUV, 1982, 123-123']"
+              "example" : [ "BUV, 1982, 123-123" ]
             }
           },
           "fundstellenSelbstaendig" : {
             "type" : "array",
             "description" : "Fundstelle in selbstständiger Literatur",
-            "example" : "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            "example" : [ "50 Jahre Betriebs-Berater, 1987, 123-456" ],
             "items" : {
               "type" : "string",
               "description" : "Fundstelle in selbstständiger Literatur",
-              "example" : "['50 Jahre Betriebs-Berater, 1987, 123-456']"
+              "example" : [ "50 Jahre Betriebs-Berater, 1987, 123-456" ]
             }
           },
           "referenzenNorm" : {
             "type" : "array",
             "description" : "Liste von Verweisen auf Normen.",
-            "example" : "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+            "example" : [ "GG, Art 6 Abs 2 S 1, 1949-05-23" ],
             "items" : {
               "type" : "string",
               "description" : "Liste von Verweisen auf Normen.",
-              "example" : "['GG, Art 6 Abs 2 S 1, 1949-05-23']"
+              "example" : [ "GG, Art 6 Abs 2 S 1, 1949-05-23" ]
             }
           },
           "haupttitel" : {
@@ -3974,21 +3974,21 @@
           "verfasser" : {
             "type" : "array",
             "description" : "Liste der Verfasser",
-            "example" : "['Musterfrau, Sabine']",
+            "example" : [ "Musterfrau, Sabine" ],
             "items" : {
               "type" : "string",
               "description" : "Liste der Verfasser",
-              "example" : "['Musterfrau, Sabine']"
+              "example" : [ "Musterfrau, Sabine" ]
             }
           },
           "mitarbeiter" : {
             "type" : "array",
             "description" : "Liste der Mitarbeiter",
-            "example" : "['Mustermann, Max']",
+            "example" : [ "Mustermann, Max" ],
             "items" : {
               "type" : "string",
               "description" : "Liste der Mitarbeiter",
-              "example" : "['Mustermann, Max']"
+              "example" : [ "Mustermann, Max" ]
             }
           },
           "bearbeiter" : {
@@ -4034,21 +4034,21 @@
           "urheber" : {
             "type" : "array",
             "description" : "Liste der Urheber",
-            "example" : "['DGB']",
+            "example" : [ "DGB" ],
             "items" : {
               "type" : "string",
               "description" : "Liste der Urheber",
-              "example" : "['DGB']"
+              "example" : [ "DGB" ]
             }
           },
           "kongressvermerke" : {
             "type" : "array",
             "description" : "Liste der Kongressvermerke",
-            "example" : "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            "example" : [ "Nationaler Beispiel Kongress, 2024, Berlin, GER" ],
             "items" : {
               "type" : "string",
               "description" : "Liste der Kongressvermerke",
-              "example" : "['Nationaler Beispiel Kongress, 2024, Berlin, GER']"
+              "example" : [ "Nationaler Beispiel Kongress, 2024, Berlin, GER" ]
             }
           },
           "hochschulschriftenvermerke" : {
@@ -4070,7 +4070,7 @@
           "literaturtyp" : {
             "type" : "string",
             "description" : "Literaturtyp",
-            "example" : "['sli', 'uli']"
+            "example" : "uli"
           },
           "encoding" : {
             "type" : "array",

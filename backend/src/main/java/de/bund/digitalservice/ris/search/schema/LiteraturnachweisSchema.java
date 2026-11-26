@@ -27,27 +27,27 @@ public record LiteraturnachweisSchema(
         String dokumentnummer,
     @RISSchema(
             name = "ris:veroeffentlichungsJahre",
-            example = "[2014, 2024-09]",
+            example = "[\"2014\", \"2024-09\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> veroeffentlichungsJahre,
     @RISSchema(
             name = "ris:dokumenttypen",
-            example = "['Auf']",
+            example = "[\"Auf\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> dokumenttypen,
     @RISSchema(
             name = "ris:fundstelle",
-            example = "['BUV, 1982, 123-123']",
+            example = "[\"BUV, 1982, 123-123\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> fundstellenUnselbstaendig,
     @RISSchema(
             name = "ris:fundstelleSelbststaendig",
-            example = "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            example = "[\"50 Jahre Betriebs-Berater, 1987, 123-456\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> fundstellenSelbstaendig,
     @RISSchema(
             name = "ris:referenzenNorm",
-            example = "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+            example = "[\"GG, Art 6 Abs 2 S 1, 1949-05-23\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> referenzenNorm,
     @Schema(description = "Haupttitel") String haupttitel,
@@ -58,12 +58,12 @@ public record LiteraturnachweisSchema(
         List<String> bestellnummern,
     @RISSchema(
             name = "ris:verfasserListe",
-            example = "['Musterfrau, Sabine']",
+            example = "[\"Musterfrau, Sabine\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> verfasser,
     @RISSchema(
             name = "ris:mitarbeiterListe",
-            example = "['Mustermann, Max']",
+            example = "[\"Mustermann, Max\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> mitarbeiter,
     @RISSchema(name = "ris:bearbeiterListe", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -78,12 +78,12 @@ public record LiteraturnachweisSchema(
         List<String> verlagsangaben,
     @RISSchema(
             name = "ris:urheberListe",
-            example = "['DGB']",
+            example = "[\"DGB\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> urheber,
     @RISSchema(
             name = "ris:kongressvermerke",
-            example = "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            example = "[\"Nationaler Beispiel Kongress, 2024, Berlin, GER\"]",
             requiredMode = Schema.RequiredMode.REQUIRED)
         List<String> kongressvermerke,
     @RISSchema(name = "ris:hochschulschriftenvermerke", requiredMode = Schema.RequiredMode.REQUIRED)

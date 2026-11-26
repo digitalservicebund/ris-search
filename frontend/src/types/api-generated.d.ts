@@ -1742,7 +1742,7 @@ export interface components {
             /** @example Literaturnachweis */
             "@type"?: string;
             "@context": string;
-            /** @example KALU000000000 */
+            /** @example /v1/literaturnachweise/KALU000000000 */
             "@id": string;
             /** @example de */
             inLanguage: string;
@@ -1753,27 +1753,38 @@ export interface components {
             dokumentnummer?: string;
             /**
              * @description Jahre der Veröffentlichung
-             * @example [2014, 2024-09]
+             * @example [
+             *       "2014",
+             *       "2024-09"
+             *     ]
              */
             veroeffentlichungsJahre?: string[];
             /**
              * @description Dokumenttypen
-             * @example ['Auf']
+             * @example [
+             *       "Auf"
+             *     ]
              */
             dokumenttypen?: string[];
             /**
              * @description Fundstelle
-             * @example ['BUV, 1982, 123-123']
+             * @example [
+             *       "BUV, 1982, 123-123"
+             *     ]
              */
             fundstellenUnselbstaendig?: string[];
             /**
              * @description Fundstelle in selbstständiger Literatur
-             * @example ['50 Jahre Betriebs-Berater, 1987, 123-456']
+             * @example [
+             *       "50 Jahre Betriebs-Berater, 1987, 123-456"
+             *     ]
              */
             fundstellenSelbstaendig?: string[];
             /**
              * @description Liste von Verweisen auf Normen.
-             * @example ['GG, Art 6 Abs 2 S 1, 1949-05-23']
+             * @example [
+             *       "GG, Art 6 Abs 2 S 1, 1949-05-23"
+             *     ]
              */
             referenzenNorm?: string[];
             /** @description Haupttitel */
@@ -1788,12 +1799,16 @@ export interface components {
             bestellnummern: string[];
             /**
              * @description Liste der Verfasser
-             * @example ['Musterfrau, Sabine']
+             * @example [
+             *       "Musterfrau, Sabine"
+             *     ]
              */
             verfasser?: string[];
             /**
              * @description Liste der Mitarbeiter
-             * @example ['Mustermann, Max']
+             * @example [
+             *       "Mustermann, Max"
+             *     ]
              */
             mitarbeiter?: string[];
             /** @description Liste der Bearbeiter */
@@ -1808,12 +1823,16 @@ export interface components {
             verlagsangaben?: string[];
             /**
              * @description Liste der Urheber
-             * @example ['DGB']
+             * @example [
+             *       "DGB"
+             *     ]
              */
             urheber?: string[];
             /**
              * @description Liste der Kongressvermerke
-             * @example ['Nationaler Beispiel Kongress, 2024, Berlin, GER']
+             * @example [
+             *       "Nationaler Beispiel Kongress, 2024, Berlin, GER"
+             *     ]
              */
             kongressvermerke?: string[];
             /** @description Liste der Hochschulschriftenvermerke */
@@ -1822,7 +1841,7 @@ export interface components {
             teilbaende?: string[];
             /**
              * @description Literaturtyp
-             * @example ['sli', 'uli']
+             * @example uli
              */
             literaturtyp: string;
             encoding: components["schemas"]["DocumentEncodingSchema"][];
