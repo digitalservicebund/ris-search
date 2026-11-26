@@ -339,35 +339,35 @@
         },
         "BERUFSBILD": {
           "type": "alias",
-          "path": "zuordnung_berufsbilder"
+          "path": "berufsbilder"
         },
         "berufsbild": {
           "type": "alias",
-          "path": "zuordnung_berufsbilder"
+          "path": "berufsbilder"
         },
         "DEFINITION": {
           "type": "alias",
-          "path": "zuordnung_definitionen"
+          "path": "definitionen"
         },
         "definition": {
           "type": "alias",
-          "path": "zuordnung_definitionen"
+          "path": "definitionen"
         },
         "KGRUND": {
           "type": "alias",
-          "path": "zuordnung_kuendigungsgruende"
+          "path": "kuendigungsgruende"
         },
         "kgrund": {
           "type": "alias",
-          "path": "zuordnung_kuendigungsgruende"
+          "path": "kuendigungsgruende"
         },
         "TV": {
           "type": "alias",
-          "path": "zuordnung_tarifvertraege"
+          "path": "tarifvertraege"
         },
         "tv": {
           "type": "alias",
-          "path": "zuordnung_tarifvertraege"
+          "path": "tarifvertraege"
         },
         "UEBER": {
           "type": "alias",
@@ -516,19 +516,19 @@
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zuordnung_berufsbilder": {
+        "berufsbilder": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zuordnung_definitionen": {
+        "definitionen": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zuordnung_kuendigungsgruende": {
+        "kuendigungsgruende": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
-        "zuordnung_tarifvertraege": {
+        "tarifvertraege": {
           "type": "text",
           "analyzer": "custom_german_analyzer"
         },
