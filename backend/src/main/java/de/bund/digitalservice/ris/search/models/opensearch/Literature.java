@@ -23,8 +23,8 @@ public record Literature(
     @Field(name = Fields.FIRST_PUBLICATION_DATE, type = FieldType.Date, format = DateFormat.date)
         LocalDate firstPublicationDate,
     @Field(name = Fields.DOCUMENT_TYPES) List<String> documentTypes,
-    @Field(name = Fields.DEPENDENT_REFERENCES) List<String> dependentReferences,
-    @Field(name = Fields.INDEPENDENT_REFERENCES) List<String> independentReferences,
+    @Field(name = Fields.FUNDSTELLEN_UNSELBSTSTAENDIG) List<String> fundstellenUnselbststaendig,
+    @Field(name = Fields.FUNDSTELLEN_SELBSTSTAENDIG) List<String> fundstellenSelbststaendig,
     @Field(name = Fields.NORM_REFERENCES) List<String> normReferences,
     @Nullable @Field(name = Fields.MAIN_TITLE) String mainTitle,
     @Nullable @Field(name = Fields.DOCUMENTARY_TITLE) String documentaryTitle,
@@ -91,7 +91,7 @@ public record Literature(
     public static final String CONFERENCE_NOTE = "conference_note";
 
     /** unselbstständige Fundstellen * */
-    public static final String DEPENDENT_REFERENCES = "dependent_references";
+    public static final String FUNDSTELLEN_UNSELBSTSTAENDIG = "dependent_references";
 
     /** Dokumentarischer Titel * */
     public static final String DOCUMENTARY_TITLE = "documentary_title";
@@ -120,7 +120,7 @@ public record Literature(
     public static final String ID = "id";
 
     /** selbständige Fundstellen */
-    public static final String INDEPENDENT_REFERENCES = "independent_references";
+    public static final String FUNDSTELLEN_SELBSTSTAENDIG = "independent_references";
 
     /** Used internally to store at what time the document was indexed */
     public static final String INDEXED_AT = "indexed_at";

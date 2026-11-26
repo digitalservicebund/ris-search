@@ -112,8 +112,9 @@ public class LiteratureLdmlToOpenSearchMapper {
         .editors(extractEditor(literatureLdml))
         .founder(extractFounder(literatureLdml))
         .languages(extractLanguages(literatureLdml))
-        .dependentReferences(extractDependentReferences(literatureLdml))
-        .independentReferences(extractIndependentReferences(literatureLdml))
+        .fundstellenUnselbststaendig(
+            extractFundstellenUnselbststaendig(literatureLdml, documentNumber))
+        .fundstellenSelbststaendig(extractFundstellenSelbststaendig(literatureLdml, documentNumber))
         .normReferences(extractNormReferences(literatureLdml))
         .shortReport(extractShortReport(literatureLdml))
         .outline((extractOutline(literatureLdml)))
@@ -135,16 +136,27 @@ public class LiteratureLdmlToOpenSearchMapper {
         .build();
   }
 
-  private static List<String> extractDependentReferences(LiteratureLdml literatureLdml) {
-    return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelle() != null)
-        .map(ImplicitReference::getShowAs)
-        .toList();
+  private static List<String> extractFundstellenUnselbststaendig(
+      LiteratureLdml literatureLdml, String documentNumber) {
+    return extractUliFundstellen(literatureLdml, documentNumber, ImplicitReference::getFundstelle);
   }
 
-  private static List<String> extractIndependentReferences(LiteratureLdml literatureLdml) {
+  private static List<String> extractFundstellenSelbststaendig(
+      LiteratureLdml literatureLdml, String documentNumber) {
+    return extractUliFundstellen(
+        literatureLdml, documentNumber, ImplicitReference::getFundstelleSelbststaendig);
+  }
+
+  /** Fundstellen only exist in unselbstständige literature. */
+  private static List<String> extractUliFundstellen(
+      LiteratureLdml literatureLdml,
+      String documentNumber,
+      Function<ImplicitReference, Object> fundstelle) {
+    if (LiteratureType.getByDocumentNumber(documentNumber) != LiteratureType.ULI) {
+      return List.of();
+    }
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelleSelbststaendig() != null)
+        .filter(implicitReference -> fundstelle.apply(implicitReference) != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
