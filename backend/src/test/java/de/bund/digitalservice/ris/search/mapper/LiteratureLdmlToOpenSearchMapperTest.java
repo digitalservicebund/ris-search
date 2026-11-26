@@ -77,6 +77,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .ueberPersonenInstitutionen(List.of("Nachname, Vorname-Eins"))
             .fuerPersonenInstitutionen(List.of("Eine Institution"))
             .ueberKongresse(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            .dokumentart("unselbststaendig")
             .indexedAt(NOW.toString())
             .languages(List.of("deu"))
             .shortReport(
@@ -202,6 +203,7 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .ueberPersonenInstitutionen(List.of("Nachname, Vorname-Eins"))
             .fuerPersonenInstitutionen(List.of("Eine Institution"))
             .ueberKongresse(List.of("Internationaler Kongreß für das Recht, 1991, Athen, GRC"))
+            .dokumentart("selbststaendig")
             .unindexed(
                 LiteratureUnindexed.builder()
                     .zitierungenLiteraturSelbststaendig(List.of())

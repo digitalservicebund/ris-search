@@ -35,6 +35,7 @@ import java.io.StringReader;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -145,6 +146,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .fuerPersonenInstitutionen(
             extractPersonenInstitutionen(literatureLdml, RisMeta::getFuerPersonenInstitutionen))
         .ueberKongresse(extractKongresse(literatureLdml, RisMeta::getUeberKongresse))
+        .dokumentart(extractDokumentart(literatureLdml))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();
@@ -170,6 +172,22 @@ public class LiteratureLdmlToOpenSearchMapper {
         .map(Doc::getMeta)
         .map(Meta::getProprietary)
         .map(Proprietary::getMeta);
+  }
+
+  private static final Map<String, String> DOKUMENTARTEN =
+      Map.of(
+          "/akn/ontology/de/concept/documenttype/bund/literatur/selbststaendig",
+          "selbststaendig",
+          "/akn/ontology/de/concept/documenttype/bund/literatur/unselbststaendig",
+          "unselbststaendig");
+
+  /** Maps the akn:doc name to the Dokumentart. Unknown names are mapped to null. */
+  private static String extractDokumentart(LiteratureLdml literatureLdml) {
+    return Optional.ofNullable(literatureLdml)
+        .map(LiteratureLdml::getDoc)
+        .map(Doc::getName)
+        .map(DOKUMENTARTEN::get)
+        .orElse(null);
   }
 
   private static List<String> extractShortTitles(LiteratureLdml literatureLdml) {
