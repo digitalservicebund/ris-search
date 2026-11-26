@@ -9,8 +9,8 @@ import de.bund.digitalservice.ris.search.config.ServerConfig;
 import de.bund.digitalservice.ris.search.exception.CustomValidationException;
 import de.bund.digitalservice.ris.search.exception.ObjectStoreServiceException;
 import de.bund.digitalservice.ris.search.mapper.ChangelogResponseMapper;
-import de.bund.digitalservice.ris.search.mapper.LiteratureSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.LiteratureSearchSchemaMapper;
+import de.bund.digitalservice.ris.search.mapper.LiteraturnachweisSchemaMapper;
 import de.bund.digitalservice.ris.search.mapper.SortParamsConverter;
 import de.bund.digitalservice.ris.search.models.DocumentKind;
 import de.bund.digitalservice.ris.search.models.api.parameters.ChangelogParams;
@@ -23,8 +23,8 @@ import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.repository.objectstorage.LiteratureBucket;
 import de.bund.digitalservice.ris.search.schema.ChangelogResponse;
 import de.bund.digitalservice.ris.search.schema.CollectionSchema;
-import de.bund.digitalservice.ris.search.schema.LiteratureSchema;
 import de.bund.digitalservice.ris.search.schema.LiteratureSearchSchema;
+import de.bund.digitalservice.ris.search.schema.LiteraturnachweisSchema;
 import de.bund.digitalservice.ris.search.schema.SearchMemberSchema;
 import de.bund.digitalservice.ris.search.service.ChangelogService;
 import de.bund.digitalservice.ris.search.service.LiteratureService;
@@ -98,7 +98,7 @@ public class LiteraturnachweiseController {
       description = "The endpoint returns the metadata of a single Literaturnachweis.")
   @ApiResponse(responseCode = "200")
   @ApiResponse(responseCode = "404", content = @Content)
-  public ResponseEntity<LiteratureSchema> getLiteraturnachweis(
+  public ResponseEntity<LiteraturnachweisSchema> getLiteraturnachweis(
       @Parameter(example = "KALU000000002") @PathVariable String documentNumber) {
     List<Literature> result = literatureService.getByDocumentNumber(documentNumber);
     if (result.isEmpty()) {
@@ -106,7 +106,7 @@ public class LiteraturnachweiseController {
     }
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
-        .body(LiteratureSchemaMapper.fromDomain(result.getFirst(), jsonldContextPath));
+        .body(LiteraturnachweisSchemaMapper.fromDomain(result.getFirst(), jsonldContextPath));
   }
 
   /**

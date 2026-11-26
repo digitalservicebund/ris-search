@@ -598,7 +598,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/LiteratureSchema"
+                  "$ref" : "#/components/schemas/LiteraturnachweisSchema"
                 }
               }
             }
@@ -3874,6 +3874,212 @@
           }
         },
         "required" : [ "item", "textMatches" ]
+      },
+      "LiteraturnachweisSchema" : {
+        "type" : "object",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "example" : "Literaturnachweis"
+          },
+          "@context" : {
+            "type" : "string"
+          },
+          "@id" : {
+            "type" : "string",
+            "example" : "KALU000000000"
+          },
+          "inLanguage" : {
+            "type" : "string",
+            "example" : "de"
+          },
+          "dokumentnummer" : {
+            "type" : "string",
+            "description" : "Dokumentnummer",
+            "example" : "KALU000000000"
+          },
+          "veroeffentlichungsJahre" : {
+            "type" : "array",
+            "description" : "Jahre der Veröffentlichung",
+            "example" : "[2014, 2024-09]",
+            "items" : {
+              "type" : "string",
+              "description" : "Jahre der Veröffentlichung",
+              "example" : "[2014, 2024-09]"
+            }
+          },
+          "dokumenttypen" : {
+            "type" : "array",
+            "description" : "Dokumenttypen",
+            "example" : "['Auf']",
+            "items" : {
+              "type" : "string",
+              "description" : "Dokumenttypen",
+              "example" : "['Auf']"
+            }
+          },
+          "fundstellenUnselbstaendig" : {
+            "type" : "array",
+            "description" : "Fundstelle",
+            "example" : "['BUV, 1982, 123-123']",
+            "items" : {
+              "type" : "string",
+              "description" : "Fundstelle",
+              "example" : "['BUV, 1982, 123-123']"
+            }
+          },
+          "fundstellenSelbstaendig" : {
+            "type" : "array",
+            "description" : "Fundstelle in selbstständiger Literatur",
+            "example" : "['50 Jahre Betriebs-Berater, 1987, 123-456']",
+            "items" : {
+              "type" : "string",
+              "description" : "Fundstelle in selbstständiger Literatur",
+              "example" : "['50 Jahre Betriebs-Berater, 1987, 123-456']"
+            }
+          },
+          "referenzenNorm" : {
+            "type" : "array",
+            "description" : "Liste von Verweisen auf Normen.",
+            "example" : "['GG, Art 6 Abs 2 S 1, 1949-05-23']",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste von Verweisen auf Normen.",
+              "example" : "['GG, Art 6 Abs 2 S 1, 1949-05-23']"
+            }
+          },
+          "haupttitel" : {
+            "type" : "string",
+            "description" : "Haupttitel"
+          },
+          "haupttitelzusatz" : {
+            "type" : "string",
+            "description" : "Zusätze zum Haupttitel"
+          },
+          "dokumentarischerTitel" : {
+            "type" : "string",
+            "description" : "Dokumentarischer Titel"
+          },
+          "ausgabe" : {
+            "type" : "string",
+            "description" : "Ausgabe"
+          },
+          "bestellnummern" : {
+            "type" : "array",
+            "description" : "Bestellnummer",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "verfasser" : {
+            "type" : "array",
+            "description" : "Liste der Verfasser",
+            "example" : "['Musterfrau, Sabine']",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Verfasser",
+              "example" : "['Musterfrau, Sabine']"
+            }
+          },
+          "mitarbeiter" : {
+            "type" : "array",
+            "description" : "Liste der Mitarbeiter",
+            "example" : "['Mustermann, Max']",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Mitarbeiter",
+              "example" : "['Mustermann, Max']"
+            }
+          },
+          "bearbeiter" : {
+            "type" : "array",
+            "description" : "Liste der Bearbeiter",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Bearbeiter"
+            }
+          },
+          "begruender" : {
+            "type" : "array",
+            "description" : "Liste der Begründer",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Begründer"
+            }
+          },
+          "herausgeberPersonen" : {
+            "type" : "array",
+            "description" : "Herausgebende Personen",
+            "items" : {
+              "type" : "string",
+              "description" : "Herausgebende Personen"
+            }
+          },
+          "herausgeberInstitutionen" : {
+            "type" : "array",
+            "description" : "Herausgebende Institutionen",
+            "items" : {
+              "type" : "string",
+              "description" : "Herausgebende Institutionen"
+            }
+          },
+          "verlagsangaben" : {
+            "type" : "array",
+            "description" : "Liste der Verlagsangaben",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Verlagsangaben"
+            }
+          },
+          "urheber" : {
+            "type" : "array",
+            "description" : "Liste der Urheber",
+            "example" : "['DGB']",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Urheber",
+              "example" : "['DGB']"
+            }
+          },
+          "kongressvermerke" : {
+            "type" : "array",
+            "description" : "Liste der Kongressvermerke",
+            "example" : "['Nationaler Beispiel Kongress, 2024, Berlin, GER']",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Kongressvermerke",
+              "example" : "['Nationaler Beispiel Kongress, 2024, Berlin, GER']"
+            }
+          },
+          "hochschulschriftenvermerke" : {
+            "type" : "array",
+            "description" : "Liste der Hochschulschriftenvermerke",
+            "items" : {
+              "type" : "string",
+              "description" : "Liste der Hochschulschriftenvermerke"
+            }
+          },
+          "teilbaende" : {
+            "type" : "array",
+            "description" : "Teilbände",
+            "items" : {
+              "type" : "string",
+              "description" : "Teilbände"
+            }
+          },
+          "literaturtyp" : {
+            "type" : "string",
+            "description" : "Literaturtyp",
+            "example" : "['sli', 'uli']"
+          },
+          "encoding" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DocumentEncodingSchema"
+            }
+          }
+        },
+        "required" : [ "@context", "@id", "bestellnummern", "encoding", "inLanguage", "literaturtyp" ]
       },
       "LiteratureSchema" : {
         "type" : "object",

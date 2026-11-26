@@ -71,41 +71,36 @@ class LiteraturnachweiseControllerApiIntegrationTest extends ContainersIntegrati
         .andExpectAll(
             status().isOk(),
             isJsonLdCompliant(),
-            jsonPath("$.documentNumber", Matchers.is(documentNumberPersistedInTest)),
-            jsonPath("$.yearsOfPublication", Matchers.containsInAnyOrder("1999", "2000", "2001")),
-            jsonPath("$.documentTypes", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
-            jsonPath("$.dependentReferences", Matchers.contains("NJW, 2000, 456-789")),
+            jsonPath("$.dokumentnummer", Matchers.is(documentNumberPersistedInTest)),
             jsonPath(
-                "$.independentReferences",
+                "$.veroeffentlichungsJahre", Matchers.containsInAnyOrder("1999", "2000", "2001")),
+            jsonPath("$.dokumenttypen", Matchers.containsInAnyOrder("Kommentar", "Aufsatz")),
+            jsonPath("$.fundstellenUnselbstaendig", Matchers.contains("NJW, 2000, 456-789")),
+            jsonPath(
+                "$.fundstellenSelbstaendig",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
-            jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1")),
-            jsonPath("$.headline", Matchers.is("Literatur. Zivilprozessrecht im Wandel")),
-            jsonPath("$.alternativeHeadline", Matchers.is("Dokumentation ZPO")),
-            jsonPath("$.headlineAdditions", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),
-            jsonPath("$.authors", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
-            jsonPath("$.collaborators", Matchers.contains("Meier, Karl")),
-            jsonPath("$.originators", Matchers.contains("FOO")),
+            jsonPath("$.referenzenNorm", Matchers.contains("GG, Art 6 Abs 2 S 1")),
+            jsonPath("$.haupttitel", Matchers.is("Literatur. Zivilprozessrecht im Wandel")),
+            jsonPath("$.dokumentarischerTitel", Matchers.is("Dokumentation ZPO")),
+            jsonPath("$.haupttitelzusatz", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),
+            jsonPath("$.verfasser", Matchers.containsInAnyOrder("Schmidt, Hans", "Becker, Anna")),
+            jsonPath("$.mitarbeiter", Matchers.contains("Meier, Karl")),
+            jsonPath("$.urheber", Matchers.contains("FOO")),
             jsonPath(
-                "$.conferenceNotes",
+                "$.kongressvermerke",
                 Matchers.contains("Internationaler Kongress 2025, Berlin, GER")),
-            jsonPath("$.languages", Matchers.contains("deu", "eng")),
-            jsonPath(
-                "$.shortReport",
-                Matchers.is("Ein Überblick über die Entwicklung der Rechtsprechung")),
-            jsonPath(
-                "$.outline", Matchers.is("Teil A: Einführung; Teil B: Praxisfälle; Teil C: Fazit")),
             jsonPath(
                 "$.encoding[*]['@id']",
                 containsInAnyOrder(
-                    "/v1/literature/" + documentNumberPersistedInTest + "/html",
-                    "/v1/literature/" + documentNumberPersistedInTest + "/xml",
-                    "/v1/literature/" + documentNumberPersistedInTest + "/zip")),
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + "/html",
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + "/xml",
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + "/zip")),
             jsonPath(
                 "$.encoding[*].contentUrl",
                 containsInAnyOrder(
-                    "/v1/literature/" + documentNumberPersistedInTest + ".html",
-                    "/v1/literature/" + documentNumberPersistedInTest + ".xml",
-                    "/v1/literature/" + documentNumberPersistedInTest + ".zip")));
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + ".html",
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + ".xml",
+                    "/v1/literaturnachweise/" + documentNumberPersistedInTest + ".zip")));
   }
 
   @Test
