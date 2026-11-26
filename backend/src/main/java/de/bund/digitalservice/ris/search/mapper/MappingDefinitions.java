@@ -48,8 +48,8 @@ public class MappingDefinitions {
         Map.ofEntries(
             Map.entry(Literature.Fields.DOCUMENT_NUMBER_KEYWORD, "documentNumber"),
             Map.entry(Literature.Fields.YEARS_OF_PUBLICATION, "yearsOfPublication"),
-            Map.entry(Literature.Fields.DEPENDENT_REFERENCES, "dependentReferences"),
-            Map.entry(Literature.Fields.INDEPENDENT_REFERENCES, "independentReferences"),
+            Map.entry(Literature.Fields.FUNDSTELLEN_UNSELBSTSTAENDIG, "dependentReferences"),
+            Map.entry(Literature.Fields.FUNDSTELLEN_SELBSTSTAENDIG, "independentReferences"),
             Map.entry(Literature.Fields.MAIN_TITLE, "mainTitle"),
             Map.entry(Literature.Fields.DOCUMENTARY_TITLE, "documentaryTitle"),
             Map.entry(Literature.Fields.AUTHORS, "authors"),

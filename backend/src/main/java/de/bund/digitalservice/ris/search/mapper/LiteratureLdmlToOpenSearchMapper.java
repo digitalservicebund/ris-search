@@ -112,8 +112,8 @@ public class LiteratureLdmlToOpenSearchMapper {
         .editors(extractEditor(literatureLdml))
         .founder(extractFounder(literatureLdml))
         .languages(extractLanguages(literatureLdml))
-        .dependentReferences(extractDependentReferences(literatureLdml))
-        .independentReferences(extractIndependentReferences(literatureLdml))
+        .fundstellenUnselbststaendig(extractFundstellenUnselbststaendig(literatureLdml))
+        .fundstellenSelbststaendig(extractFundstellenSelbststaendig(literatureLdml))
         .normReferences(extractNormReferences(literatureLdml))
         .shortReport(extractShortReport(literatureLdml))
         .outline((extractOutline(literatureLdml)))
@@ -135,14 +135,14 @@ public class LiteratureLdmlToOpenSearchMapper {
         .build();
   }
 
-  private static List<String> extractDependentReferences(LiteratureLdml literatureLdml) {
+  private static List<String> extractFundstellenUnselbststaendig(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
         .filter(implicitReference -> implicitReference.getFundstelle() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
 
-  private static List<String> extractIndependentReferences(LiteratureLdml literatureLdml) {
+  private static List<String> extractFundstellenSelbststaendig(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
         .filter(implicitReference -> implicitReference.getFundstelleSelbststaendig() != null)
         .map(ImplicitReference::getShowAs)

@@ -44,8 +44,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .yearsOfPublication(List.of("2025"))
             .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
             .documentTypes(List.of("Auf", "Foo"))
-            .dependentReferences(List.of("BB, 1979, 1298-1300"))
-            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .fundstellenUnselbststaendig(List.of("BB, 1979, 1298-1300"))
+            .fundstellenSelbststaendig(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             .mainTitle("Literatur Test Dokument")
             .mainTitleAdditions("Titelzusatz")
@@ -171,8 +171,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .volumes(List.of("Teilband"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             // fundstellen only exist in uli documents
-            .dependentReferences(List.of())
-            .independentReferences(List.of())
+            .fundstellenUnselbststaendig(List.of())
+            .fundstellenSelbststaendig(List.of())
             .titelAspekte(List.of("Testdokument"))
             .schlagworte(
                 List.of(
@@ -257,8 +257,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
 
     Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(minimalValidLdml, NOW);
 
-    assertThat(literature.dependentReferences()).isEmpty();
-    assertThat(literature.independentReferences()).isEmpty();
+    assertThat(literature.fundstellenUnselbststaendig()).isEmpty();
+    assertThat(literature.fundstellenSelbststaendig()).isEmpty();
     assertThat(literature.mainTitle()).isNull();
     assertThat(literature.mainTitleAdditions()).isNull();
     assertThat(literature.documentaryTitle()).isNull();
