@@ -147,6 +147,8 @@ public class LiteratureLdmlToOpenSearchMapper {
             extractPersonenInstitutionen(literatureLdml, RisMeta::getFuerPersonenInstitutionen))
         .ueberKongresse(extractKongresse(literatureLdml, RisMeta::getUeberKongresse))
         .dokumentart(extractDokumentart(literatureLdml))
+        .abweichendeDokumentnummern(
+            extractStrings(literatureLdml, RisMeta::getAbweichendeDokumentnummern))
         .unindexed(extractUnindexed(literatureLdml))
         .indexedAt(time.toString())
         .build();

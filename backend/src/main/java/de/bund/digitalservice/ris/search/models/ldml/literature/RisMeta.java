@@ -160,4 +160,8 @@ public class RisMeta {
   @XmlElementWrapper(name = "ueberkongresse", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "ueberkongress", namespace = LiteratureNamespaces.RIS_NS)
   private List<RisRoleItem> ueberKongresse;
+
+  @XmlElementWrapper(name = "abweichendeDokumentnummern", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "abweichendeDokumentnummer", namespace = LiteratureNamespaces.RIS_NS)
+  private List<String> abweichendeDokumentnummern;
 }
