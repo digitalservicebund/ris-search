@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,7 +108,7 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
             CaseLawTestData.allDocuments.stream()
                 .filter(d -> Objects.equals(d.tenor(), "Tenor"))
                 .count();
-    Assertions.assertTrue(documentsWithTenorCount > 0);
+    assertThat(documentsWithTenorCount).isPositive();
     for (var alias : new String[] {"TENOR", "TN", "TXTTN"}) {
       arguments.add(Arguments.of(alias, "Tenor", documentsWithTenorCount));
     }
@@ -350,6 +349,228 @@ class AdvancedSearchControllerApiIntegrationTest extends ContainersIntegrationBa
           .andExpect(jsonPath("$.member", hasSize(expectedCount)))
           .andExpect(status().isOk());
     }
+  }
+
+  private static Stream<Arguments> literatureAdvancedSearchParams() {
+    var arguments = new ArrayList<Arguments>();
+    for (var alias : new String[] {"first_publication_date", "DATUM", "datum"}) {
+      arguments.add(Arguments.of(alias, "[2020-01-01 TO 2020-12-31]", 1));
+    }
+
+    for (var alias : new String[] {"main_title", "T", "t", "HAUPTTITEL", "haupttitel"}) {
+      arguments.add(Arguments.of(alias, "kompakt", 1));
+    }
+
+    for (var alias : new String[] {"authors", "V", "v", "VERF", "verf"}) {
+      arguments.add(Arguments.of(alias, "Hoffmann", 1));
+    }
+
+    for (var alias : new String[] {"dependent_references", "FU", "fu", "FSULIT", "fsulit"}) {
+      arguments.add(Arguments.of(alias, "NJW", 1));
+    }
+
+    for (var alias : new String[] {"norm_references", "N", "n", "NORM", "norm"}) {
+      arguments.add(Arguments.of(alias, "GG", 1));
+    }
+
+    for (var alias : new String[] {"documentary_title", "DOKTITEL", "doktitel"}) {
+      arguments.add(Arguments.of(alias, "ZPO", 1));
+    }
+
+    for (var alias : new String[] {"main_title_additions", "TITELZUS", "titelzus"}) {
+      arguments.add(Arguments.of(alias, "Zusatz", 1));
+    }
+
+    for (var alias : new String[] {"short_titles", "KURZTITEL", "kurztitel"}) {
+      arguments.add(Arguments.of(alias, "kurztitelTest", 1));
+    }
+
+    for (var alias : new String[] {"additional_titles", "NEBENTITEL", "nebentitel"}) {
+      arguments.add(Arguments.of(alias, "nebentitelTest", 1));
+    }
+
+    for (var alias : new String[] {"full_title_additions", "GESAMTTITEL", "gesamttitel"}) {
+      arguments.add(Arguments.of(alias, "gesamttitelTest", 1));
+    }
+
+    for (var alias : new String[] {"short_report", "KTXT", "ktxt"}) {
+      arguments.add(Arguments.of(alias, "Lehrbuch", 1));
+    }
+
+    for (var alias : new String[] {"outline", "GLIEDERUNG", "gliederung"}) {
+      arguments.add(Arguments.of(alias, "Staatsorganisationsrecht", 1));
+    }
+
+    for (var alias : new String[] {"footnotes", "FN", "fn"}) {
+      arguments.add(Arguments.of(alias, "fussnoteTest", 1));
+    }
+
+    for (var alias : new String[] {"collaborators", "MITARB", "mitarb"}) {
+      arguments.add(Arguments.of(alias, "Meier", 1));
+    }
+
+    for (var alias : new String[] {"originator", "URH", "urh"}) {
+      arguments.add(Arguments.of(alias, "FOO", 1));
+    }
+
+    for (var alias : new String[] {"publisher_persons", "HRSGP", "hrsgp"}) {
+      arguments.add(Arguments.of(alias, "herausgeberPersonTest", 1));
+    }
+
+    for (var alias : new String[] {"publisher_organizations", "HRSGI", "hrsgi"}) {
+      arguments.add(Arguments.of(alias, "herausgeberInstitutionTest", 1));
+    }
+
+    for (var alias : new String[] {"editor", "BEARB", "bearb"}) {
+      arguments.add(Arguments.of(alias, "bearbeiterTest", 1));
+    }
+
+    for (var alias : new String[] {"founder", "BEGR", "begr"}) {
+      arguments.add(Arguments.of(alias, "begruenderTest", 1));
+    }
+
+    for (var alias : new String[] {"independent_references", "FSSLIT", "fsslit"}) {
+      arguments.add(Arguments.of(alias, "Festschrift", 1));
+    }
+
+    for (var alias : new String[] {"document_number", "DNR", "dnr"}) {
+      arguments.add(Arguments.of(alias, "KALU000000003", 1));
+    }
+
+    for (var alias : new String[] {"international_identifiers", "ISBN", "isbn"}) {
+      arguments.add(Arguments.of(alias, "isbnTest", 1));
+    }
+
+    for (var alias : new String[] {"document_types", "DTYP", "dtyp"}) {
+      arguments.add(Arguments.of(alias, "Buch", 1));
+    }
+
+    for (var alias : new String[] {"years_of_publication", "JAHR", "jahr"}) {
+      arguments.add(Arguments.of(alias, "2020", 1));
+    }
+
+    for (var alias : new String[] {"edition", "AUSGABE", "ausgabe"}) {
+      arguments.add(Arguments.of(alias, "ausgabeTest", 1));
+    }
+
+    for (var alias : new String[] {"volumes", "TEILBAND", "teilband"}) {
+      arguments.add(Arguments.of(alias, "teilbandTest", 1));
+    }
+
+    for (var alias : new String[] {"publisher_information", "VERLAG", "verlag"}) {
+      arguments.add(Arguments.of(alias, "verlagTest", 1));
+    }
+
+    for (var alias : new String[] {"university_note", "HSSVMK", "hssvmk"}) {
+      arguments.add(Arguments.of(alias, "hochschulvermerkTest", 1));
+    }
+
+    for (var alias : new String[] {"conference_note", "KGRVMK", "kgrvmk"}) {
+      arguments.add(Arguments.of(alias, "Kongress", 1));
+    }
+
+    for (var alias : new String[] {"language", "SPRACHE", "sprache"}) {
+      arguments.add(Arguments.of(alias, "eng", 1));
+    }
+
+    for (var alias : new String[] {"titel_aspekte", "TITEL", "titel"}) {
+      arguments.add(Arguments.of(alias, "titelAspektTest", 1));
+    }
+
+    for (var alias : new String[] {"bibliothekarische_verweisungen", "ZITFORMAL", "zitformal"}) {
+      arguments.add(Arguments.of(alias, "zitformalTest", 1));
+    }
+
+    for (var alias : new String[] {"vorauflagen", "VORAUFL", "voraufl"}) {
+      arguments.add(Arguments.of(alias, "vorauflageTest", 1));
+    }
+
+    for (var alias : new String[] {"kollationsvermerk", "KOLLVMK", "kollvmk"}) {
+      arguments.add(Arguments.of(alias, "kollationsvermerkTest", 1));
+    }
+
+    for (var alias : new String[] {"schlagworte", "SLW", "slw"}) {
+      arguments.add(Arguments.of(alias, "schlagwortTest", 1));
+    }
+
+    for (var alias : new String[] {"sachgebiete", "SG", "sg"}) {
+      arguments.add(Arguments.of(alias, "sachgebietTest", 1));
+    }
+
+    for (var alias : new String[] {"regionen", "REGION", "region"}) {
+      arguments.add(Arguments.of(alias, "regionTest", 1));
+    }
+
+    for (var alias : new String[] {"berufsbilder", "BERUFSBILD", "berufsbild"}) {
+      arguments.add(Arguments.of(alias, "berufsbildTest", 1));
+    }
+
+    for (var alias : new String[] {"definitionen", "DEFINITION", "definition"}) {
+      arguments.add(Arguments.of(alias, "definitionTest", 1));
+    }
+
+    for (var alias : new String[] {"kuendigungsgruende", "KGRUND", "kgrund"}) {
+      arguments.add(Arguments.of(alias, "kuendigungsgrundTest", 1));
+    }
+
+    for (var alias : new String[] {"tarifvertraege", "TV", "tv"}) {
+      arguments.add(Arguments.of(alias, "tarifvertragTest", 1));
+    }
+
+    for (var alias : new String[] {"ueber_personen_institutionen", "UEBER", "ueber"}) {
+      arguments.add(Arguments.of(alias, "ueberPersonTest", 1));
+    }
+
+    for (var alias : new String[] {"ueber_kongresse", "KONGR", "kongr"}) {
+      arguments.add(Arguments.of(alias, "ueberKongressTest", 1));
+    }
+
+    for (var alias : new String[] {"fuer_personen_institutionen", "FUERPERSINST", "fuerpersinst"}) {
+      arguments.add(Arguments.of(alias, "fuerPersonTest", 1));
+    }
+
+    for (var alias : new String[] {"abweichende_dokumentnummern", "ABWNR", "abwnr"}) {
+      arguments.add(Arguments.of(alias, "abweichendeNummerTest", 1));
+    }
+
+    for (var alias : new String[] {"dokumentart", "DART", "dart"}) {
+      arguments.add(Arguments.of(alias, "dokumentartTest", 1));
+    }
+
+    for (var alias : new String[] {"aktivzitierungen_rechtsprechung", "ZITRSPR", "zitrspr"}) {
+      arguments.add(Arguments.of(alias, "zitierungRechtsprechungTest", 1));
+    }
+
+    for (var alias :
+        new String[] {"aktivzitierungen_literatur_selbstaendig", "ZITSLIT", "zitslit"}) {
+      arguments.add(Arguments.of(alias, "zitierungSelbstaendigTest", 1));
+    }
+
+    for (var alias :
+        new String[] {"aktivzitierungen_literatur_unselbstaendig", "ZITULIT", "zitulit"}) {
+      arguments.add(Arguments.of(alias, "zitierungUnselbstaendigTest", 1));
+    }
+
+    for (var alias :
+        new String[] {"aktivzitierungen_verwaltungsvorschriften", "ZITVWV", "zitvwv"}) {
+      arguments.add(Arguments.of(alias, "zitierungVerwaltungTest", 1));
+    }
+
+    return arguments.stream();
+  }
+
+  // Only the literature endpoint: several aliases (e.g. DATUM, NORM, SLW) point to other fields
+  // in the other indices, so the generic endpoint would return a different count.
+  @ParameterizedTest
+  @MethodSource("literatureAdvancedSearchParams")
+  void shouldFindCorrectLiteratureCount(String key, String value, int expectedCount)
+      throws Exception {
+    mockMvc
+        .perform(
+            get(ApiConfig.Paths.LITERATURE_ADVANCED_SEARCH + buildAdvancedQuery(key, value))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.member", hasSize(expectedCount)))
+        .andExpect(status().isOk());
   }
 
   @ParameterizedTest
