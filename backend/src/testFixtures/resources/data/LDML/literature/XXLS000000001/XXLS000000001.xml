@@ -41,12 +41,6 @@
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference showAs="BB, 1979, 1298-1300">
-                        <ris:fundstelleUnselbstaendig periodikum="BB" zitatstelle="1979, 1298-1300"/>
-                    </akn:implicitReference>
-                    <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
-                        <ris:fundstelleSelbstaendig titel="Titel einer Fundstelle" zitatstelle="1979, 1298-1300"/>
-                    </akn:implicitReference>
                     <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
                         <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
                     </akn:implicitReference>

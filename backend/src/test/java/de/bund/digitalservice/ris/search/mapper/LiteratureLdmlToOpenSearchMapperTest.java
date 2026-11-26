@@ -170,8 +170,9 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .internationalIdentifiers(List.of("ISBN 3-XXXXX-XX-X", "ISSN XXXX-XXXX"))
             .volumes(List.of("Teilband"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
-            .dependentReferences(List.of("BB, 1979, 1298-1300"))
-            .independentReferences(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            // fundstellen only exist in uli documents
+            .dependentReferences(List.of())
+            .independentReferences(List.of())
             .titelAspekte(List.of("Testdokument"))
             .schlagworte(
                 List.of(

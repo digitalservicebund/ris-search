@@ -106,6 +106,17 @@ class LdmlTestDataSchemaConformanceTest {
     assertLiteratureIsSchemaValid(ldmlFilePath);
   }
 
+  private static Stream<Arguments> argumentsForLiteratureIntegrationTestDataSchemaConformance()
+      throws IOException {
+    return testDataPathForDirectory("src/testFixtures/resources/data/LDML/literature");
+  }
+
+  @ParameterizedTest
+  @MethodSource("argumentsForLiteratureIntegrationTestDataSchemaConformance")
+  void literatureLdmlIntegrationTestDataShouldBeSchemaConform(Path ldmlFilePath) {
+    assertLiteratureIsSchemaValid(ldmlFilePath);
+  }
+
   private static Stream<Arguments> argumentsForCaseLawE2EDataSchemaConformance()
       throws IOException {
     return testDataPathForDirectory("e2e-data/caselaw/");

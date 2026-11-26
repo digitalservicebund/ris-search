@@ -39,10 +39,18 @@
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
                     <akn:implicitReference showAs="FooBar, 1982, 123-123">
-                        <ris:fundstelleUnselbstaendig periodikum="FooBar" zitatstelle="1982, 123-123"/>
+                        <ris:fundstelle domainTerm="Fundstelle">
+                            <ris:periodikum domainTerm="Periodikum">
+                                <ris:abkuerzung domainTerm="Abkürzung">FooBar</ris:abkuerzung>
+                            </ris:periodikum>
+                            <ris:zitatstelle domainTerm="Zitatstelle">1982, 123-123</ris:zitatstelle>
+                        </ris:fundstelle>
                     </akn:implicitReference>
                     <akn:implicitReference showAs="SelbstFund, 1982, 123-123">
-                        <ris:fundstelleSelbstaendig titel="SelbstFund" zitatstelle="2024, 456-456" />
+                        <ris:fundstelleSelbststaendig domainTerm="Fundstelle selbstständig">
+                            <ris:titel domainTerm="Titel">SelbstFund</ris:titel>
+                            <ris:zitatstelle domainTerm="Zitatstelle">2024, 456-456</ris:zitatstelle>
+                        </ris:fundstelleSelbststaendig>
                     </akn:implicitReference>
                     <akn:implicitReference showAs="BMV-Ä">
                         <ris:normReference abbreviation="BMV-Ä" />

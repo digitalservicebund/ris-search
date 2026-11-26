@@ -137,14 +137,14 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractDependentReferences(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelleUnselbstaendig() != null)
+        .filter(implicitReference -> implicitReference.getFundstelle() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
 
   private static List<String> extractIndependentReferences(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelleSelbstaendig() != null)
+        .filter(implicitReference -> implicitReference.getFundstelleSelbststaendig() != null)
         .map(ImplicitReference::getShowAs)
         .toList();
   }
