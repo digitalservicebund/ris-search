@@ -35,7 +35,7 @@
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference showAs="Baz, 1900, 124-125">
+                    <akn:implicitReference>
                         <ris:fundstelle domainTerm="Fundstelle">
                             <ris:periodikum domainTerm="Periodikum">
                                 <ris:abkuerzung domainTerm="Abkürzung">Baz</ris:abkuerzung>

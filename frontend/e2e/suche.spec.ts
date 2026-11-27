@@ -798,7 +798,7 @@ test.describe("searching literature", () => {
 
     // Header
     await expect(searchResult).toHaveText(/Auf/);
-    await expect(searchResult).toHaveText(/FooBar, 1982, 123-123/);
+    await expect(searchResult).toHaveText(/FooBar 1982, 123-123/);
     await expect(searchResult).toHaveText(/2024/);
 
     // Result detail link

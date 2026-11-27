@@ -12,4 +12,16 @@ public class FundstelleSelbststaendig {
 
   @XmlElement(name = "zitatstelle", namespace = LiteratureNamespaces.RIS_NS)
   private String zitatstelle;
+
+  /**
+   * Formats this as displayable string.
+   *
+   * @return the formatted fundstelle
+   */
+  public String getFormatted() {
+    if (titel == null || zitatstelle == null) {
+      return null;
+    }
+    return titel.trim() + " " + zitatstelle.trim();
+  }
 }

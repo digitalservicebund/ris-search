@@ -40,7 +40,7 @@
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference showAs="BB, 1979, 1298-1300">
+                    <akn:implicitReference>
                         <ris:fundstelle domainTerm="Fundstelle">
                             <ris:periodikum domainTerm="Periodikum">
                                 <ris:abkuerzung domainTerm="Abkürzung">BB</ris:abkuerzung>
@@ -48,7 +48,7 @@
                             <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
                         </ris:fundstelle>
                     </akn:implicitReference>
-                    <akn:implicitReference showAs="Titel einer Fundstelle, 1979, 1298-1300">
+                    <akn:implicitReference>
                         <ris:fundstelleSelbststaendig domainTerm="Fundstelle selbstständig">
                             <ris:titel domainTerm="Titel">Titel einer Fundstelle</ris:titel>
                             <ris:zitatstelle domainTerm="Zitatstelle">1979, 1298-1300</ris:zitatstelle>
