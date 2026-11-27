@@ -14,8 +14,6 @@
                     <akn:FRBRauthor href="recht.bund.de/institution/bundesregierung"/>
                     <akn:FRBRcountry value="de"/>
                     <akn:FRBRsubtype value="LU"/>
-                    <akn:FRBRnumber value="ISBN 3-XXXXX-XX-X" />
-                    <akn:FRBRnumber value="ISSN XXXX-XXXX" />
                     <akn:FRBRname value="TODO"/>
                 </akn:FRBRWork>
                 <akn:FRBRExpression>
@@ -28,6 +26,8 @@
                 <akn:FRBRManifestation>
                     <akn:FRBRthis value="TODO"/>
                     <akn:FRBRuri value="TODO"/>
+                    <akn:FRBRalias name="ISBN" value="ISBN 3-XXXXX-XX-X" />
+                    <akn:FRBRalias name="ISSN" value="ISSN XXXX-XXXX" />
                     <akn:FRBRdate date="2024-01-01" name="generierung"/>
                     <akn:FRBRauthor href="recht.bund.de"/>
                     <akn:FRBRformat value="xml"/>
