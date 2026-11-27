@@ -60,6 +60,7 @@ sentry-spring-boot-starter-jakarta = { module = "io.sentry:sentry-spring-boot-4"
 sentry-logback = { module = "io.sentry:sentry-logback", version.ref = "sentry" }
 posthog = { module = "com.posthog:posthog-server", version.ref = "posthog" }
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "commons-text" }
+jackson2-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson2" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv" }
 saxon-he = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxon-he" }
 lombok = { module = "org.projectlombok:lombok" }
