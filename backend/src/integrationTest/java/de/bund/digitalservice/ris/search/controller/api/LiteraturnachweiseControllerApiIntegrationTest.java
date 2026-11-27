@@ -79,7 +79,7 @@ class LiteraturnachweiseControllerApiIntegrationTest extends ContainersIntegrati
             jsonPath(
                 "$.fundstellenSelbstaendig",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
-            jsonPath("$.referenzenNorm", Matchers.contains("GG, Art 6 Abs 2 S 1")),
+            jsonPath("$.referenzenNorm", Matchers.contains("GG, Art 6 Abs 2 S 1, 1949-05-23")),
             jsonPath("$.haupttitel", Matchers.is("Literatur. Zivilprozessrecht im Wandel")),
             jsonPath("$.dokumentarischerTitel", Matchers.is("Dokumentation ZPO")),
             jsonPath("$.haupttitelzusatz", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),

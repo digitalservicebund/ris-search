@@ -3149,7 +3149,7 @@
           "abweichendeAktenzeichen" : {
             "type" : "array",
             "description" : "Abweichende Aktenzeichen",
-            "example" : 1,
+            "example" : "1 BvR 839, 899/96",
             "items" : {
               "type" : "string"
             }

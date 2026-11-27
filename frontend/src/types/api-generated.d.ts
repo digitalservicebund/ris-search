@@ -1230,7 +1230,7 @@ export interface components {
             aktenzeichenListe: string[];
             /**
              * @description Abweichende Aktenzeichen
-             * @example 1
+             * @example 1 BvR 839, 899/96
              */
             abweichendeAktenzeichen?: string[];
             /** @description Abweichende ECLIs */
