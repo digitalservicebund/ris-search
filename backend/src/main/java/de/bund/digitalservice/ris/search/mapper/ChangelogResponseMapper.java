@@ -41,7 +41,10 @@ public class ChangelogResponseMapper {
               remoteJsonContext);
       case LITERATURE ->
           mapStandardDocument(
-              changelog, ApiConfig.Paths.LITERATURE, JsonldTypes.LITERATURE, remoteJsonContext);
+              changelog,
+              ApiConfig.Paths.LITERATURNACHWEISE,
+              JsonldTypes.LITERATURNACHWEIS,
+              remoteJsonContext);
       case ADMINISTRATIVE_DIRECTIVE ->
           mapStandardDocument(
               changelog,

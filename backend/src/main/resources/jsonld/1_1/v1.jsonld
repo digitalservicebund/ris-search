@@ -181,6 +181,33 @@
           "literatureType": "ris:literatureType"
         }
       },
+      "Literaturnachweis": {
+        "@id": "ris:Literaturnachweis",
+        "@context": {
+          "veroeffentlichungsJahre": "ris:veroeffentlichungsJahr",
+          "dokumenttypen": "ris:dokumenttyp",
+          "fundstellenUnselbstaendig": "ris:fundstelle",
+          "fundstellenSelbstaendig": "ris:fundstelleSelbstaendig",
+          "referenzenNorm": "ris:referenzNorm",
+          "haupttitel": "schema:headline",
+          "haupttitelzusatz": "ris:haupttitelzusatz",
+          "dokumentarischerTitel": "schema:alternativeHeadline",
+          "ausgabe": "ris:ausgabe",
+          "bestellnummern": "ris:bestellnummer",
+          "verfasser": "schema:author",
+          "mitarbeiter": "schema:contributor",
+          "bearbeiter": "schema:editor",
+          "begruender": "ris:begruender",
+          "herausgeberPersonen": "schema:publisher",
+          "herausgeberInstitutionen": "ris:herausgeberInstitution",
+          "verlagsangaben": "ris:verlagsangabe",
+          "urheber": "schema:creator",
+          "kongressvermerke": "ris:kongressvermerk",
+          "hochschulschriftenvermerke": "ris:hochschulschriftenvermerk",
+          "teilbaende": "ris:teilband",
+          "literaturtyp": "ris:literaturtyp"
+        }
+      },
       "AdministrativeDirective": {
         "@id": "ris:AdministrativeDirective",
         "@context": {
