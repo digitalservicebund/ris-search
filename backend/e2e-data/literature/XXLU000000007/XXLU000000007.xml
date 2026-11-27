@@ -45,11 +45,19 @@
                             <ris:zitatstelle domainTerm="Zitatstelle">1982, 123-123</ris:zitatstelle>
                         </ris:fundstelle>
                     </akn:implicitReference>
-                    <akn:implicitReference showAs="BMV-Ä">
-                        <ris:normReference abbreviation="BMV-Ä" />
+                    <akn:implicitReference ris:domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
                     </akn:implicitReference>
-                    <akn:implicitReference showAs="GG, Art 6 Abs 2 S 1, 1949-05-23">
-                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 6 Abs 2 S 1"/>
+                    <akn:implicitReference ris:domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
