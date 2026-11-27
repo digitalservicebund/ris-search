@@ -52,20 +52,6 @@
                             <ris:zitatstelle domainTerm="Zitatstelle">2024, 456-456</ris:zitatstelle>
                         </ris:fundstelleSelbststaendig>
                     </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
                 </akn:otherReferences>
                 <akn:otherReferences source="active">
                     <akn:implicitReference ris:domainTerm="Referenz Rechtsprechung">
@@ -161,6 +147,18 @@
                     <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
                         <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
                     </ris:mitarbeiterListe>
+                    <ris:referenzenNorm domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                    </ris:referenzenNorm>
                     <ris:organisationen domainTerm="Organisationen">
                         <ris:organisation domainTerm="Organisation" eId="dgb-urheber-1" showAs="DGB, Bundesauschuß">
                             <ris:name domainTerm="Name">DGB</ris:name>
