@@ -19,7 +19,6 @@ public record LiteraturnachweisSchema(
             requiredMode = Schema.RequiredMode.REQUIRED)
         @JsonProperty("@id")
         String id,
-    @Schema(example = "de", requiredMode = Schema.RequiredMode.REQUIRED) String inLanguage,
     @RISSchema(
             name = "ris:dokumentnummer",
             example = "KALU000000000",

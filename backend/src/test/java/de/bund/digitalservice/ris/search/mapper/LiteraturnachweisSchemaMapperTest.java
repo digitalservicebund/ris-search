@@ -44,7 +44,6 @@ class LiteraturnachweisSchemaMapperTest {
         LiteraturnachweisSchema.builder()
             .context("jsonLdContext")
             .id("/v1/literaturnachweise/XXLU000000001")
-            .inLanguage("de")
             .dokumentnummer("XXLU000000001")
             .veroeffentlichungsJahre(List.of("1979", "2004-09"))
             .dokumenttypen(List.of("Auf"))

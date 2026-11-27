@@ -3889,10 +3889,6 @@
             "type" : "string",
             "example" : "/v1/literaturnachweise/KALU000000000"
           },
-          "inLanguage" : {
-            "type" : "string",
-            "example" : "de"
-          },
           "dokumentnummer" : {
             "type" : "string",
             "description" : "Dokumentnummer",
@@ -4079,7 +4075,7 @@
             }
           }
         },
-        "required" : [ "@context", "@id", "bearbeiter", "begruender", "bestellnummern", "dokumentnummer", "dokumenttypen", "encoding", "fundstellenSelbstaendig", "fundstellenUnselbstaendig", "herausgeberInstitutionen", "herausgeberPersonen", "hochschulschriftenvermerke", "inLanguage", "kongressvermerke", "literaturtyp", "mitarbeiter", "referenzenNorm", "teilbaende", "urheber", "verfasser", "verlagsangaben", "veroeffentlichungsJahre" ]
+        "required" : [ "@context", "@id", "bearbeiter", "begruender", "bestellnummern", "dokumentnummer", "dokumenttypen", "encoding", "fundstellenSelbstaendig", "fundstellenUnselbstaendig", "herausgeberInstitutionen", "herausgeberPersonen", "hochschulschriftenvermerke", "kongressvermerke", "literaturtyp", "mitarbeiter", "referenzenNorm", "teilbaende", "urheber", "verfasser", "verlagsangaben", "veroeffentlichungsJahre" ]
       },
       "LiteratureSchema" : {
         "type" : "object",

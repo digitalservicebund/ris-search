@@ -1744,8 +1744,6 @@ export interface components {
             "@context": string;
             /** @example /v1/literaturnachweise/KALU000000000 */
             "@id": string;
-            /** @example de */
-            inLanguage: string;
             /**
              * @description Dokumentnummer
              * @example KALU000000000

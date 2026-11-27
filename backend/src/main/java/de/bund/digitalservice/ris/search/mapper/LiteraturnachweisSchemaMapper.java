@@ -31,7 +31,6 @@ public class LiteraturnachweisSchemaMapper {
     return LiteraturnachweisSchema.builder()
         .id(entityURI)
         .context(remoteJsonContext)
-        .inLanguage("de")
         .dokumentnummer(entity.documentNumber())
         .veroeffentlichungsJahre(entity.yearsOfPublication())
         .dokumenttypen(entity.documentTypes())
