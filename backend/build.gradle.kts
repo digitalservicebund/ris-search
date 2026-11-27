@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.sentry.logback)
     implementation(libs.posthog)
     implementation(libs.commons.text)
+    implementation(libs.jackson2.datatype.jsr310)
 
     implementation(libs.commons.csv)
 
