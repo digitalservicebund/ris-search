@@ -8,6 +8,7 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
@@ -119,7 +120,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .languages(extractLanguages(literatureLdml))
         .fundstellenUnselbststaendig(extractFundstellenUnselbststaendig(literatureLdml))
         .fundstellenSelbststaendig(extractFundstellenSelbststaendig(literatureLdml))
-        .normReferences(extractNormReferences(literatureLdml))
+        .normReferences(extractNormenReferenzen(literatureLdml))
         .shortReport(extractShortReport(literatureLdml))
         .outline((extractOutline(literatureLdml)))
         .publisherOrganizations(extractPublisherOrganization(literatureLdml))
@@ -269,10 +270,12 @@ public class LiteratureLdmlToOpenSearchMapper {
     return documentTypes;
   }
 
-  private static List<String> extractNormReferences(LiteratureLdml literatureLdml) {
+  private static List<String> extractNormenReferenzen(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getNormReference() != null)
-        .map(ImplicitReference::getShowAs)
+        .map(ImplicitReference::getReferenzNorm)
+        .filter(Objects::nonNull)
+        .map(ReferenzNorm::getFormatted)
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 

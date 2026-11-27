@@ -1,11 +1,11 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzVerwaltungsvorschrift;
-import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 
@@ -25,17 +25,14 @@ import lombok.Getter;
 @Getter
 public class ImplicitReference {
 
-  @XmlAttribute(name = "showAs")
-  private String showAs;
-
   @XmlElement(name = "fundstelle", namespace = LiteratureNamespaces.RIS_NS)
   private Fundstelle fundstelle;
 
   @XmlElement(name = "fundstelleSelbststaendig", namespace = LiteratureNamespaces.RIS_NS)
   private FundstelleSelbststaendig fundstelleSelbststaendig;
 
-  @XmlElement(name = "normReference", namespace = LiteratureNamespaces.RIS_NS)
-  private NormReference normReference;
+  @XmlElement(name = "referenzNorm", namespace = LiteratureNamespaces.RIS_NS)
+  private ReferenzNorm referenzNorm;
 
   @XmlElement(name = "referenzRechtsprechung", namespace = LiteratureNamespaces.RIS_NS)
   private ReferenzRechtsprechung referenzRechtsprechung;
