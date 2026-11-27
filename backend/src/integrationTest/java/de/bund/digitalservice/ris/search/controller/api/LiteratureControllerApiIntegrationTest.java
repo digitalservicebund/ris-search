@@ -78,7 +78,7 @@ class LiteratureControllerApiIntegrationTest extends ContainersIntegrationBase {
             jsonPath(
                 "$.independentReferences",
                 Matchers.contains("Festschrift für Müller, 2001, 12-34")),
-            jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1")),
+            jsonPath("$.normReferences", Matchers.contains("GG, Art 6 Abs 2 S 1, 1949-05-23")),
             jsonPath("$.headline", Matchers.is("Literatur. Zivilprozessrecht im Wandel")),
             jsonPath("$.alternativeHeadline", Matchers.is("Dokumentation ZPO")),
             jsonPath("$.headlineAdditions", Matchers.is("Zusatz zu Zivilprozessrecht im Wandel")),

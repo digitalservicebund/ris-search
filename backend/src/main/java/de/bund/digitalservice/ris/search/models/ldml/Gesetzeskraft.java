@@ -1,4 +1,4 @@
-package de.bund.digitalservice.ris.search.models.ldml.caselaw;
+package de.bund.digitalservice.ris.search.models.ldml;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import lombok.Setter;
 @Setter
 public class Gesetzeskraft {
 
-  @XmlElement(name = "gesetzeskraftTyp", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "gesetzeskraftTyp", namespace = Namespaces.RIS_NS)
   private String gesetzeskraftTyp;
 
-  @XmlElement(name = "geltungsbereich", namespace = CaseLawLdmlNamespaces.RIS_NS)
+  @XmlElement(name = "geltungsbereich", namespace = Namespaces.RIS_NS)
   private String geltungsbereich;
 
   /**

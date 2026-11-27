@@ -1,6 +1,9 @@
 package de.bund.digitalservice.ris.search.models.ldml.caselaw;
 
+import de.bund.digitalservice.ris.search.models.ldml.Einzelnorm;
 import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
+import de.bund.digitalservice.ris.search.models.ldml.Gesetzeskraft;
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;

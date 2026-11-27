@@ -32,8 +32,14 @@
             </akn:identification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference showAs="GG, Art 3 Abs 1, 1949-05-23">
-                        <ris:normReference abbreviation="GG" dateOfVersion="1949-05-23" singleNorm="Art 3 Abs 1"/>
+                    <akn:implicitReference ris:domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 3 Abs 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
                     </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>

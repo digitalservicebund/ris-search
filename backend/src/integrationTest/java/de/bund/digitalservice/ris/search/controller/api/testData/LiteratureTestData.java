@@ -40,7 +40,7 @@ public class LiteratureTestData {
             .documentTypes(List.of("Kommentar", "Aufsatz"))
             .fundstellenUnselbststaendig(List.of("NJW, 2000, 456-789"))
             .fundstellenSelbststaendig(List.of("Festschrift für Müller, 2001, 12-34"))
-            .normReferences(List.of("GG, Art 6 Abs 2 S 1"))
+            .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             .mainTitle(matchAllTerm + "Zivilprozessrecht im Wandel")
             .mainTitleAdditions("Zusatz zu Zivilprozessrecht im Wandel")
             .documentaryTitle("Dokumentation ZPO")
