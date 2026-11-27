@@ -41,15 +41,6 @@
             </akn:classification>
             <akn:analysis source="#rechtsinformationen-des-bundes">
                 <akn:otherReferences source="#rechtsinformationen-des-bundes">
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
                     <akn:implicitReference ris:domainTerm="Referenz Verwaltungsvorschrift">
                         <ris:referenzVerwaltungsvorschrift domainTerm="Referenz Verwaltungsvorschrift">
                             <ris:richtung domainTerm="Richtung der Referenzierung">passiv</ris:richtung>
@@ -174,6 +165,17 @@
                     <ris:mitarbeiterListe domainTerm="Mitarbeiterliste">
                         <ris:mitarbeiter domainTerm="Mitarbeiter" refersTo="#foo-peter-mitarbeiter-1">Foo, Peter</ris:mitarbeiter>
                     </ris:mitarbeiterListe>
+                    <ris:referenzenNorm domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:titel domainTerm="Amtliche Langüberschrift">Grundgesetz für die Bundesrepublik Deutschland</ris:titel>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                                <ris:jahr domainTerm="Jahr">1949</ris:jahr>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                    </ris:referenzenNorm>
                     <ris:organisationen domainTerm="Organisationen">
                         <ris:organisation domainTerm="Organisation" eId="universitaet-1" showAs="Universität Foo">
                             <ris:name domainTerm="Name">Universität Foo</ris:name>

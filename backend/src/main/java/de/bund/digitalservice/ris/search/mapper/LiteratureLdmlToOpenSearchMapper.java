@@ -271,8 +271,7 @@ public class LiteratureLdmlToOpenSearchMapper {
   }
 
   private static List<String> extractNormenReferenzen(LiteratureLdml literatureLdml) {
-    return getImplicitReferences(literatureLdml)
-        .map(ImplicitReference::getReferenzNorm)
+    return extractRisMeta(literatureLdml).map(RisMeta::getReferenzenNorm).orElse(List.of()).stream()
         .filter(Objects::nonNull)
         .map(ReferenzNorm::getFormatted)
         .filter(StringUtils::isNotBlank)

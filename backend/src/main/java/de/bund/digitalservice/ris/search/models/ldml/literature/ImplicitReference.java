@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
-import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzRechtsprechung;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzSelbststaendigeLiteratur;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzUnselbststaendigeLiteratur;
@@ -11,16 +10,16 @@ import lombok.Getter;
 
 /**
  * Represents an implicit reference within a larger document structure. This class provides
- * references to different elements such as unselbstaendig or selbstaendig literals and norm
- * references, with the ability to include metadata about how the reference should be displayed.
+ * references to different elements such as unselbstaendig or selbstaendig literals, with the
+ * ability to include metadata about how the reference should be displayed.
  *
  * <p>Fields in this class are annotated to support XML serialization, enabling integration with
  * XML-based document or metadata standards.
  *
  * <p>The following elements are captured: - Display attributes for the implicit reference. - A
  * Fundstelle in a periodical (`fundstelle`, ULI only). - A Fundstelle in selbstständige literature
- * (`fundstelleSelbststaendig`, ULI only). - A reference to normative elements (`normReference`),
- * including potential legal or regulatory norms.
+ * (`fundstelleSelbststaendig`, ULI only). - References to case law, administrative directives and
+ * other literature.
  */
 @Getter
 public class ImplicitReference {
@@ -30,9 +29,6 @@ public class ImplicitReference {
 
   @XmlElement(name = "fundstelleSelbststaendig", namespace = LiteratureNamespaces.RIS_NS)
   private FundstelleSelbststaendig fundstelleSelbststaendig;
-
-  @XmlElement(name = "referenzNorm", namespace = LiteratureNamespaces.RIS_NS)
-  private ReferenzNorm referenzNorm;
 
   @XmlElement(name = "referenzRechtsprechung", namespace = LiteratureNamespaces.RIS_NS)
   private ReferenzRechtsprechung referenzRechtsprechung;

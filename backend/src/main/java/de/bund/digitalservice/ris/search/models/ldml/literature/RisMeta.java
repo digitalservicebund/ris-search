@@ -1,5 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
+import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import java.util.List;
@@ -128,6 +129,10 @@ public class RisMeta {
   @XmlElementWrapper(name = "regionen", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "region", namespace = LiteratureNamespaces.RIS_NS)
   private List<String> regionen;
+
+  @XmlElementWrapper(name = "referenzenNorm", namespace = LiteratureNamespaces.RIS_NS)
+  @XmlElement(name = "referenzNorm", namespace = LiteratureNamespaces.RIS_NS)
+  private List<ReferenzNorm> referenzenNorm;
 
   @XmlElementWrapper(name = "berufsbilder", namespace = LiteratureNamespaces.RIS_NS)
   @XmlElement(name = "berufsbild", namespace = LiteratureNamespaces.RIS_NS)

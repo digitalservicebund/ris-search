@@ -54,62 +54,6 @@
                             <ris:zitatstelle domainTerm="Zitatstelle">1999, 123-123</ris:zitatstelle>
                         </ris:fundstelle>
                     </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
-                    <akn:implicitReference ris:domainTerm="Norm">
-                        <ris:referenzNorm domainTerm="Norm">
-                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
-                            <ris:einzelnorm domainTerm="Einzelnorm">
-                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
-                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
-                            </ris:einzelnorm>
-                        </ris:referenzNorm>
-                    </akn:implicitReference>
                 </akn:otherReferences>
             </akn:analysis>
             <akn:proprietary source="#rechtsinformationen-des-bundes">
@@ -124,6 +68,48 @@
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">II. Birnen.</ris:gliederungseintrag>
                         <ris:gliederungseintrag domainTerm="Gliederungseintrag">III. Orangen.</ris:gliederungseintrag>
                     </ris:gliederung>
+                    <ris:referenzenNorm domainTerm="Norm">
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">BMV-Ä</ris:abkuerzung>
+                        </ris:referenzNorm>
+                        <ris:referenzNorm domainTerm="Norm">
+                            <ris:abkuerzung domainTerm="Abkürzung">GG</ris:abkuerzung>
+                            <ris:einzelnorm domainTerm="Einzelnorm">
+                                <ris:bezeichnung domainTerm="Bezeichnung">Art 6 Abs 2 S 1</ris:bezeichnung>
+                                <ris:fassungsdatum domainTerm="Fassungsdatum">1949-05-23</ris:fassungsdatum>
+                            </ris:einzelnorm>
+                        </ris:referenzNorm>
+                    </ris:referenzenNorm>
                     <ris:personen domainTerm="Personen">
                         <ris:person domainTerm="Person" eId="mustermann-max-verfasser-1" showAs="Mustermann, Max, Dr">
                             <ris:name domainTerm="Person">Mustermann, Max</ris:name>
