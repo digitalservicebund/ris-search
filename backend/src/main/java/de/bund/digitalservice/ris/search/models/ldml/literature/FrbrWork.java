@@ -1,5 +1,7 @@
-package de.bund.digitalservice.ris.search.models.ldml;
+package de.bund.digitalservice.ris.search.models.ldml.literature;
 
+import de.bund.digitalservice.ris.search.models.ldml.FrbrAuthor;
+import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
 import lombok.Getter;
@@ -21,12 +23,9 @@ import lombok.Getter;
 @Getter
 public class FrbrWork {
 
-  @XmlElement(name = "FRBRalias", namespace = Namespaces.AKN_NS)
+  @XmlElement(name = "FRBRalias", namespace = LiteratureNamespaces.AKN_NS)
   private List<FrbrNameValueElement> frbrAliasList;
 
-  @XmlElement(name = "FRBRauthor", namespace = Namespaces.AKN_NS)
+  @XmlElement(name = "FRBRauthor", namespace = LiteratureNamespaces.AKN_NS)
   private List<FrbrAuthor> frbrAuthors;
-
-  @XmlElement(name = "FRBRnumber", namespace = Namespaces.AKN_NS)
-  private List<FRBRNumber> frbrNumbers;
 }

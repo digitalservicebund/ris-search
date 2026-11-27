@@ -1,7 +1,6 @@
 package de.bund.digitalservice.ris.search.models.ldml.literature;
 
 import de.bund.digitalservice.ris.search.models.ldml.FrbrExpression;
-import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 
@@ -30,4 +29,7 @@ public class Identification {
 
   @XmlElement(name = "FRBRWork", namespace = LiteratureNamespaces.AKN_NS)
   private FrbrWork frbrWork;
+
+  @XmlElement(name = "FRBRManifestation", namespace = LiteratureNamespaces.AKN_NS)
+  private FrbrManifestation frbrManifestation;
 }

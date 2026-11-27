@@ -1,24 +1,23 @@
 package de.bund.digitalservice.ris.search.mapper;
 
 import de.bund.digitalservice.ris.search.exception.OpenSearchMapperException;
-import de.bund.digitalservice.ris.search.models.ldml.FRBRNumber;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
-import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.ReferenzNorm;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
+import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrManifestation;
+import de.bund.digitalservice.ris.search.models.ldml.literature.FrbrWork;
 import de.bund.digitalservice.ris.search.models.ldml.literature.FundstelleSelbststaendig;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Keyword;
 import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureLdml;
-import de.bund.digitalservice.ris.search.models.ldml.literature.LiteratureType;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Meta;
 import de.bund.digitalservice.ris.search.models.ldml.literature.OtherReferences;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Proprietary;
@@ -131,7 +130,7 @@ public class LiteratureLdmlToOpenSearchMapper {
         .footnotes(extractFootnotes(literatureLdml))
         .publisherInformation(extractPublisherinformation(literatureLdml))
         .edition(extractEdition(literatureLdml))
-        .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml, documentNumber))
+        .internationalIdentifiers(extractInternationalIdentifiers(literatureLdml))
         .volumes(extractVolumes(literatureLdml))
         .titelAspekte(extractTitelAspekte(literatureLdml))
         .schlagworte(extractSchlagworte(literatureLdml))
@@ -540,23 +539,18 @@ public class LiteratureLdmlToOpenSearchMapper {
     return extractRisMeta(ldml).map(RisMeta::getTeilbaende).orElse(List.of());
   }
 
-  /**
-   * ISBN/ISSN numbers of selbstständige literature. Unselbstständige literature carries a
-   * placeholder FRBRnumber (the element is mandatory in akn:FRBRWork), which must not be indexed.
-   */
-  private static List<String> extractInternationalIdentifiers(
-      LiteratureLdml ldml, String documentNumber) {
-    if (LiteratureType.getByDocumentNumber(documentNumber) != LiteratureType.SLI) {
-      return List.of();
-    }
+  private static List<String> extractInternationalIdentifiers(LiteratureLdml ldml) {
     return Optional.ofNullable(ldml)
         .map(LiteratureLdml::getDoc)
         .map(Doc::getMeta)
         .map(Meta::getIdentification)
-        .map(Identification::getFrbrWork)
+        .map(Identification::getFrbrManifestation)
+        .map(FrbrManifestation::getFrbrAliasList)
+        .orElse(Collections.emptyList())
         .stream()
-        .filter(w -> Objects.nonNull(w.getFrbrNumbers()))
-        .flatMap(work -> work.getFrbrNumbers().stream().map(FRBRNumber::getValue))
+        .filter(alias -> List.of("ISBN", "ISSN").contains(alias.getName()))
+        .map(FrbrNameValueElement::getValue)
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 
