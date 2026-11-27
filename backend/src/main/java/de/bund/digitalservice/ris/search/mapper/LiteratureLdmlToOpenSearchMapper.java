@@ -29,7 +29,6 @@ import de.bund.digitalservice.ris.search.models.ldml.literature.RisRoleItem;
 import de.bund.digitalservice.ris.search.models.opensearch.Literature;
 import de.bund.digitalservice.ris.search.models.opensearch.LiteratureUnindexed;
 import de.bund.digitalservice.ris.search.models.opensearch.zitierungen.Richtung;
-import jakarta.xml.bind.DataBindingException;
 import jakarta.xml.bind.JAXB;
 import jakarta.xml.bind.ValidationException;
 import java.io.StringReader;
@@ -45,7 +44,6 @@ import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
-import org.eclipse.persistence.exceptions.DescriptorException;
 
 /**
  * Utility class responsible for mapping LDML (Legal Document Markup Language) string
@@ -88,7 +86,7 @@ public class LiteratureLdmlToOpenSearchMapper {
       StreamSource ldmlStreamSource = new StreamSource(new StringReader(ldmlString));
       var literatureLdml = JAXB.unmarshal(ldmlStreamSource, LiteratureLdml.class);
       return mapToEntity(literatureLdml, time);
-    } catch (DescriptorException | DataBindingException | ValidationException e) {
+    } catch (Exception e) {
       throw new OpenSearchMapperException("unable to parse file to Literature", e);
     }
   }
