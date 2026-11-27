@@ -44,8 +44,8 @@ class LiteratureLdmlToOpenSearchMapperTest {
             .yearsOfPublication(List.of("2025"))
             .firstPublicationDate(LocalDate.of(2025, Month.JANUARY, 1))
             .documentTypes(List.of("Auf", "Foo"))
-            .fundstellenUnselbststaendig(List.of("BB, 1979, 1298-1300"))
-            .fundstellenSelbststaendig(List.of("Titel einer Fundstelle, 1979, 1298-1300"))
+            .fundstellenUnselbststaendig(List.of("BB 1979, 1298-1300"))
+            .fundstellenSelbststaendig(List.of("Titel einer Fundstelle 1979, 1298-1300"))
             .normReferences(List.of("GG, Art 6 Abs 2 S 1, 1949-05-23"))
             .mainTitle("Literatur Test Dokument")
             .mainTitleAdditions("Titelzusatz")
@@ -349,5 +349,66 @@ class LiteratureLdmlToOpenSearchMapperTest {
     assertThat(literature.normReferences()).isEmpty();
     assertThat(literature.shortReport()).isNull();
     assertThat(literature.outline()).isNull();
+  }
+
+  @Test
+  @DisplayName("Ignores incomplete and blank Fundstellen")
+  void ignoresIncompleteAndBlankFundstellen() {
+    final String ldml =
+        """
+        <akn:akomaNtoso xmlns:akn="http://docs.oasis-open.org/legaldocml/ns/akn/3.0" xmlns:ris="http://rechtsinformationen.bund.de/schema/ris/0.1">
+          <akn:doc name="offene-struktur">
+            <akn:meta>
+              <akn:identification>
+                <akn:FRBRWork>
+                  <akn:FRBRalias name="dokumentnummer" value="BJLU002758328" />
+                </akn:FRBRWork>
+              </akn:identification>
+              <akn:analysis>
+                <akn:otherReferences>
+                  <akn:implicitReference>
+                    <ris:fundstelle>
+                      <ris:periodikum><ris:abkuerzung>BB</ris:abkuerzung></ris:periodikum>
+                    </ris:fundstelle>
+                  </akn:implicitReference>
+                  <akn:implicitReference>
+                    <ris:fundstelle>
+                      <ris:periodikum><ris:abkuerzung> </ris:abkuerzung></ris:periodikum>
+                      <ris:zitatstelle> </ris:zitatstelle>
+                    </ris:fundstelle>
+                  </akn:implicitReference>
+                  <akn:implicitReference>
+                    <ris:fundstelleSelbststaendig>
+                      <ris:titel>Titel</ris:titel>
+                    </ris:fundstelleSelbststaendig>
+                  </akn:implicitReference>
+                  <akn:implicitReference>
+                    <ris:fundstelleSelbststaendig>
+                      <ris:titel> </ris:titel>
+                      <ris:zitatstelle> </ris:zitatstelle>
+                    </ris:fundstelleSelbststaendig>
+                  </akn:implicitReference>
+                </akn:otherReferences>
+              </akn:analysis>
+              <akn:proprietary>
+                <ris:meta>
+                  <ris:dokumenttypen>
+                    <ris:dokumenttyp>Auf</ris:dokumenttyp>
+                  </ris:dokumenttypen>
+                  <ris:veroeffentlichungsJahre>
+                    <ris:veroeffentlichungsJahr>2025</ris:veroeffentlichungsJahr>
+                  </ris:veroeffentlichungsJahre>
+                </ris:meta>
+              </akn:proprietary>
+            </akn:meta>
+          </akn:doc>
+        </akn:akomaNtoso>
+        """
+            .stripIndent();
+
+    Literature literature = LiteratureLdmlToOpenSearchMapper.mapLdml(ldml, NOW);
+
+    assertThat(literature.fundstellenUnselbststaendig()).isEmpty();
+    assertThat(literature.fundstellenSelbststaendig()).isEmpty();
   }
 }

@@ -6,10 +6,12 @@ import de.bund.digitalservice.ris.search.models.ldml.FrbrExpression;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrLanguage;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrNameValueElement;
 import de.bund.digitalservice.ris.search.models.ldml.FrbrWork;
+import de.bund.digitalservice.ris.search.models.ldml.Fundstelle;
 import de.bund.digitalservice.ris.search.models.ldml.MainBody;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Analysis;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Classification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Doc;
+import de.bund.digitalservice.ris.search.models.ldml.literature.FundstelleSelbststaendig;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Gliederung;
 import de.bund.digitalservice.ris.search.models.ldml.literature.Identification;
 import de.bund.digitalservice.ris.search.models.ldml.literature.ImplicitReference;
@@ -168,15 +170,21 @@ public class LiteratureLdmlToOpenSearchMapper {
 
   private static List<String> extractFundstellenUnselbststaendig(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelle() != null)
-        .map(ImplicitReference::getShowAs)
+        .map(ImplicitReference::getFundstelle)
+        .filter(Objects::nonNull)
+        .map(Fundstelle::getFormatted)
+        .filter(Objects::nonNull)
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 
   private static List<String> extractFundstellenSelbststaendig(LiteratureLdml literatureLdml) {
     return getImplicitReferences(literatureLdml)
-        .filter(implicitReference -> implicitReference.getFundstelleSelbststaendig() != null)
-        .map(ImplicitReference::getShowAs)
+        .map(ImplicitReference::getFundstelleSelbststaendig)
+        .filter(Objects::nonNull)
+        .map(FundstelleSelbststaendig::getFormatted)
+        .filter(Objects::nonNull)
+        .filter(StringUtils::isNotBlank)
         .toList();
   }
 

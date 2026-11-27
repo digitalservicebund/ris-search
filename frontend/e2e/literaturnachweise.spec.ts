@@ -41,8 +41,8 @@ test(
     await expect(defs.nth(0)).toHaveText("Auf");
     // Fundstellen are rendered as badges (spans)
     await expect(defs.nth(1).locator("span")).toHaveText([
-      "FooBar, 1982, 123-123",
-      "SelbstFund, 1982, 123-123",
+      "FooBar 1982, 123-123",
+      "SelbstFund 2024, 456-456",
     ]);
     await expect(defs.nth(2)).toHaveText("Sabine Musterfrau");
     await expect(defs.nth(3)).toHaveText("2024");
